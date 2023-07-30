@@ -12,4 +12,7 @@ public class HomeController {
     public List<String> hello() {
         return Arrays.asList("첫번째 인사", "두번째 인사");
     }
+
+
+
 }
