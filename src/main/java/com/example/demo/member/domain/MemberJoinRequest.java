@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.member.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class UserJoinRequest {
+public class MemberJoinRequest {
 
     private String userName;
 

@@ -1,4 +1,4 @@
-package com.example.demo.exception;
+package com.example.demo.member.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,5 +7,5 @@ import lombok.Getter;
 @Getter
 public class AppException extends RuntimeException {
     private ErrorCode errorCode;
-    private String massage;
+    private String message;
 }

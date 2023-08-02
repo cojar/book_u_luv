@@ -1,4 +1,4 @@
-package com.example.demo.domain;
+package com.example.demo.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

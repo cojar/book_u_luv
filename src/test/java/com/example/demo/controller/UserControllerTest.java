@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.UserJoinRequest;
-import com.example.demo.service.UserService;
+import com.example.demo.member.domain.MemberJoinRequest;
+import com.example.demo.member.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class UserControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    UserService userService;
+    MemberService userService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -37,7 +37,7 @@ public class UserControllerTest {
         String password = "1q2w3e4r";
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password))))
+                        .content(objectMapper.writeValueAsBytes(new MemberJoinRequest(userName, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -53,7 +53,7 @@ public class UserControllerTest {
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password))))
+                        .content(objectMapper.writeValueAsBytes(new MemberJoinRequest(userName, password))))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

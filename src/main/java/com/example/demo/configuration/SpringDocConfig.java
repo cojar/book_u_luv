@@ -6,4 +6,5 @@ import org.springframework.context.annotation.Configuration;
 @OpenAPIDefinition
 @Configuration
 public class SpringDocConfig {
+
 }

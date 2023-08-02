@@ -1,7 +1,7 @@
 package com.example.demo.configuration;
 
-import com.example.demo.service.UserService;
-import com.example.demo.utils.JwtUtil;
+import com.example.demo.member.service.MemberService;
+import com.example.demo.member.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final UserService userService;
+    private final MemberService userService;
 
     private final String secretKey;
 
