@@ -1,6 +1,6 @@
 package com.project.bookuluv.api.controller;
 
-import com.project.bookuluv.api.domain.productE;
+import com.project.bookuluv.api.domain.ProductE;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api/myBooks")
 public class MyBooksController {
 
-    private List<productE> bookList = new ArrayList<>();
+    private List<ProductE> bookList = new ArrayList<>();
 
 
     @PostMapping()
@@ -24,7 +24,7 @@ public class MyBooksController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<productE>> myBookList(Authentication authentication) {
+    public ResponseEntity<List<ProductE>> myBookList(Authentication authentication) {
         return ResponseEntity.ok().body(bookList);
     }
 

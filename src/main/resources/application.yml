@@ -13,9 +13,9 @@ spring:
       enabled: true
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://bookuluv.cmdeab77miub.ap-northeast-2.rds.amazonaws.com:3306/book_u_luv?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
-    username: buladmin
-    password: 1q2w3e4r
+    url: jdbc:mariadb://localhost:3307/book_u_luv?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+    username: root
+    password: 
   jpa:
     hibernate:
       ddl-auto: create

@@ -6,30 +6,29 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
 @Getter
+@Component
 public class ArticleDto {
-    @Entity
-    @Getter
-    @Setter
-    public class article {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
 
-        private String register;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        private String subject;
+    private String register;
 
-        private String content;
+    private String subject;
 
-        private LocalDate createDate;
+    private String content;
 
-        private LocalDate modifyDate;
+    private LocalDate createDate;
 
-        private int hit;
-    }
+    private LocalDate modifyDate;
 
+    private int hit;
 }
+
+
