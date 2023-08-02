@@ -13,7 +13,7 @@ public class articleService {
 
     private final articleRepository articleRepository;
 
-    public List<articleDto> getList() {
+    public List<articleDto> getAll() {
         return this.articleRepository.findAll();
     }
 }
