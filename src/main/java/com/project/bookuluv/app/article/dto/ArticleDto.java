@@ -1,17 +1,15 @@
 package com.project.bookuluv.app.article.dto;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
 @Getter
-@Component
+@Setter
 public class ArticleDto {
 
     @Id

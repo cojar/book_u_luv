@@ -1,6 +1,6 @@
 package com.project.bookuluv.app.article.service;
 
-import com.project.bookuluv.app.article.dto.ArticleDto;
+import com.project.bookuluv.app.article.domain.Article;
 import com.project.bookuluv.app.article.repository.ArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
 
-    public List<ArticleDto> getAll() {
+    public List<Article> getAll() {
         return this.articleRepository.findAll();
     }
 }

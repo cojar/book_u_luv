@@ -19,7 +19,7 @@ public class AuthenticationConfig {
 
     private final MemberService userService;
 
-    @Value("${jwt.secret}")
+    @Value("${spring.jwt.secret}")
     private String secretKey;
 
     @Bean

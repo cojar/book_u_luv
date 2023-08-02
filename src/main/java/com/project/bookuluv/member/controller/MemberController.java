@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberService userService;
+    private final MemberService memberService;
 
     @PostMapping("/join")
     public ResponseEntity<String> join(@RequestBody MemberJoinRequest dto) {
-        userService.join(dto.getUserName(), dto.getPassword1());
+        memberService.join(dto.getUserName(), dto.getPassword1());
         return ResponseEntity.ok().body("회원가입이 완료되었습니다.");
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody MemberLoginRequest dto) {
-        return ResponseEntity.ok().body(userService.login(dto.getUserName(), ""));
+        return ResponseEntity.ok().body(memberService.login(dto.getUserName(), ""));
     }
 
     // @GetMapping("/me")

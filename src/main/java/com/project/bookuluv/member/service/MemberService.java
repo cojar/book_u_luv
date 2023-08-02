@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final MemberRepository userRepository;
+    private final MemberRepository memberRepository;
 
     private final BCryptPasswordEncoder encoder;
 
-    @Value("${jwt.secret}")
+    @Value("${spring.jwt.secret}")
     private String secretKey;
 
     private Long expiredMs = 1000 * 60 * 60l;
@@ -26,7 +26,7 @@ public class MemberService {
     public String join(String userName, String password) {
 
         // userName 중복체크
-        userRepository.findByUserName(userName)
+        memberRepository.findByUserName(userName)
                 .ifPresent(user -> {
                     throw new AppException(ErrorCode.USERNAME_DUPLICATED, userName + " 는 이미있습니다.");
                 });
@@ -37,14 +37,14 @@ public class MemberService {
                 .password(encoder.encode(password))
                 .build();
 
-        userRepository.save(user);
+        memberRepository.save(user);
         return "SUCCESS";
     }
 
     public String login(String userName, String password) {
 
         // userName 없음
-        Member user = userRepository.findByUserName(userName)
+        Member user = memberRepository.findByUserName(userName)
                 .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "이 없습니다."));
 
         // password 틀림
@@ -57,7 +57,7 @@ public class MemberService {
     }
 
     // public String me(String userName) {
-    //  User user = userRepository.findByUserName(userName)
+    //  User user = memberRepository.findByUserName(userName)
     //           .orElseThrow();
     //   return ;
     // }

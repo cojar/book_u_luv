@@ -1,6 +1,6 @@
 package com.project.bookuluv.app.article.controller;
 
-import com.project.bookuluv.app.article.dto.ArticleDto;
+import com.project.bookuluv.app.article.domain.Article;
 import com.project.bookuluv.app.article.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ public class ArticleController {
 
     @GetMapping("/articles")
     public String list(Model model) {
-        List<ArticleDto> articleList = this.articleService.getAll();
+        List<Article> articleList = this.articleService.getAll();
         model.addAttribute("articleList", articleList);
         return "article_list";
     }
