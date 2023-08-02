@@ -25,7 +25,7 @@ public class Article {
 
     private LocalDate createDate;
 
-    private LocalDate motifyDate;
+    private LocalDate modifyDate;
 
     private int hit;
 }

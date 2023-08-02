@@ -1,17 +1,27 @@
+server:
+  port: 7070
 spring:
   jwt:
     secret: adjljweoiruo32493oadjy89uoadlskj873912eljadskljo8qeu92u
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://localhost:3307/bookuluv?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
-    username: root
-    password:
+    url: jdbc:mariadb://bookuluv.cmdeab77miub.ap-northeast-2.rds.amazonaws.com:3306/book_u_luv?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+    username: buladmin
+    password: 1q2w3e4r
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
-        show_sql: false
+        show_sql: true
         format_sql: false
         use_sql_comments: false
 springdoc:
