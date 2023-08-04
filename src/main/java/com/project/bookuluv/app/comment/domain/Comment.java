@@ -37,7 +37,7 @@ public class Comment {
     Set<Member> commentLike;
 
     @ManyToOne
-    private Member member;
+    private Member register;
 
     @ManyToOne
     private Product product;
