@@ -24,7 +24,7 @@ public class AuthenticationConfig {
     private String secretKey;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain jwtsecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         return httpSecurity
                 .httpBasic().disable()
@@ -39,26 +39,17 @@ public class AuthenticationConfig {
                         "/join",
                         "/login",
                         "/swagger-ui/**",
-                        "/v3/api-docs"
+                        "/v3/api-docs",
+                        "/"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/member/login")
-                .defaultSuccessUrl("/")
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(new JwtFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
     private String siteName = "bookuluv";
+
     public String getSiteName() {
         return siteName;
     }
