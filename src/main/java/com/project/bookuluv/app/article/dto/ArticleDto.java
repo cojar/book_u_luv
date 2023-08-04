@@ -1,5 +1,6 @@
 package com.project.bookuluv.app.article.dto;
 
+import com.project.bookuluv.member.domain.Member;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -16,7 +17,7 @@ public class ArticleDto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String register;
+    private Member register;
 
     private String subject;
 

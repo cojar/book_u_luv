@@ -1,36 +1,93 @@
 package com.project.bookuluv.app.article.controller;
 
 import com.project.bookuluv.app.article.domain.Article;
+import com.project.bookuluv.app.article.dto.ArticleDto;
 import com.project.bookuluv.app.article.service.ArticleService;
+import com.project.bookuluv.member.domain.Member;
+import com.project.bookuluv.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("/article")
 public class ArticleController {
 
     private final ArticleService articleService;
 
-    @GetMapping("/articles")
+    private final MemberService memberService;
+
+    @GetMapping("/list")
     public String list(Model model) {
         List<Article> articleList = this.articleService.getAll();
         model.addAttribute("articleList", articleList);
         return "article_list";
     }
 
-    @GetMapping("/articles/{id}")
-    private String detail() {
+    @GetMapping(value = "/detail/{id}")
+    private String detail(Model model, @PathVariable("id") Integer id) {
+        Article article = this.articleService.getById(id);
+        model.addAttribute("article", article);
+        return "article_detail";
+    }
+
+    @GetMapping("/create")
+    @PreAuthorize("isAuthenticated()")
+    private String create() {
+        return "article_form";
+    }
+
+    @PostMapping("/create")
+    @PreAuthorize("isAuthenticated()")
+    private String articleCreate(ArticleDto articleDto, BindingResult bindingResult, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return "article_form";
+        }
+
+        Member member = this.memberService.getMember(principal.getName());
+        this.articleService.create(articleDto.getSubject(), articleDto.getContent(), member);
+        return "redirect:/";
+    }
+
+    @GetMapping("/")
+    @PreAuthorize("isAuthenticated()")
+    public String modify(@PathVariable("id") Integer id, Principal principal) {
         return "";
     }
 
-    @PostMapping("/articles/create")
-    private String create() {
-        return "";
+    @PostMapping("/")
+    @PreAuthorize("isAuthenticated()")
+    public String articleModify(@PathVariable("id") Integer id, BindingResult bindingResult, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return "article_form";
+        }
+
+        Article article = this.articleService.getById(id);
+        this.articleService.modify(article.getSubject(), article.getContent(), article);
+        return "redirect:/";
     }
+
+    @PostMapping("/")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(@PathVariable("id") Integer id, BindingResult bindingResult, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return "article_list";
+        }
+        Article article = this.articleService.getById(id);
+        this.articleService.delete(article);
+        return "redirect:/";
+    }
+
 
 }

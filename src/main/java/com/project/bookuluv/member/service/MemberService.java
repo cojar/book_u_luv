@@ -1,5 +1,6 @@
 package com.project.bookuluv.member.service;
 
+import com.project.bookuluv.DataNotFoundException;
 import com.project.bookuluv.member.exception.AppException;
 import com.project.bookuluv.member.exception.ErrorCode;
 import com.project.bookuluv.member.repository.MemberRepository;
@@ -9,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +58,16 @@ public class MemberService {
         String token = JwtUtil.createJwt(user.getUserName(), secretKey, expiredMs);
         return token;
     }
+
+    public Member getMember(String userName) {
+        Optional<Member> siteUser = this.memberRepository.findByUserName(userName);
+        if (siteUser.isPresent()) {
+            return siteUser.get();
+        } else {
+            throw new DataNotFoundException("member not found");
+        }
+    }
+
 
     // public String me(String userName) {
     //  User user = memberRepository.findByUserName(userName)
