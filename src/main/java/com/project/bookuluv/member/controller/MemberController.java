@@ -5,6 +5,7 @@ import com.project.bookuluv.member.dto.MemberLoginRequest;
 import com.project.bookuluv.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,10 +33,10 @@ public class MemberController {
     // public ResponseEntity<String> me(@RequestBody MemberLoginRequest dto) {
     //       return ResponseEntity.ok().body(memberService.me(dto.getUserName()));
     //  }
-
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/member/join")
-    public String signup(MemberJoinRequest memberJoinRequest) {
-        return "join";
+    public String showJoin() {
+        return "member/join";
     }
 
 }
