@@ -1,5 +1,6 @@
 package com.project.bookuluv.app.article.domain;
 
+import com.project.bookuluv.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +17,7 @@ public class Article {
     private Long id;
 
     @Column(name = "register")
-    private String register;
+    private Member register;
 
     @Column(name = "subject")
     private String subject;

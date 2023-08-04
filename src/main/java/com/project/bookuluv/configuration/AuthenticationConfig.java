@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +33,15 @@ public class AuthenticationConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/v1/users/login", "/api/v1/users/join", "/swagger-ui/**", "/v3/api-docs").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/member/login")
+                .defaultSuccessUrl("/")
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
