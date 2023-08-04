@@ -31,7 +31,16 @@ public class AuthenticationConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/users/login", "/api/v1/users/join", "/swagger-ui/**", "/v3/api-docs").permitAll()
+                .requestMatchers(
+                        "/api/v1/users/login",
+                        "/api/v1/users/join",
+                        "/member/join",
+                        "/member/login",
+                        "/join",
+                        "/login",
+                        "/swagger-ui/**",
+                        "/v3/api-docs"
+                ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
                 .and()
                 .formLogin()
@@ -48,5 +57,9 @@ public class AuthenticationConfig {
                 .and()
                 .addFilterBefore(new JwtFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+    private String siteName = "bookuluv";
+    public String getSiteName() {
+        return siteName;
     }
 }
