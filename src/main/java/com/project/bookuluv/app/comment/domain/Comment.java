@@ -15,16 +15,9 @@ import java.util.Set;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "member_id")
-    private Long memberId;
-
-    @Column(name = "product_id")
-    private int productId;
-
-    @Column(name = "content")
+    @Column(name = "content", columnDefinition = "TEXT")
     private String content;
 
     @Column(name = "create_date")
@@ -33,12 +26,21 @@ public class Comment {
     @Column(name = "modify_date")
     private LocalDateTime modifyDate;
 
-    @ManyToMany
-    Set<Member> commentLike;
+    @ManyToOne
+    private Product product;
 
     @ManyToOne
     private Member register;
 
-    @ManyToOne
-    private Product product;
+    @ManyToMany
+    Set<Member> commentLike;
+
+
+
+
+
+
+
+
+
 }

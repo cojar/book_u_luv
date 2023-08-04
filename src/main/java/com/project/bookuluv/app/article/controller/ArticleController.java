@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -60,13 +59,13 @@ public class ArticleController {
         return "redirect:/";
     }
 
-    @GetMapping("/")
+    @GetMapping("/a")
     @PreAuthorize("isAuthenticated()")
     public String modify(@PathVariable("id") Integer id, Principal principal) {
         return "";
     }
 
-    @PostMapping("/")
+    @PostMapping("/b")
     @PreAuthorize("isAuthenticated()")
     public String articleModify(@PathVariable("id") Integer id, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
@@ -78,7 +77,7 @@ public class ArticleController {
         return "redirect:/";
     }
 
-    @PostMapping("/")
+    @PostMapping("/c")
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable("id") Integer id, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
@@ -88,6 +87,4 @@ public class ArticleController {
         this.articleService.delete(article);
         return "redirect:/";
     }
-
-
 }

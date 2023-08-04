@@ -13,11 +13,7 @@ import java.time.LocalDate;
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
-
-    @Column(name = "register")
-    private Member register;
 
     @Column(name = "subject")
     private String subject;
@@ -33,4 +29,7 @@ public class Article {
 
     @Column(name = "hit")
     private int hit;
+
+    @ManyToOne
+    private Member register;
 }
