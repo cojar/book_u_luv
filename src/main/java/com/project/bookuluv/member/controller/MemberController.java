@@ -33,10 +33,11 @@ public class MemberController {
     // public ResponseEntity<String> me(@RequestBody MemberLoginRequest dto) {
     //       return ResponseEntity.ok().body(memberService.me(dto.getUserName()));
     //  }
-    @PreAuthorize("isAnonymous()")
+
+//    @PreAuthorize("isAnonymous()")
     @GetMapping("/member/join")
-    public String showJoin() {
-        return "member/join";
+    public String signup(MemberJoinRequest memberJoinRequest) {
+        return "join";
     }
 
 }

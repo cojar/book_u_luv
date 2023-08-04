@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final MemberService userService;
+    private final MemberService memberService;
 
     private final String secretKey;
 

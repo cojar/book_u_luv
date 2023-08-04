@@ -12,8 +12,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +24,7 @@ public class AuthenticationConfig {
     private String secretKey;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain jwtsecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
         return httpSecurity
                 .httpBasic().disable()
@@ -41,33 +39,18 @@ public class AuthenticationConfig {
                         "/join",
                         "/login",
                         "/swagger-ui/**",
-                        "/v3/api-docs"
+                        "/v3/api-docs",
+                        "/"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
-                .and()
-//                .formLogin()
-//                .loginPage("/member/login")
-//                .defaultSuccessUrl("/")
-//                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(new JwtFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-    @Bean
-    public WebMvcConfigurer forwardToJoinPage() {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addViewControllers(ViewControllerRegistry registry) {
-                // Map /member/join to the actual join page
-                registry.addViewController("/member/join").setViewName("member/join");
-            }
-        };
+
+    private String siteName = "bookuluv";
+
+    public String getSiteName() {
+        return siteName;
     }
 }
