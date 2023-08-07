@@ -5,16 +5,16 @@ import com.project.bookuluv.app.article.dto.ArticleDto;
 import com.project.bookuluv.app.article.service.ArticleService;
 import com.project.bookuluv.member.domain.Member;
 import com.project.bookuluv.member.service.MemberService;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -49,13 +49,13 @@ public class ArticleController {
 
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    private String articleCreate(ArticleDto articleDto, BindingResult bindingResult, Principal principal) {
+    private String articleCreate(ArticleDto articleDto, BindingResult bindingResult, Principal principal, @RequestParam("files") MultipartFile[] files) throws IOException {
         if (bindingResult.hasErrors()) {
             return "article_form";
         }
 
         Member member = this.memberService.getMember(principal.getName());
-        this.articleService.create(articleDto.getSubject(), articleDto.getContent(), member);
+        this.articleService.create(articleDto.getSubject(), articleDto.getContent(), member, files);
         return "redirect:/";
     }
 

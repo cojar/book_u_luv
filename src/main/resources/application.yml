@@ -24,6 +24,10 @@ spring:
         show_sql: true
         format_sql: false
         use_sql_comments: false
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 500MB
 springdoc:
   api-docs:
     enabled: true

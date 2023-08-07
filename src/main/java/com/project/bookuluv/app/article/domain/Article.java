@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,4 +33,8 @@ public class Article {
 
     @ManyToOne
     private Member register;
+
+    private List<String> filePaths;
+
+    private List<String> fileNames;
 }
