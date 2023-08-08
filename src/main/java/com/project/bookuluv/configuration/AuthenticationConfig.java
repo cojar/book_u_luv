@@ -38,7 +38,7 @@ public class AuthenticationConfig {
                         "/login",
                         "/swagger-ui/**",
                         "/v3/api-docs",
-                        "/"
+                        "/**"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
                 .and()

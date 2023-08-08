@@ -68,6 +68,14 @@ public class MemberService {
         }
     }
 
+    public Member getMember(String firstName, String lastName) {
+        Optional<Member> _member = this.memberRepository.findByUserFirstNameAndLastName(firstName, lastName);
+        if (_member.isPresent()) {
+            return _member.get();
+        }
+        throw new DataNotFoundException("member not found");
+    }
+
 
     // public String me(String userName) {
     //  User user = memberRepository.findByUserName(userName)
