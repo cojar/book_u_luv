@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+</head>
+<body>
+<h1>회원가입</h1>
+
+<form action="/member/join" method="post">
+    <!-- 사용자 아이디 (이메일) -->
+    <div>
+        <label for="userName">사용자 아이디 (이메일):</label>
+        <input type="text" id="userName" name="userName" th:field="${memberJoinRequest.userName}" required>
+    </div>
+
+    <!-- 비밀번호 -->
+    <div>
+        <label for="password1">비밀번호:</label>
+        <input type="password" id="password1" name="password1" th:field="${memberJoinRequest.password1}" required>
+    </div>
+
+    <!-- 비밀번호 확인 -->
+    <div>
+        <label for="password2">비밀번호 확인:</label>
+        <input type="password" id="password2" name="password2" th:field="${memberJoinRequest.password2}" required>
+    </div>
+
+    <!-- 닉네임 -->
+    <div>
+        <label for="nickName">닉네임:</label>
+        <input type="text" id="nickName" name="nickName" th:field="${memberJoinRequest.nickName}" required>
+    </div>
+
+    <!-- 사용자 주소 -->
+    <div>
+        <label for="address">사용자 주소:</label>
+        <input type="text" id="address" name="address" th:field="${memberJoinRequest.address}" required>
+    </div>
+
+    <!-- 우편번호 -->
+    <div>
+        <label for="postalNum">우편번호:</label>
+        <input type="text" id="postalNum" name="postalNum" th:field="${memberJoinRequest.postalNum}" required>
+    </div>
+
+    <!-- 연락처 -->
+    <div>
+        <label for="phone">연락처:</label>
+        <input type="text" id="phone" name="phone" th:field="${memberJoinRequest.phone}" required>
+    </div>
+
+    <!-- 이름 -->
+    <div>
+        <label for="firstName">이름:</label>
+        <input type="text" id="firstName" name="firstName" th:field="${memberJoinRequest.firstName}" required>
+    </div>
+
+    <!-- 성 -->
+    <div>
+        <label for="lastName">성:</label>
+        <input type="text" id="lastName" name="lastName" th:field="${memberJoinRequest.lastName}" required>
+    </div>
+
+    <!-- 성별 -->
+    <div>
+        <label for="gender">성별:</label>
+        <select id="gender" name="gender" th:field="${memberJoinRequest.gender}">
+            <option value="true">남성</option>
+            <option value="false">여성</option>
+        </select>
+    </div>
+
+    <!-- 생년월일 -->
+    <div>
+        <label for="birthDate">생년월일:</label>
+        <input type="text" id="birthDate" name="birthDate" th:field="${memberJoinRequest.birthDate}">
+    </div>
+
+    <!-- 회원 가입 버튼 -->
+    <div>
+        <button type="submit">회원 가입</button>
+    </div>
+</form>
+</body>
+</html>
