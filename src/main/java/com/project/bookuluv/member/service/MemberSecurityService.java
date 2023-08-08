@@ -1,5 +1,9 @@
-package com.ll.spirits.user;
+package com.project.bookuluv.member.service;
 
+import com.project.bookuluv.member.domain.CustomMember;
+import com.project.bookuluv.member.domain.Member;
+import com.project.bookuluv.member.dto.MemberRole;
+import com.project.bookuluv.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,28 +18,43 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserSecurityService implements UserDetailsService {
+public class MemberSecurityService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
+    Member member = new Member();
+    public boolean isAdmin() {
+        // 관리자 여부를 판별하는 로직을 구현
+        // 예: 관리자라면 true, 일반 사용자라면 false 반환
+        return "admin@gmail.com".equals(member.getUserName()) ||
+                "admin1@gmail.com".equals(member.getUserName()) ||
+                "admin2@gmail.com".equals(member.getUserName()) ||
+                "insung5189@gmail.com".equals(member.getUserName()) ||
+                "tjqls2013@gmail.com".equals(member.getUserName()) ||
+                "thdcodud01@gmail.com".equals(member.getUserName()) ||
+                "gim156922@gmail.com".equals(member.getUserName()) ||
+                "pintor.dev@gmail.com".equals(member.getUserName()) ||
+                "insung5189youpri@gmail.com".equals(member.getUserName())
+                ;
+    }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<SiteUser> siteUserOptional = userRepository.findByUsername(username);
-        SiteUser siteUser = siteUserOptional.orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        Optional<Member> memberOp = memberRepository.findByUserName(userName);
+        Member member = memberOp.orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        if (siteUser.isAdmin()) {
-            authorities.add(new SimpleGrantedAuthority(UserRole.ADMIN.getValue()));
+        if (isAdmin()) {
+            authorities.add(new SimpleGrantedAuthority(MemberRole.ADMIN.getValue()));
         } else {
-            authorities.add(new SimpleGrantedAuthority(UserRole.USER.getValue()));
+            authorities.add(new SimpleGrantedAuthority(MemberRole.USER.getValue()));
         }
 
-        return new CustomUser(
-                siteUser.getUsername(),
-                siteUser.getPassword(),
+        return new CustomMember(
+                member.getUserName(),
+                member.getPassword(),
                 authorities,
-                siteUser.getNickname(),
-                siteUser.getBirthDate()
+                member.getNickName(),
+                member.getBirthDate()
         );
     }
 }

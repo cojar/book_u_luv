@@ -1,12 +1,11 @@
-package com.ll.spirits.email;
+package com.project.bookuluv.member.email;
 
-import com.ll.spirits.DataNotFoundException;
-import com.ll.spirits.user.SiteUser;
-import com.ll.spirits.user.UserRepository;
-import com.ll.spirits.user.UserService;
+import com.project.bookuluv.DataNotFoundException;
+import com.project.bookuluv.member.domain.Member;
+import com.project.bookuluv.member.repository.MemberRepository;
+import com.project.bookuluv.member.service.MemberService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,11 +17,11 @@ public class MailController {
 
     private final JavaMailSender mailSender;
 
-    private final UserService userService;
-
-    private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
+
+    private final MemberService memberService;
+
+    private final MemberRepository memberRepository;
 
     @GetMapping("/mailCheck")
     @ResponseBody
@@ -53,7 +52,7 @@ public class MailController {
     @ResponseBody
     public void sendEmailForPw(@RequestParam("email") String userEmail, String userName) {
 
-        String tempPw = userService.generateTempPassword();
+        String tempPw = memberService.generateTempPassword();
         String from = "admin@ToolTool.com";//보내는 이 메일주소
         String to = userEmail;
         String title = "임시 비밀번호입니다.";
@@ -69,9 +68,9 @@ public class MailController {
 
             mailSender.send(mail);
 
-            SiteUser user = userService.getUserByUsername(userName);
+            Member user = memberService.getUserByUserName(userName);
             user.setPassword(passwordEncoder.encode(tempPw));
-            userRepository.save(user);
+            memberRepository.save(user);
 
         } catch (Exception e) {
             throw new DataNotFoundException("error");

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout/layout.html}">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <title>로그인</title>
 </head>
 
 <body>
-<main layout:fragment="main">
+<main>
     <section class="section section-login flex-grow flex flex-col items-center justify-center">
 
         <div class="max-w-md w-full px-2 pt-4">
@@ -48,14 +48,14 @@
             </script>
 
 
-            <form th:action method="POST" class="flex flex-col gap-3"
+            <form th:action="@{/member/login}" method="POST" class="flex flex-col gap-3"
                   onsubmit="MemberLogin__submit(this); return false;">
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">아이디</span>
                     </label>
-                    <input autofocus type="text" name="username" placeholder="아이디" class="input input-bordered"
-                           maxlength="50" th:value="${param.username}">
+                    <input autofocus type="text" name="userName" placeholder="아이디" class="input input-bordered"
+                           maxlength="50">
                 </div>
 
                 <div class="form-control">
@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="grid grid-cols-2 mt-2 gap-2">
-                    <a href="/member/join" class="btn btn-secondary btn-outline">가입하기</a>
+                    <a th:href="@{/member/join}" class="btn btn-secondary btn-outline">가입하기</a>
                     <input class="btn btn-primary" type="submit" value="로그인">
                 </div>
 

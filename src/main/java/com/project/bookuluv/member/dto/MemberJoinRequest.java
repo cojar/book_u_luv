@@ -2,11 +2,13 @@ package com.project.bookuluv.member.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
+@Component
 public class MemberJoinRequest {
     @NotEmpty(message = "사용자ID는 필수항목입니다.")
     @Email
@@ -43,7 +46,7 @@ public class MemberJoinRequest {
     @NotEmpty(message = "성은 필수항목입니다.")
     private String lastName;
 
-    @NotEmpty(message = "성별은 필수항목입니다.")
+    @NotNull(message = "성별은 필수항목입니다.")
     private boolean gender;
 
     private LocalDate birthDate;
