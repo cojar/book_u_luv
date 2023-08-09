@@ -1,13 +1,7 @@
 package com.project.bookuluv.member.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.*;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -31,9 +25,6 @@ public class MemberJoinRequest {
     @Size(min = 3, max = 25)
     private String nickName;
 
-   @NotEmpty(message = "사용자 주소는 필수항목입니다.")
-    private String address;
-
    @NotEmpty(message = "우편번호는 필수항목입니다.")
     private String postalNum;
 
@@ -56,4 +47,9 @@ public class MemberJoinRequest {
     private Integer genMailKey;
 
     private boolean mailAuth;
+
+    private String roadAddress;
+    private String jibunAddress;
+    private String detailAddress;
+    private String extraAddress;
 }

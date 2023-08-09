@@ -46,7 +46,10 @@ public class MemberService {
     public String join(String userName,
                        String password,
                        String nickName,
-                       String address,
+                       String roadAddress,
+                       String jibunAddress,
+                       String detailAddress,
+                       String extraAddress,
                        String postalNum,
                        String phone,
                        String firstName,
@@ -68,7 +71,11 @@ public class MemberService {
                 .userName(userName) // 사용자ID 추가(email형식)
                 .password(encoder.encode(password)) // 사용자 비밀번호 추가(passwordEncoder로 인코딩)
                 .nickName(nickName) // 사용자 닉네임 추가
-                .address(address) // 사용자 주소 추가
+                .roadAddress(roadAddress) // 사용자 도로명주소 추가(카카오API)
+                .jibunAddress(jibunAddress) // 사용자 지번주소 추가(카카오API)
+                .detailAddress(detailAddress) // 사용자 상세주소 추가(동네이름 / 아파트이름)(카카오API)
+                .extraAddress(extraAddress) // 사용자 기타주소 추가(ex. 동, 호수) (카카오API)
+//                .address(address) // 사용자 주소 추가
                 .postalNum(postalNum) // 사용자 우편번호 추가
                 .phone(phone) // 사용자 연락처 추가
                 .firstName(firstName) // 사용자 이름 추가

@@ -64,7 +64,12 @@ dependencies {
     // emailAuth
     implementation 'com.sun.mail:jakarta.mail:2.0.1'
     implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.1'
+
+    // OAuth
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()
