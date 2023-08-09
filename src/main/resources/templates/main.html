@@ -1,10 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>main</title>
 </head>
 <body>
 <div>메인페이지입니다</div>
+<div class="right-box">
+    <div class="user-box">
+        <div class="login">
+            <a class="log-in-btn" sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
+
+            <a class="admin-page-btn" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/page}">관리자페이지 </a>
+            <a th:href="@{/member/mypage}">
+                <div class="profile-img">
+                    <img alt="" sec:authorize="isAuthenticated()" th:if="${userImg}" th:src="${userImg}"/>
+                    <img alt="" sec:authorize="isAuthenticated()" src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
+                         th:unless="${userImg}"/>
+                </div>
+            </a>
+            <a sec:authorize="isAuthenticated()" th:href="@{/member/mypage}"
+               th:text="${#authentication.principal.nickName + ' 님'}"></a>
+            <a class="log-out-btn" sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a>
+
+            <a class="sign-up-btn" sec:authorize="isAnonymous()" th:href="@{|/member/join|}">회원가입</a>
+        </div>
+    </div>
+</div>
+
+<form enctype="multipart/form-data" method="POST"
+      th:action="@{/member/updateprofile}" th:object="${memberJoinRequest}">
+    <div class="user-profile-register">
+        <div class="user-img-box">
+            <label for="avatar1">프로필 사진 등록</label>
+            <input accept="image/png, image/jpeg, image/jpg" id="avatar1" name="file"
+                   type="file">
+            <input class="btn btn-primary btn-action img-btn" type="submit" value="저장하기">
+        </div>
+    </div>
+</form>
 </body>
 </html>

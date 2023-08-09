@@ -8,4 +8,9 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByUserName(String userName);
+
+//    @Modifying
+//    @Transactional
+//    @Query("UPDATE Member u SET u.mailAuth = true WHERE u.username = :username AND u.mailKey = :mailKey")
+//    int updateMailAuth(@Param("username") String userName, @Param("mailKey") int mailKey);
 }

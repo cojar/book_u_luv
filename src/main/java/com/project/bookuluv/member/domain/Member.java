@@ -77,6 +77,6 @@ public class Member {
     @Column(name = "mail_auth")
     private boolean mailAuth;
 
-    @Column(name = "main_key")
-    private Integer mainKey;
+    @Column(name = "mail_key")
+    private int mailKey;
 }
