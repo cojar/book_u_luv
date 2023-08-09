@@ -7,20 +7,20 @@
 <body>
 <h1>회원가입</h1>
 
-<form th:action="@{/member/join}" th:object="${memberJoinRequest}" method="post">
+<form method="post" th:action="@{/member/join}" th:object="${memberJoinRequest}">
     <!-- 사용자 아이디 (이메일) -->
     <div>
         <label for="userName">사용자 아이디 (이메일):</label>
-        <input type="email" id="userName" th:field="*{userName}" required>
+        <input id="userName" required th:field="*{userName}" type="email">
     </div>
 
     <!-- 이메일 인증 -->
     <div>
         <label for="mailKey">이메일 인증번호:</label>
-        <input id="mailKey" th:field="*{mailKey}" type="text" placeholder="인증번호">
-        <input id="genMailKey" th:field="*{genMailKey}" type="hidden" placeholder="인증번호">
-        <button type="button" onclick="sendEmailConfirmation()">인증번호 전송</button>
-        <button type="button" onclick="validateMailKey()">인증 확인</button>
+        <input id="mailKey" placeholder="인증번호" th:field="*{mailKey}" type="text">
+        <input id="genMailKey" placeholder="인증번호" th:field="*{genMailKey}" type="hidden">
+        <button onclick="sendEmailConfirmation()" type="button">인증번호 전송</button>
+        <button onclick="validateMailKey()" type="button">인증 확인</button>
         <span class="email-check-checkmark" style="display: none">✔️</span>
         <span id="mail-key-errorMessage" style="display: none; color: red">인증번호가 일치하지 않습니다.</span>
     </div>
@@ -28,49 +28,76 @@
     <!-- 비밀번호 -->
     <div>
         <label for="password1">비밀번호:</label>
-        <input type="password" id="password1" th:field="*{password1}" required>
+        <input id="password1" required th:field="*{password1}" type="password">
     </div>
 
     <!-- 비밀번호 확인 -->
     <div>
         <label for="password2">비밀번호 확인:</label>
-        <input type="password" id="password2" th:field="*{password2}" required>
+        <input id="password2" required th:field="*{password2}" type="password">
     </div>
 
     <!-- 닉네임 -->
     <div>
         <label for="nickName">닉네임:</label>
-        <input type="text" id="nickName" th:field="*{nickName}" required>
+        <input id="nickName" required th:field="*{nickName}" type="text">
     </div>
 
     <!-- 사용자 주소 -->
     <div>
         <label for="address">사용자 주소:</label>
-        <input type="text" id="address" th:field="*{address}" required>
+        <input id="address" required th:field="*{address}" type="text">
     </div>
 
+    <!-- 카카오맵 지도영역 -->
+    <div id="map" style="width:500px;height:400px;"></div>
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=29a0c927015ac2aacc00215b1a91d7f3" type="text/javascript"></script>
+    <script>
+		var container = document.getElementById('map');
+		var options = {
+			center: new kakao.maps.LatLng(36.349405, 127.376768),
+			level: 3
+		};
+
+		var map = new kakao.maps.Map(container, options);
+
+		// 마커가 표시될 위치입니다
+        var markerPosition  = new kakao.maps.LatLng(36.349405, 127.376768);
+
+        // 마커를 생성합니다
+        var marker = new kakao.maps.Marker({
+            position: markerPosition
+        });
+
+        // 마커가 지도 위에 표시되도록 설정합니다
+        marker.setMap(map);
+
+        // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
+        // marker.setMap(null);
+
+    </script>
     <!-- 우편번호 -->
     <div>
         <label for="postalNum">우편번호:</label>
-        <input type="number" id="postalNum" th:field="*{postalNum}" required>
+        <input id="postalNum" required th:field="*{postalNum}" type="number">
     </div>
 
     <!-- 연락처 -->
     <div>
         <label for="phone">연락처:</label>
-        <input type="number" id="phone" th:field="*{phone}" required>
+        <input id="phone" required th:field="*{phone}" type="number">
     </div>
 
     <!-- 이름 -->
     <div>
         <label for="firstName">이름:</label>
-        <input type="text" id="firstName" th:field="*{firstName}" required>
+        <input id="firstName" required th:field="*{firstName}" type="text">
     </div>
 
     <!-- 성 -->
     <div>
         <label for="lastName">성:</label>
-        <input type="text" id="lastName" th:field="*{lastName}" required>
+        <input id="lastName" required th:field="*{lastName}" type="text">
     </div>
 
     <!-- 성별 -->
@@ -85,7 +112,7 @@
     <!-- 생년월일 -->
     <div>
         <label for="birthDate">생년월일:</label>
-        <input type="date" id="birthDate" th:field="*{birthDate}">
+        <input id="birthDate" th:field="*{birthDate}" type="date">
     </div>
 
     <!-- 회원 가입 버튼 -->
@@ -128,5 +155,6 @@
             errorMessage.style.display = 'block';
         }
     }
+
 </script>
 </html>
