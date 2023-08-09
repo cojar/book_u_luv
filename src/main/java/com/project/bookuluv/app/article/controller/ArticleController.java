@@ -6,7 +6,6 @@ import com.project.bookuluv.app.article.service.ArticleService;
 import com.project.bookuluv.member.domain.Member;
 import com.project.bookuluv.member.service.MemberService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;

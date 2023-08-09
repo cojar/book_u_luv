@@ -17,6 +17,7 @@ public class AuthenticationConfig {
 
     private final MemberService memberService;
 
+
     @Value("${spring.jwt.secret}")
     private String secretKey;
 

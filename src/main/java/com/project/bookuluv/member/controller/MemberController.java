@@ -1,5 +1,7 @@
 package com.project.bookuluv.member.controller;
 
+import com.project.bookuluv.DataNotFoundException;
+import com.project.bookuluv.mail.MailController;
 import com.project.bookuluv.member.domain.Member;
 import com.project.bookuluv.member.dto.MemberJoinRequest;
 import com.project.bookuluv.member.dto.MemberLoginRequest;
@@ -10,6 +12,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,12 +41,15 @@ import java.security.Principal;
 import java.time.LocalDate;
 
 @Controller
-//@RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
     private final MemberSecurityService memberSecurityService;
+
+    private final MailController mailController;
+
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/api/v1/members/join")
     public ResponseEntity<String> join(@RequestBody MemberJoinRequest dto) {
@@ -67,7 +81,6 @@ public class MemberController {
     //       return ResponseEntity.ok().body(memberService.me(dto.getUserName()));
     //  }
 
-    //    @PreAuthorize("isAnonymous()")
     @GetMapping("/member/join")
     public String showSignup(MemberJoinRequest memberJoinRequest) {
 //        model.addAttribute("memberJoinRequest", new MemberJoinRequest());
@@ -126,6 +139,61 @@ public class MemberController {
         return "redirect:/";
     }
 
+
+    @GetMapping("/member/findUsername")
+    public String findUsername() {
+        return "member/findUsername";
+    }
+
+    @PostMapping("/member/findUsername")
+    @ResponseBody
+    public ResponseEntity<String> findUsername(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("phone") String phone) {
+
+        Member member = memberService.getMember(firstName, lastName, phone);
+
+        if (member != null) {
+            String result = "찾은 아이디 : " + member.getUserName();
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("아이디를 찾지 못했습니다.");
+        }
+    }
+
+    @GetMapping("/member/findPassword")
+    public String showFindPw() {
+        return "member/findPassword";
+    }
+
+    @PostMapping("/member/findPassword")
+    @ResponseBody
+    public String findPw(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("phone") String phone, @RequestParam("userName") String userName) {
+
+        try {
+            Member member = memberService.getMember(firstName, lastName, phone, userName);
+
+            mailController.sendEmailForPw(userName, lastName, firstName, phone);
+
+            return "success";
+
+        } catch (DataNotFoundException e) {
+            return "fail";
+        }
+    }
+
+    @PostMapping("/mypage/changePassword")
+    @ResponseBody
+    public String changePassword(@RequestParam("newpassword") String newpw, @RequestParam("newpasswordcf") String newpwcf) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Member member = memberService.getMember(username);
+
+        if (!newpw.equals(newpwcf)) {
+            return "변경할 비밀번호와 확인 비밀번호가 일치하지 않습니다.";
+        }
+        member.setPassword(passwordEncoder.encode(newpw));
+        memberService.saveMember(member);
+        return "/";
+    }
     @GetMapping("/member/mypage")
     public String myPage(Model model, Principal principal) {
         Member member = memberService.getUser(principal.getName());
