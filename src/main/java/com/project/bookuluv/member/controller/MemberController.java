@@ -1,5 +1,6 @@
 package com.project.bookuluv.member.controller;
 
+import com.project.bookuluv.DataNotFoundException;
 import com.project.bookuluv.mail.MailController;
 import com.project.bookuluv.member.domain.Member;
 import com.project.bookuluv.member.dto.MemberJoinRequest;
@@ -7,12 +8,15 @@ import com.project.bookuluv.member.dto.MemberLoginRequest;
 import com.project.bookuluv.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -21,6 +25,8 @@ public class MemberController {
     private final MemberService memberService;
 
     private final MailController mailController;
+
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/api/v1/members/join")
     public ResponseEntity<String> join(@RequestBody MemberJoinRequest dto) {
@@ -49,27 +55,24 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping("/member/find")
-    public String find() {
-        return "find";
-    }
 
     @GetMapping("/member/findUsername")
-    public String showFindUsername() {
+    public String findUsername() {
         return "/member/findUsername";
     }
 
     @PostMapping("/member/findUsername")
-    public String findUsername(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("phone") String phone) {
+    @ResponseBody
+    public ResponseEntity<String> findUsername(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("phone") String phone) {
 
-        Member member = memberService.getMember(firstName, lastName);
+        Member member = memberService.getMember(firstName, lastName, phone);
 
         if (member != null) {
-            mailController.sendEmailForId(member.getUserName(), member.getPhone());
-            return "메일 발송 완료";
+            String result = "찾은 아이디 : " + member.getUserName();
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("아이디를 찾지 못했습니다.");
         }
-
-        return "/member/findUsername";
     }
 
     @GetMapping("/member/findPassword")
@@ -78,10 +81,35 @@ public class MemberController {
     }
 
     @PostMapping("/member/findPassword")
-    public String findPw() {
-        return "/member/findPassword";
+    @ResponseBody
+    public String findPw(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("phone") String phone, @RequestParam("userName") String userName) {
+
+        try {
+            Member member = memberService.getMember(firstName, lastName, phone, userName);
+
+            mailController.sendEmailForPw(userName, lastName, firstName, phone);
+
+            return "success";
+
+        } catch (DataNotFoundException e) {
+            return "fail";
+        }
     }
 
+    @PostMapping("/mypage/changePassword")
+    @ResponseBody
+    public String changePassword(@RequestParam("newpassword") String newpw, @RequestParam("newpasswordcf") String newpwcf) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Member member = memberService.getMember(username);
+
+        if (!newpw.equals(newpwcf)) {
+            return "변경할 비밀번호와 확인 비밀번호가 일치하지 않습니다.";
+        }
+        member.setPassword(passwordEncoder.encode(newpw));
+        memberService.saveMember(member);
+        return "/";
+    }
 
     @GetMapping("/member/me")
     public String me() {

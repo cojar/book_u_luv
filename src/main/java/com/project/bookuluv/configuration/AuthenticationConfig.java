@@ -18,6 +18,7 @@ public class AuthenticationConfig {
 
     private final MemberService memberService;
 
+
     @Value("${spring.jwt.secret}")
     private String secretKey;
 
@@ -40,9 +41,11 @@ public class AuthenticationConfig {
                         "/v3/api-docs",
                         "/**"
                 ).permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
                 .and()
-                .addFilterBefore(new JwtFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class)
                 .build();
+//                .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
+//                .and()
+//                .addFilterBefore(new JwtFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class)
+//                .build();
     }
 }

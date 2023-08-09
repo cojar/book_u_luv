@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class MemberService {
         // userName 중복체크
         memberRepository.findByUserName(userName)
                 .ifPresent(user -> {
-                    throw new AppException(ErrorCode.USERNAME_DUPLICATED, userName + " 는 이미있습니다.");
+                    throw new AppException(ErrorCode.USERNAME_DUPLICATED, userName + " 는 존재합니다.");
                 });
 
         // 저장
@@ -68,12 +69,37 @@ public class MemberService {
         }
     }
 
-    public Member getMember(String firstName, String lastName) {
-        Optional<Member> _member = this.memberRepository.findByUserFirstNameAndLastName(firstName, lastName);
-        if (_member.isPresent()) {
-            return _member.get();
+    public Member getMember(String firstName, String lastName, String phone) {
+        Optional<Member> member = this.memberRepository.findByFirstNameAndLastNameAndPhone(firstName, lastName, phone);
+        if (member.isPresent()) {
+            return member.get();
         }
-        throw new DataNotFoundException("member not found");
+        throw new DataNotFoundException("Member not found");
+    }
+
+    public Member getMember(String firstName, String lastName, String phone, String userName) {
+        Optional<Member> member = this.memberRepository.findByFirstNameAndLastNameAndPhoneAndUserName(firstName, lastName, phone, userName);
+        if (member.isPresent()) {
+            return member.get();
+        }
+        throw new DataNotFoundException("Member not found");
+    }
+
+    public String generateTempPassword() {
+        String characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        StringBuilder sb = new StringBuilder();
+
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            int index = random.nextInt(characters.length());
+            sb.append(characters.charAt(index));
+        }
+
+        return sb.toString();
+    }
+
+    public Member saveMember(Member member) {
+        return memberRepository.save(member);
     }
 
 
