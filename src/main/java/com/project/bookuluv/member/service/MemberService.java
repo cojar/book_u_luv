@@ -203,20 +203,6 @@ public class MemberService {
         }
         throw new DataNotFoundException("Member not found");
     }
-
-    public String generateTempPassword() {
-        String characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        StringBuilder sb = new StringBuilder();
-
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            int index = random.nextInt(characters.length());
-            sb.append(characters.charAt(index));
-        }
-
-        return sb.toString();
-    }
-
     public Member saveMember(Member member) {
         return memberRepository.save(member);
     }

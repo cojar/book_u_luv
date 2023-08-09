@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,5 +50,29 @@ public class MailController {
         } catch (Exception e) {
             throw new DataNotFoundException("error");
         }
+    }
+
+    @GetMapping("/mailCheck")
+    @ResponseBody
+    public int processMailCheck(@RequestParam("email") String email) throws Exception {
+        int mailKey = (int) ((Math.random() * (99999 - 10000 + 1)) + 10000);
+
+        String to = email;
+        String title = "안녕하세요 주류추천 서비스 Spirits 입니다. 회원가입시 필요한 인증번호 입니다.";
+        String content = "[인증번호] " + mailKey + " 입니다. <br/> 인증번호 확인란에 기입해주십시오.";
+        try {
+            MimeMessage mail = mailSender.createMimeMessage();
+            MimeMessageHelper mailHelper = new MimeMessageHelper(mail, true, "UTF-8");
+
+            mailHelper.setTo(to);
+            mailHelper.setSubject(title);
+            mailHelper.setText(content, true);
+
+            mailSender.send(mail);
+
+        } catch (Exception e) {
+            throw new DataNotFoundException("error");
+        }
+        return mailKey;
     }
 }

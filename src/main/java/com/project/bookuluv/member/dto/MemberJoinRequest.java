@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @Setter
 @Component
 public class MemberJoinRequest {
-   @NotEmpty(message = "사용자ID는 필수항목입니다.")
+    @NotEmpty(message = "사용자ID는 필수항목입니다.")
     @Email
     private String userName;
 
