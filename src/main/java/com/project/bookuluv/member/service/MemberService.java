@@ -1,18 +1,25 @@
 package com.project.bookuluv.member.service;
 
 import com.project.bookuluv.DataNotFoundException;
+import com.project.bookuluv.member.domain.Member;
+import com.project.bookuluv.member.dto.MemberRole;
 import com.project.bookuluv.member.exception.AppException;
 import com.project.bookuluv.member.exception.ErrorCode;
 import com.project.bookuluv.member.repository.MemberRepository;
 import com.project.bookuluv.utils.JwtUtil;
-import com.project.bookuluv.member.domain.Member;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,7 +34,28 @@ public class MemberService {
 
     private Long expiredMs = 1000 * 60 * 60l;
 
-    public String join(String userName, String password) {
+    public Member getUser(String userName) {
+        Optional<Member> siteUser = this.memberRepository.findByUserName(userName);
+        if (siteUser.isPresent()) {
+            return siteUser.get();
+        } else {
+            throw new DataNotFoundException("siteUser not found");
+        }
+    }
+
+    public String join(String userName,
+                       String password,
+                       String nickName,
+                       String address,
+                       String postalNum,
+                       String phone,
+                       String firstName,
+                       String lastName,
+                       boolean gender,
+                       LocalDate birthDate,
+                       Integer mailKey,
+                       MemberRole role,
+                       boolean mailAuth) { // 프로필 사진 파일 이름
 
         // userName 중복체크
         memberRepository.findByUserName(userName)
@@ -36,15 +64,106 @@ public class MemberService {
                 });
 
         // 저장
-        Member user = Member.builder()
-                .userName(userName)
-                .password(encoder.encode(password))
+        Member member = Member.builder()
+                .userName(userName) // 사용자ID 추가(email형식)
+                .password(encoder.encode(password)) // 사용자 비밀번호 추가(passwordEncoder로 인코딩)
+                .nickName(nickName) // 사용자 닉네임 추가
+                .address(address) // 사용자 주소 추가
+                .postalNum(postalNum) // 사용자 우편번호 추가
+                .phone(phone) // 사용자 연락처 추가
+                .firstName(firstName) // 사용자 이름 추가
+                .lastName(lastName) // 사용자 성 추가
+                .gender(gender) // 사용자 성별 추가
+                .birthDate(birthDate) // 사용자 생년월일 추가
+                .mailKey(mailKey) // 사용자 이메일 인증당시 인증 키 추가
+                .role(role) // 사용자 권한 추가
+                .mailAuth(mailAuth) // 사용자 메일 인증여부 추가(일반 가입시 true)
+                .createDate(LocalDate.from(LocalDateTime.now())) // 계정 생성일 추가
                 .build();
 
-        memberRepository.save(user);
+        this.memberRepository.save(member);
         return "SUCCESS";
     }
+    public Member verifyEmailConfirmation(String userName, int mailKey) throws Exception {
+        Member member= this.getUserByUserName(userName);
+        if (member == null) {
+            throw new Exception("유효하지 않은 이메일입니다.");
+        }
+        if (member.isMailAuth()) {
+            throw new Exception("이미 인증된 이메일입니다.");
+        }
+        if (member.getMailKey() != mailKey) {
+            throw new Exception("인증코드가 일치하지 않습니다.");
+        }
+        member.setMailAuth(true);
+        memberRepository.save(member);
+        return member;
+    }
 
+    public Member getUserByUserName (String userName) {
+        Optional<Member> memberOp = this.memberRepository.findByUserName(userName);
+        return memberOp.orElse(null);
+    }
+
+//    public void updateMailAuth(String userName, int mailKey) {
+//        int updatedRows = memberRepository.updateMailAuth(userName, mailKey);
+//        if (updatedRows > 0) {
+//            System.out.println("Mail auth updated successfully.");
+//        } else {
+//            System.out.println("Failed to update mail auth.");
+//        }
+//    }
+
+    public Member updateProfile(Member member, File file) throws IOException {
+        String projectPath =
+                System.getProperty("user.dir") +
+                        File.separator + "src" +
+                        File.separator + "main" +
+                        File.separator + "resources" +
+                        File.separator + "static" +
+                        File.separator + "files";
+
+        UUID uuid = UUID.randomUUID();
+        String fileName = uuid + "_" + file.getName();
+        String filePath = "/files/" + fileName;
+
+        File saveFile = new File(projectPath, fileName);
+        FileUtils.copyFile(file, saveFile); // 임시 파일을 실제 저장 경로로 복사
+
+        member.setImgFileName(fileName);
+        member.setImgFilePath(filePath);
+        this.memberRepository.save(member);
+
+        return member;
+    }
+    public String generateTempPassword() {
+        String characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        StringBuilder sb = new StringBuilder();
+
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            int index = random.nextInt(characters.length());
+            sb.append(characters.charAt(index));
+        }
+        return sb.toString();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // 이하 JWT 토큰 관련
     public String login(String userName, String password) {
 
         // userName 없음

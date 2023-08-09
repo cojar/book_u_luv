@@ -5,11 +5,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -41,6 +40,15 @@ public class AuthenticationConfig {
                         "/v3/api-docs",
                         "/**"
                 ).permitAll()
+                .and()
+                .formLogin()
+                .loginPage("/user/login") // 로그인 페이지를 지정해두면 스프링시큐리티의 통제를 받음(디버깅 과정에서 username을 못받아옴)
+                .defaultSuccessUrl("/")
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
                 .and()
                 .build();
 //                .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()

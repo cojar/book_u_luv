@@ -12,4 +12,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByFirstNameAndLastNameAndPhone(String firstName, String lastName, String phone);
 
     Optional<Member> findByFirstNameAndLastNameAndPhoneAndUserName(String firstName, String lastName, String phone, String userName);
+//    @Modifying
+//    @Transactional
+//    @Query("UPDATE Member u SET u.mailAuth = true WHERE u.username = :username AND u.mailKey = :mailKey")
+//    int updateMailAuth(@Param("username") String userName, @Param("mailKey") int mailKey);
 }
