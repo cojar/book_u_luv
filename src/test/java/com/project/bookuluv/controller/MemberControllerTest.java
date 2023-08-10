@@ -23,11 +23,11 @@ public class MemberControllerTest {
     @Test
     void t1() {
         Member member = new Member();
-        member.setUserName("changgyu549@gmail.com");
+        member.setUserName("kikikiki@gmail.com");
         member.setPassword(passwordEncoder.encode("1234"));
-        member.setFirstName("창규");
-        member.setLastName("박");
-        member.setPhone("010-4277-0595");
+        member.setFirstName("철수");
+        member.setLastName("김");
+        member.setPhone("010-1234-1234");
         memberRepository.save(member);
     }
 }

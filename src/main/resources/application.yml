@@ -28,17 +28,6 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 500MB
-# 이하 OAuth google
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: 507385930767-poj4o9uks4pdtu2vs9rmdvocj1pnj929.apps.googleusercontent.com
-            client-secret: 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
-            scope:
-              - email
-              - profile
 springdoc:
   api-docs:
     enabled: true
