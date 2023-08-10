@@ -27,7 +27,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'commons-io:commons-io:2.11.0'
 
-
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -43,7 +42,6 @@ dependencies {
     // Security
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
 
     // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -57,6 +55,7 @@ dependencies {
     // thymeleaf
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
 
     // mail
     implementation 'com.sun.mail:jakarta.mail:2.0.1'
@@ -65,7 +64,14 @@ dependencies {
     // emailAuth
     implementation 'com.sun.mail:jakarta.mail:2.0.1'
     implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.1'
+
+    // OAuth
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    // assertj
+    implementation 'org.assertj:assertj-core:3.11.1'
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()

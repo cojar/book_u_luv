@@ -58,7 +58,7 @@ public class MailController {
         int mailKey = (int) ((Math.random() * (99999 - 10000 + 1)) + 10000);
 
         String to = email;
-        String title = "안녕하세요 주류추천 서비스 Spirits 입니다. 회원가입시 필요한 인증번호 입니다.";
+        String title = "안녕하세요 [당신이 사랑한 책 : Book_U_Luv] 입니다. 회원가입시 필요한 인증번호 입니다.";
         String content = "[인증번호] " + mailKey + " 입니다. <br/> 인증번호 확인란에 기입해주십시오.";
         try {
             MimeMessage mail = mailSender.createMimeMessage();

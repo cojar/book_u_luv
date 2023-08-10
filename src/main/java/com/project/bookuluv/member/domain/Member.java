@@ -31,9 +31,6 @@ public class Member {
     @Column(name = "tmp_password")
     private String tmpPassword;
 
-    @Column(name = "address")
-    private String address;
-
     @Column(name = "postal_num")
     private String postalNum;
 
@@ -79,4 +76,23 @@ public class Member {
 
     @Column(name = "mail_key")
     private int mailKey;
+
+    @Column(name = "road_address")
+    private String roadAddress;
+
+    @Column(name = "jibun_address")
+    private String jibunAddress;
+
+    @Column(name = "detail_address")
+    private String detailAddress;
+
+    @Column(name = "extra_address")
+    private String extraAddress;
+
+    // 소셜로그인 기능을 위한 프로바이더와 프로바이더_id 칼럼 추가
+    @Column(name = "provider")
+    private String provider;
+
+    @Column(name = "provider_id")
+    private String providerId;
 }
