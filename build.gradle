@@ -68,6 +68,8 @@ dependencies {
     // OAuth
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+    // assertj
+    implementation 'org.assertj:assertj-core:3.11.1'
 }
 
 
