@@ -15,7 +15,8 @@
             <a th:href="@{/member/mypage}">
                 <div class="profile-img">
                     <img alt="" sec:authorize="isAuthenticated()" th:if="${userImg}" th:src="${userImg}"/>
-                    <img alt="" sec:authorize="isAuthenticated()" src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
+                    <img alt="" sec:authorize="isAuthenticated()"
+                         src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
                          th:unless="${userImg}"/>
                 </div>
             </a>
@@ -39,5 +40,101 @@
         </div>
     </div>
 </form>
+
+<div>
+    <form action="#" th:action="@{/api/search}" th:method="get" onsubmit="return validateSearchForm();">
+        <input type="text" name="query" placeholder="Search for a book">
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<div>
+    <h2>New Books</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Publisher</th>
+            <th>Price Standard</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="newBook : ${newBooks}">
+            <td><span th:text="${newBook.title}">Title</span>
+            </td>
+            <td><span th:text="${newBook.author}">Author</span>
+            </td>
+            <td><span th:text="${newBook.publisher}">Publisher</span>
+            </td>
+            <td><span th:text="${newBook.pubDate}">PubDate</span>
+            </td>
+            <td><span th:text="${newBook.isbn}">Isbn</span>
+            </td>
+            <td><span th:text="${newBook.categoryId}">CategoryId</span>
+            </td>
+            <td><span th:text="${newBook.categoryName}">CategoryName</span>
+            </td>
+            <td><span th:text="${newBook.priceStandard}">PriceStandard</span>
+            </td>
+            <td><a th:href="${newBook.link}">Book Info</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h2>Bestsellers</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Publisher</th>
+            <th>Price Standard</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="bestseller : ${bestsellers}">
+            <td><span th:text="${bestseller.title}">Title</span>
+            </td>
+            <td><span th:text="${bestseller.author}">Author</span>
+            </td>
+            <td><span th:text="${bestseller.publisher}">Publisher</span>
+            </td>
+            <td><span th:text="${bestseller.pubDate}">PubDate</span>
+            </td>
+            <td><span th:text="${bestseller.isbn}">Isbn</span>
+            </td>
+            <td><span th:text="${bestseller.categoryId}">CategoryId</span>
+            </td>
+            <td><span th:text="${bestseller.categoryName}">CategoryName</span>
+            </td>
+            <td><span th:text="${bestseller.priceStandard}">PriceStandard</span>
+            </td>
+            <td><a th:href="${bestseller.link}">Book Info</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
+
+<script th:inline="javascript">
+    /* 검색창이 제출될 때 검색어가 비어있는지 확인 */
+    function validateSearchForm() {
+        var queryInput = document.querySelector('input[name="query"]');
+        if (queryInput.value.trim() === "") {
+            alert("검색어를 입력해주세요.");
+            return false; // 검색어가 비어있으면 검색 요청을 보내지 않도록 반환
+        }
+        return true;
+    }
+
+
+
+
+
+</script>
 </html>

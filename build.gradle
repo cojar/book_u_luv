@@ -26,6 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'commons-io:commons-io:2.11.0'
+    implementation 'org.springframework.boot:spring-boot-starter'
 
 
     // lombok
@@ -62,9 +63,9 @@ dependencies {
     implementation 'com.sun.mail:jakarta.mail:2.0.1'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-    // emailAuth
-    implementation 'com.sun.mail:jakarta.mail:2.0.1'
-    implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.1'
+    // json
+    implementation group: 'org.json', name: 'json', version: '+'
+
 }
 
 tasks.named('test') {
