@@ -15,9 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductController {
 
-    @Value("${spring.aladin.api.key")
-    private String apiKey;
-
     private final ProductService productService;
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)

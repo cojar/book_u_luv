@@ -53,15 +53,22 @@
     <table>
         <thead>
         <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Publisher</th>
-            <th>Price Standard</th>
+            <th>표지</th>
+            <th>제목</th>
+            <th>작가</th>
+            <th>출판사</th>
+            <th>출판일</th>
+            <th>고유번호</th>
+            <th>카테고리</th>
+            <th>정가</th>
+            <th>할인가</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="newBook : ${newBooks}">
-            <td><span th:text="${newBook.title}">Title</span>
+            <td><a th:href="${newBook.link}"><img th:src="${newBook.coverImg}"></a></img>
+            </td>
+            <td><a th:href="${newBook.link}"><span th:text="${newBook.title}">Title</span></a>
             </td>
             <td><span th:text="${newBook.author}">Author</span>
             </td>
@@ -71,13 +78,11 @@
             </td>
             <td><span th:text="${newBook.isbn}">Isbn</span>
             </td>
-            <td><span th:text="${newBook.categoryId}">CategoryId</span>
-            </td>
             <td><span th:text="${newBook.categoryName}">CategoryName</span>
             </td>
             <td><span th:text="${newBook.priceStandard}">PriceStandard</span>
             </td>
-            <td><a th:href="${newBook.link}">Book Info</a>
+            <td><span th:text="${newBook.priceSales}">priceSales</span>
             </td>
         </tr>
         </tbody>
@@ -89,15 +94,22 @@
     <table>
         <thead>
         <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Publisher</th>
-            <th>Price Standard</th>
+            <th>표지</th>
+            <th>제목</th>
+            <th>작가</th>
+            <th>출판사</th>
+            <th>출판일</th>
+            <th>고유번호</th>
+            <th>카테고리</th>
+            <th>정가</th>
+            <th>할인가</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="bestseller : ${bestsellers}">
-            <td><span th:text="${bestseller.title}">Title</span>
+            <td><a th:href="${bestseller.link}"><img th:src="${bestseller.coverImg}"></a></img>
+            </td>
+            <td><a th:href="${bestseller.link}"><span th:text="${bestseller.title}">Title</span></a>
             </td>
             <td><span th:text="${bestseller.author}">Author</span>
             </td>
@@ -107,13 +119,11 @@
             </td>
             <td><span th:text="${bestseller.isbn}">Isbn</span>
             </td>
-            <td><span th:text="${bestseller.categoryId}">CategoryId</span>
-            </td>
             <td><span th:text="${bestseller.categoryName}">CategoryName</span>
             </td>
             <td><span th:text="${bestseller.priceStandard}">PriceStandard</span>
             </td>
-            <td><a th:href="${bestseller.link}">Book Info</a>
+            <td><span th:text="${bestseller.priceSales}">priceSales</span>
             </td>
         </tr>
         </tbody>
@@ -131,6 +141,16 @@
         }
         return true;
     }
+
+
+
+
+
+
+
+
+
+
 
 
 

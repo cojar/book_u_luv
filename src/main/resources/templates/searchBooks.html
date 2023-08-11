@@ -12,15 +12,15 @@
     <table>
         <thead>
         <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Publisher</th>
-            <th>PubDate</th>
-            <th>Isbn</th>
-            <th>CategoryId</th>
-            <th>CategoryName</th>
-            <th>PriceStandard</th>
-            <th>Link</th>
+            <th>표지</th>
+            <th>제목</th>
+            <th>작가</th>
+            <th>출판사</th>
+            <th>출판일</th>
+            <th>고유번호</th>
+            <th>카테고리</th>
+            <th>정가</th>
+            <th>할인가</th>
         </tr>
         </thead>
         <tbody>
@@ -28,7 +28,9 @@
             <td> 검색 결과를 찾지 못했습니다. 다시 검색해주세요.</td>
         </tr>
         <tr th:each="result : ${results}">
-            <td><span th:text="${result.title}">Title</span>
+            <td><a th:href="${result.link}"><img th:src="${result.coverImg}"></a></img>
+            </td>
+            <td><a th:href="${result.link}"><span th:text="${result.title}">Title</span></a>
             </td>
             <td><span th:text="${result.author}">Author</span>
             </td>
@@ -38,13 +40,11 @@
             </td>
             <td><span th:text="${result.isbn}">Isbn</span>
             </td>
-            <td><span th:text="${result.categoryId}">CategoryId</span>
-            </td>
             <td><span th:text="${result.categoryName}">CategoryName</span>
             </td>
             <td><span th:text="${result.priceStandard}">PriceStandard</span>
             </td>
-            <td><a th:href="${result.link}">Book Info</a>
+            <td><span th:text="${result.priceSales}">PriceStandard</span>
             </td>
         </tr>
         </tbody>

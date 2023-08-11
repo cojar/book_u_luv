@@ -25,6 +25,8 @@ public class ProductDto {
 
     private Long priceStandard;
 
+    private Long priceSales;
+
     private String mallType; // 대분류
 
     private String stockStatus;
@@ -40,8 +42,6 @@ public class ProductDto {
     private int bestRank;
 
     private char status; // 책 상태(A~C, N , E)
-
-    private Long categoryId;
 
     private String categoryName;
 }

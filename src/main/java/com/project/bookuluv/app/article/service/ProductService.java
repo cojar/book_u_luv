@@ -3,13 +3,14 @@ package com.project.bookuluv.app.article.service;
 import com.project.bookuluv.app.article.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -60,15 +61,16 @@ public class ProductService {
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
                     ProductDto result = new ProductDto();
+                    result.setCoverImg(item.optString("cover"));
                     result.setTitle(item.optString("title"));
                     result.setLink(item.optString("link"));
                     result.setAuthor(item.optString("author"));
                     result.setPubDate(item.optString("pubDate"));
                     result.setIsbn(item.optString("isbn"));
-                    result.setCategoryId(item.optLong("categoryId"));
                     result.setCategoryName(item.optString("categoryName"));
                     result.setPublisher(item.optString("publisher"));
                     result.setPriceStandard(item.optLong("priceStandard"));
+                    result.setPriceSales(item.optLong("priceSales"));
                     results.add(result);
                 }
             } else {
