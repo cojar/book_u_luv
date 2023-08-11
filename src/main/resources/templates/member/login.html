@@ -45,39 +45,56 @@
                     form.submit();
                     MemberLogin__submitDone = true;
                 }
+
             </script>
 
 
-            <form th:action="@{/member/login}" method="POST" class="flex flex-col gap-3"
-                  onsubmit="MemberLogin__submit(this); return false;">
+            <form class="flex flex-col gap-3" method="POST" onsubmit="MemberLogin__submit(this); return false;"
+                  th:action="@{/member/login}">
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">아이디</span>
                     </label>
-                    <input autofocus type="text" name="userName" placeholder="아이디" class="input input-bordered"
-                           maxlength="50">
+                    <input autofocus class="input input-bordered" maxlength="50" name="userName" placeholder="아이디"
+                           type="text">
                 </div>
 
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">비밀번호</span>
                     </label>
-                    <input type="password" name="password"
-                           placeholder="비밀번호" class="input input-bordered" maxlength="50">
+                    <input class="input input-bordered" maxlength="50"
+                           name="password" placeholder="비밀번호" type="password">
                 </div>
 
                 <div class="grid grid-cols-2 mt-2 gap-2">
-                    <a th:href="@{/member/join}" class="btn btn-secondary btn-outline">가입하기</a>
+                    <a class="btn btn-secondary btn-outline" th:href="@{/member/join}">가입하기</a>
                     <input class="btn btn-primary" type="submit" value="로그인">
                 </div>
 
                 <div class="flex justify-center">
-                    <a href="/member/findUsername" class="btn btn-link">아이디찾기</a>
-                    <a href="/member/findPassword" class="btn btn-link">비밀번호 찾기</a>
+                    <a class="btn btn-link" href="/member/findUsername">아이디찾기</a>
+                    <a class="btn btn-link" href="/member/findPassword">비밀번호 찾기</a>
                 </div>
             </form>
         </div>
-
+        <div class="login-logo">
+            <div class="logo" id="login-kakao">
+                <a href="http://localhost:7070/oauth2/authorization/kakao">
+                    <img alt="" src="https://developers.kakao.com/tool/resource/static/img/button/login/full/ko/kakao_login_medium_narrow.png">
+                </a>
+            </div>
+            <div class="logo" id="login-naver">
+                <a href="http://localhost:7070/oauth2/authorization/naver">
+                    <img alt="" src="https://i.imgur.com/XdvHPOs.png">
+                </a>
+            </div>
+            <div class="logo" id="login_google">
+                <a href="http://localhost:7070/oauth2/authorization/google">
+                    <img alt="" src="https://i.imgur.com/j6xl70h.png">
+                </a>
+            </div>
+        </div>
     </section>
 
 </main>

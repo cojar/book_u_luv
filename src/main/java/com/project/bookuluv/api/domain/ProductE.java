@@ -1,6 +1,8 @@
 package com.project.bookuluv.api.domain;
 
-import jakarta.persistence.*;
+import com.project.bookuluv.base.entity.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,12 +11,12 @@ import java.time.LocalDate;
 @Entity
 @Setter
 @Getter
-public class ProductE {
+public class ProductE extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "id")
+//    private Long id;
 
     @Column(name = "title")
     private String title;
@@ -63,6 +65,10 @@ public class ProductE {
 
     @Column(name = "status")
     private char status; // 책 상태(A~C, N , E)
+
+    @Column(name = "is_active")
+    private boolean isActive;
+
 
 }
 

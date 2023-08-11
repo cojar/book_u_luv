@@ -2,7 +2,6 @@ package com.project.bookuluv.app.article.service;
 
 import com.project.bookuluv.app.article.domain.Article;
 import com.project.bookuluv.app.article.repository.ArticleRepository;
-
 import com.project.bookuluv.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -52,7 +51,7 @@ public class ArticleService {
         Article article = new Article();
         article.setSubject(subject);
         article.setContent(content);
-        article.setCreateDate(LocalDate.now());
+        article.setCreateDate(LocalDateTime.now());
         article.setRegister(member);
         article.setFileNames(filenames);
         article.setFilePaths(filespaths);
@@ -63,7 +62,7 @@ public class ArticleService {
     public void modify(String subject, String content, Article article) {
         article.setSubject(subject);
         article.setContent(content);
-        article.setModifyDate(LocalDate.now());
+        article.setModifyDate(LocalDateTime.now());
         this.articleRepository.save(article);
     }
 

@@ -1,10 +1,8 @@
 package com.project.bookuluv.app.article.domain;
 
+import com.project.bookuluv.base.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,11 +11,11 @@ import java.time.LocalDate;
 @Entity
 @Setter
 @Getter
-public class Product {
+public class Product extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    private Long id;
 
     @Column(name = "title")
     private String title;
@@ -66,5 +64,8 @@ public class Product {
 
     @Column(name = "status")
     private char status; // 책 상태(A~C, N , E)
+
+    @Column(name = "is_active")
+    private boolean isActive;
 
 }
