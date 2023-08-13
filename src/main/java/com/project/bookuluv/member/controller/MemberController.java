@@ -18,21 +18,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -53,7 +46,7 @@ public class MemberController {
 
     @PostMapping("/api/v1/members/join")
     public ResponseEntity<String> join(@RequestBody MemberJoinRequest dto) {
-        MemberRole role = dto.getUserName().startsWith("admin") ? MemberRole.ADMIN : MemberRole.USER;
+        MemberRole role = dto.getUserName().startsWith("templates/admin") ? MemberRole.ADMIN : MemberRole.USER;
         this.memberService.join(
                 dto.getUserName(),
                 dto.getPassword1(),
@@ -105,7 +98,7 @@ public class MemberController {
                 LocalDate birthDate = dto.getBirthDate();
 
                 // 회원가입 처리
-                MemberRole role = dto.getUserName().startsWith("admin") ? MemberRole.ADMIN : MemberRole.USER;
+                MemberRole role = dto.getUserName().startsWith("templates/admin") ? MemberRole.ADMIN : MemberRole.USER;
                 this.memberService.join(
                         dto.getUserName(),
                         dto.getPassword1(),

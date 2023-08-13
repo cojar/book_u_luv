@@ -28,7 +28,6 @@ dependencies {
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'org.springframework.boot:spring-boot-starter'
 
-
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -64,7 +63,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
     // json
-    implementation group: 'org.json', name: 'json', version: '+'
+    implementation group: 'org.json', name: 'json', version: '20230227'
+
+    // Oauth2
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
+
 
 }
 

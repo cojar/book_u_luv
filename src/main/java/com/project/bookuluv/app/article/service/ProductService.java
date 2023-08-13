@@ -4,6 +4,9 @@ import com.project.bookuluv.app.article.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.json.JSONArray;
@@ -18,6 +21,9 @@ import java.util.List;
 public class ProductService {
 
     private final RestTemplate restTemplate;
+
+    private final OAuth2AuthorizedClientService clientService;
+
     @Value("${spring.aladin.api.key}")
     private String apiKey;
     private final String searchUrl = "http://www.aladdin.co.kr/ttb/api/ItemSearch.aspx";
@@ -82,4 +88,22 @@ public class ProductService {
 
         return results;
     }
+
+//    public String search(String query, Authentication authentication) {
+//        OAuth2AuthorizedClient oAuth2Client = clientService.loadAuthorizedClient("google",
+//                authentication.getName());
+//        String accessToken = oAuth2Client.getAccessToken().getTokenValue();
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setBearerAuth(accessToken);
+//
+//        HttpEntity<String> entity = new HttpEntity<>(headers);
+//
+//        String url = "https://www.googleapis.com/books/v1/volumes?q=" + query;
+//        RestTemplate restTemplate = new RestTemplate();
+//        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+//
+//        return response.getBody();
+//    }
+
 }

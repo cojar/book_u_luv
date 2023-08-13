@@ -23,4 +23,11 @@ public class ProductController {
         model.addAttribute("results", results);
         return "searchBooks";
     }
+
+//    @RequestMapping(value = "/search1", method = RequestMethod.GET)
+//    public String search(Model model, @RequestParam String query){
+//        List<ProductDto> results = productService.searchBooks(query);
+//        model.addAttribute("results", results);
+//        return "searchBooks";
+//    }
 }

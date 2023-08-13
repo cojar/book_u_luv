@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
@@ -84,8 +85,9 @@ public class MemberService {
         this.memberRepository.save(member);
         return "SUCCESS";
     }
+
     public Member verifyEmailConfirmation(String userName, int mailKey) throws Exception {
-        Member member= this.getUserByUserName(userName);
+        Member member = this.getUserByUserName(userName);
         if (member == null) {
             throw new Exception("유효하지 않은 이메일입니다.");
         }
@@ -100,7 +102,7 @@ public class MemberService {
         return member;
     }
 
-    public Member getUserByUserName (String userName) {
+    public Member getUserByUserName(String userName) {
         Optional<Member> memberOp = this.memberRepository.findByUserName(userName);
         return memberOp.orElse(null);
     }
@@ -136,6 +138,7 @@ public class MemberService {
 
         return member;
     }
+
     public String generateTempPassword() {
         String characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         StringBuilder sb = new StringBuilder();
@@ -147,20 +150,6 @@ public class MemberService {
         }
         return sb.toString();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // 이하 JWT 토큰 관련
@@ -203,8 +192,13 @@ public class MemberService {
         }
         throw new DataNotFoundException("Member not found");
     }
+
     public Member saveMember(Member member) {
         return memberRepository.save(member);
+    }
+
+    public List<Member> getAllMembers() {
+        return memberRepository.findAll();
     }
 
 
