@@ -1,12 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
-
-<head>
-    <title>로그인</title>
-</head>
-
-<body>
-<main>
+<html layout:decorate="~{/layout/layout}">
+<main layout:fragment="content">
     <section class="section section-login flex-grow flex flex-col items-center justify-center">
 
         <div class="max-w-md w-full px-2 pt-4">
@@ -78,6 +72,7 @@
                 </div>
             </form>
         </div>
+
         <div class="login-logo">
             <div class="logo" id="login-kakao">
                 <a href="http://localhost:7070/oauth2/authorization/kakao">
@@ -95,8 +90,6 @@
                 </a>
             </div>
         </div>
-    </section>
 
+    </section>
 </main>
-</body>
-</html>
