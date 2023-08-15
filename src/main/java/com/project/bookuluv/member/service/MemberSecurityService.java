@@ -50,7 +50,7 @@ public class MemberSecurityService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(MemberRole.USER.getValue()));
         }
 
-        return new CustomMember( //User 클래스를 리턴한단말이야 원래는 근데 내가 유저정보중에 닉네임을 불러오고싶어서 커스텀을 했어
+        return new CustomMember(
                 member.getUserName(),
                 member.getPassword(),
                 authorities,

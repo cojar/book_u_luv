@@ -189,7 +189,7 @@ public class MemberController {
         memberService.saveMember(member);
         return "/";
     }
-    @GetMapping("/member/mypage")
+    @GetMapping("/member/profile")
     public String myPage(Model model, Principal principal) {
         Member member = memberService.getUser(principal.getName());
 //        List<Review> reviewList = reviewService.getReviewsByAuthor(user);

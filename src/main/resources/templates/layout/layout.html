@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -36,49 +36,51 @@
             <span class="ml-[2px] hidden lg:block">U_LUV</span>
         </a>
 
-        <div class="flex gap-4">
+        <div class="flex gap-4 items-center">
             <a href="/member/login" class="inline-flex" sec:authorize="isAnonymous()">
-                <span class="ml-[2px] hidden lg:block">
+                <span class="ml-[2px] hidden lg:block items-center">
                     로그인
                 </span>
             </a>
 
             <a href="/member/join" class="inline-flex" sec:authorize="isAnonymous()">
-                <span class="ml-[2px] hidden lg:block">
+                <span class="ml-[2px] hidden lg:block items-center">
                     회원가입
                 </span>
             </a>
 
-            <a href="/member/logout" class="inline-flex" sec:authorize="isAuthenticated()">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                <span class="ml-[2px] hidden lg:block">
+            <a href="/member/logout" class="inline-flex items-center" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-arrow-right-from-bracket items-center"></i>
+                <span class="ml-[2px] hidden lg:inline-flex items-center">
                     로그아웃
                 </span>
             </a>
 
-            <a href="/member/profile" class="inline-flex" sec:authorize="isAuthenticated()">
-                <i class="fa-solid fa-user"></i>
+            <a href="/member/profile" class="inline-flex items-center" sec:authorize="isAuthenticated()">
+<!--                <i class="fa-solid fa-user"></i>-->
+                <img class="fa-solid fa-user w-12 h-12" style="border : solid 1px; border-radius : 50%;" alt="" th:if="${#authentication.principal.imgFilePath}" th:src="${#authentication.principal.imgFilePath}"/>
+                <img class="fa-solid fa-user w-12 h-12" style="border : solid 1px; border-radius : 50%;" alt="" src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
+                     th:unless="${#authentication.principal.imgFilePath}"/>
                 <span class="ml-[2px]">
                    <svg width="20" height="20"></svg>
                 </span>
-                <span class="ml-[2px] hidden lg:block">
-                   00회원
+                <span class="ml-[2px] hidden lg:block items-center" th:if="${#authentication.principal.nickName}" th:text="${#authentication.principal.nickName + ' 님'}">
                 </span>
             </a>
 
-            <a href="#" class="inline-flex">
-                <span class="ml-[2px] hidden lg:block">
+            <a href="#" class="inline-flex items-center">
+                <span class="ml-[2px] hidden lg:block items-center">
                     메뉴 1
                 </span>
             </a>
 
-            <a href="#" class="inline-flex">
+            <a href="#" class="inline-flex items-center">
                 <span class="ml-[2px] hidden lg:block">
                     메뉴 2
                 </span>
             </a>
 
-            <a href="#" class="inline-flex">
+            <a href="#" class="inline-flex items-center">
                 <span class="ml-[2px] hidden lg:block">
                     메뉴 3
                 </span>

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{layout/layout.html}" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <title>로그인</title>
 </head>
 
 <body>
-<main>
+<main layout:fragment="content">
     <section class="section section-login flex-grow flex flex-col items-center justify-center">
 
         <div class="max-w-md w-full px-2 pt-4">
@@ -45,20 +45,36 @@
                 </div>
             </form>
         </div>
+        <style>
+            .login-logo {
+	width: 100%;
+	display: flex;
+	position: relative;
+	justify-content: center;
+}
+.login-logo > .logo {
+	width: 12%;
+}
+.login-logo > .logo img {
+	width: 50%;
+	object-fit: cover;
+	border-radius: 0.5rem;
+}
+        </style>
         <div class="login-logo">
             <div class="logo" id="login-kakao">
                 <a href="http://localhost:7070/oauth2/authorization/kakao">
-                    <img alt="" src="https://developers.kakao.com/tool/resource/static/img/button/login/full/ko/kakao_login_medium_narrow.png">
+                    <img th:src="@{/image/login_kakao.png}" alt="">
                 </a>
             </div>
             <div class="logo" id="login-naver">
                 <a href="http://localhost:7070/oauth2/authorization/naver">
-                    <img alt="" src="https://i.imgur.com/XdvHPOs.png">
+                    <img th:src="@{/image/login_naver.png}" alt="">
                 </a>
             </div>
             <div class="logo" id="login_google">
                 <a href="http://localhost:7070/oauth2/authorization/google">
-                    <img alt="" src="https://i.imgur.com/j6xl70h.png">
+                    <img th:src="@{/image/login_google.png}" alt="">
                 </a>
             </div>
         </div>
