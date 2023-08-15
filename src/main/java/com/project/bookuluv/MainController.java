@@ -22,9 +22,9 @@ public class MainController {
             model.addAttribute("member", member);
             model.addAttribute("userImg", member.getImgFilePath());
 
-            return "main"; // ROOT로 접근했을 때 페이지가 해당 주소로 리다이렉트 되게끔 리턴.
+            return "home/main"; // ROOT로 접근했을 때 페이지가 해당 주소로 리다이렉트 되게끔 리턴.
         }
-        return "main";
+        return "home/main";
     }
 
 }
