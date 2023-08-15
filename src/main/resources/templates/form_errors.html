@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .form_errors {
+          background-color: #ffcccc;
+          color: #ff0000;
+          padding: 10px;
+          border-radius: 4px;
+          margin-bottom: 10px;
+          font-weight: bold;
+          text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div th:fragment="formErrorsFragment" class="form_errors" role="alert" th:if="${#fields.hasAnyErrors()}">
+    <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
+</div>
+</body>
+</html>

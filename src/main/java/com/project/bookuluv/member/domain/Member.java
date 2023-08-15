@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
-@Builder(builderMethodName = "memberBuilder")
+@SuperBuilder
 public class Member extends BaseEntity {
 
 //    @Id
@@ -26,7 +27,7 @@ public class Member extends BaseEntity {
     @Column(name = "user_name", unique = true)
     private String userName; // 사용자 계정이름(email타입, 가입 시 인증필수)
 
-    @Column(name = "nick_name", unique = true)
+    @Column(name = "nick_name")
     private String nickName; // 사용자 닉네임
 
     @Column(name = "password")
@@ -99,6 +100,9 @@ public class Member extends BaseEntity {
 
     @Column(name = "provider_id")
     private String providerId;
+
+    @Column(name = "socialEmail")
+    private String socialEmail;
 
     @Column(name = "is_active")
     private boolean isActive; // soft Delete를 처리하기 위한 칼럼. (회원 활성 여부)

@@ -39,6 +39,7 @@ public class MemberSecurityService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        System.out.println("loadUserByUsername's userName : " + userName);
         Optional<Member> memberOp = memberRepository.findByUserName(userName);
         Member member = memberOp.orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
@@ -49,7 +50,7 @@ public class MemberSecurityService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(MemberRole.USER.getValue()));
         }
 
-        return new CustomMember(
+        return new CustomMember( //User 클래스를 리턴한단말이야 원래는 근데 내가 유저정보중에 닉네임을 불러오고싶어서 커스텀을 했어
                 member.getUserName(),
                 member.getPassword(),
                 authorities,

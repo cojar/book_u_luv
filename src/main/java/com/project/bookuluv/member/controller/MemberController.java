@@ -1,27 +1,23 @@
 package com.project.bookuluv.member.controller;
 
-import com.project.bookuluv.DataNotFoundException;
 import com.project.bookuluv.mail.MailController;
 import com.project.bookuluv.member.domain.Member;
 import com.project.bookuluv.member.dto.MemberJoinRequest;
 import com.project.bookuluv.member.dto.MemberLoginRequest;
 import com.project.bookuluv.member.dto.MemberRole;
+import com.project.bookuluv.member.exception.DataNotFoundException;
 import com.project.bookuluv.member.service.MemberSecurityService;
 import com.project.bookuluv.member.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -239,26 +235,20 @@ public class MemberController {
         return "redirect:/";
     }
 
-
-    @GetMapping("/member/me")
-    public String me() {
-        return "profile";
-    }
     @GetMapping("/member/login")
     public String login() {
         return "member/login";
     }
 
-    @PostMapping("/member/login")
-    public String login(@RequestParam("userName") String userName, @RequestParam("password") String password, HttpSession session, Model model) {
-
-            UserDetails userDetails = memberSecurityService.loadUserByUsername(userName);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-
-            return "redirect:/";
-    }
+//    @PostMapping("/member/login")
+//    public String login(@RequestParam("userName") String userName, HttpSession session) {
+//            UserDetails userDetails = memberSecurityService.loadUserByUsername(userName);
+//            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+//
+//            return "redirect:/";
+//    }
 
 }

@@ -1,23 +1,21 @@
 <!DOCTYPE html>
-<html xmlns:layout="http://www.w3.org/1999/xhtml">
-
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title layout:title-pattern="$LAYOUT_TITLE | $CONTENT_TITLE" th:text="${@appConfig.siteName}"></title>
-
+    <title>Book U Luv</title>
     <!-- 제이쿼리 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 
     <!-- toastr -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://jhs512.github.io/toastr/toastr.css">
 
     <!-- 폰트어썸 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- 테일윈드 -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -26,7 +24,7 @@
 <body class="min-h-screen flex flex-col pt-[35px] md:pt-[50px]">
 
 <!-- 데이지 UI -->
-<link href="https://cdn.jsdelivr.net/npm/daisyui@2.31.0/dist/full.css" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.1/dist/full.css" rel="stylesheet" type="text/css"/>
 
 <!-- common.css -->
 <link href="/resource/common/common.css" rel="stylesheet" type="text/css"/>
@@ -40,70 +38,58 @@
 
         <div class="flex gap-4">
             <a href="/member/login" class="inline-flex" sec:authorize="isAnonymous()">
-                <i class="fa-solid fa-arrow-right-to-bracket"></i>
                 <span class="ml-[2px] hidden lg:block">
                     로그인
                 </span>
             </a>
 
             <a href="/member/join" class="inline-flex" sec:authorize="isAnonymous()">
-                <i class="fa-solid fa-user-plus"></i>
                 <span class="ml-[2px] hidden lg:block">
                     회원가입
                 </span>
             </a>
 
-            <a href="javascript: document.logoutForm.submit();" class="inline-flex" sec:authorize="isAuthenticated()">
+            <a href="/member/logout" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span class="ml-[2px] hidden lg:block">
                     로그아웃
                 </span>
             </a>
-            <form name="logoutForm" method="POST" th:action="@{/member/logout}" hidden></form>
 
             <a href="/member/profile" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa-solid fa-user"></i>
                 <span class="ml-[2px]">
-                   <svg width="20" height="20" th:data-jdenticon-value="${@rq.member.jdenticon}"></svg>
+                   <svg width="20" height="20"></svg>
                 </span>
                 <span class="ml-[2px] hidden lg:block">
-                    [[${@rq.member.name}]]
+                   00회원
                 </span>
             </a>
 
-            <a href="/post/write" class="inline-flex">
-                <i class="fa-solid fa-pen"></i>
+            <a href="#" class="inline-flex">
                 <span class="ml-[2px] hidden lg:block">
-                    글 작성
+                    메뉴 1
                 </span>
             </a>
 
-            <a href="/post/list" class="inline-flex">
-                <i class="fa-solid fa-rectangle-list"></i>
+            <a href="#" class="inline-flex">
                 <span class="ml-[2px] hidden lg:block">
-                    글 목록
+                    메뉴 2
                 </span>
             </a>
 
-            <a href="/product/create" class="inline-flex" th:if="${@rq.hasAuthority('AUTHOR')}">
-                <i class="fa-solid fa-book-medical"></i>
+            <a href="#" class="inline-flex">
                 <span class="ml-[2px] hidden lg:block">
-                    도서 등록
+                    메뉴 3
                 </span>
             </a>
 
-            <a href="/product/list" class="inline-flex">
-                <i class="fa-solid fa-book"></i>
-                <span class="ml-[2px] hidden lg:block">
-                    도서 목록
-                </span>
-            </a>
         </div>
     </div>
 </header>
 
 <div class="flex-grow flex flex-col py-5">
-    <main layout:fragment="main" class="flex-grow flex flex-col"></main>
+    <main layout:fragment="content" class="flex-grow flex flex-col"></main>
 </div>
 
 <footer class="border-t-[1px] border-t-[color:#efefef] py-3 text-[color:#777] text-[14px] mt-5">
@@ -128,24 +114,6 @@
 </footer>
 
 <script src="/resource/common/common.js"></script>
-
-<script th:inline="javascript">
-    const params = /*[[ ${param} ]]*/ null;
-
-    if (params.msg) {
-        successModal(params.msg[0]);
-    }
-
-    if (params.errorMsg) {
-        errorModal(params.errorMsg[0]);
-    }
-</script>
-
-<!-- jdenticon -->
-<script src="https://cdn.jsdelivr.net/npm/jdenticon@3.2.0/dist/jdenticon.min.js" async
-        integrity="sha384-yBhgDqxM50qJV5JPdayci8wCfooqvhFYbIKhv0hTtLvfeeyJMJCscRfFNKIxt43M"
-        crossorigin="anonymous">
-</script>
 
 </body>
 </html>

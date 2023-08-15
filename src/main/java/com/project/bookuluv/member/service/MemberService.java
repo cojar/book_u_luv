@@ -1,6 +1,6 @@
 package com.project.bookuluv.member.service;
 
-import com.project.bookuluv.DataNotFoundException;
+import com.project.bookuluv.member.exception.DataNotFoundException;
 import com.project.bookuluv.member.domain.Member;
 import com.project.bookuluv.member.dto.MemberRole;
 import com.project.bookuluv.member.exception.AppException;
@@ -66,45 +66,45 @@ public class MemberService {
                     throw new AppException(ErrorCode.USERNAME_DUPLICATED, userName + " 는 존재합니다.");
                 });
 
-//        // 저장
-//        Member member = Member.builder()
-//                .userName(userName)                 // 사용자ID 추가(email형식)
-//                .password(encoder.encode(password)) // 사용자 비밀번호 추가(passwordEncoder로 인코딩)
-//                .nickName(nickName)                 // 사용자 닉네임 추가
-//                .roadAddress(roadAddress)           // 사용자 도로명주소 추가(카카오API)
-//                .jibunAddress(jibunAddress)         // 사용자 지번주소 추가(카카오API)
-//                .detailAddress(detailAddress)       // 사용자 상세주소 추가(동네이름 / 아파트이름)(카카오API)
-//                .extraAddress(extraAddress)         // 사용자 기타주소 추가(ex. 동, 호수) (카카오API)
-//                .postalNum(postalNum)               // 사용자 우편번호 추가
-//                .phone(phone)                       // 사용자 연락처 추가
-//                .firstName(firstName)               // 사용자 이름 추가
-//                .lastName(lastName)                 // 사용자 성 추가
-//                .gender(gender)                     // 사용자 성별 추가
-//                .birthDate(birthDate)               // 사용자 생년월일 추가
-//                .mailKey(mailKey)                   // 사용자 이메일 인증당시 인증 키 추가
-//                .role(role)                         // 사용자 권한 추가
-//                .mailAuth(mailAuth)                 // 사용자 메일 인증여부 추가(일반 가입시 true)
-//                .createDate(LocalDate.from(LocalDateTime.now())) // 계정 생성일 추가
-//                .build(); // 빌드완료
+        // 저장
+        Member member = Member.builder()
+                .userName(userName)                 // 사용자ID 추가(email형식)
+                .password(encoder.encode(password)) // 사용자 비밀번호 추가(passwordEncoder로 인코딩)
+                .nickName(nickName)                 // 사용자 닉네임 추가
+                .roadAddress(roadAddress)           // 사용자 도로명주소 추가(카카오API)
+                .jibunAddress(jibunAddress)         // 사용자 지번주소 추가(카카오API)
+                .detailAddress(detailAddress)       // 사용자 상세주소 추가(동네이름 / 아파트이름)(카카오API)
+                .extraAddress(extraAddress)         // 사용자 기타주소 추가(ex. 동, 호수) (카카오API)
+                .postalNum(postalNum)               // 사용자 우편번호 추가
+                .phone(phone)                       // 사용자 연락처 추가
+                .firstName(firstName)               // 사용자 이름 추가
+                .lastName(lastName)                 // 사용자 성 추가
+                .gender(gender)                     // 사용자 성별 추가
+                .birthDate(birthDate)               // 사용자 생년월일 추가
+                .mailKey(mailKey)                   // 사용자 이메일 인증당시 인증 키 추가
+                .role(role)                         // 사용자 권한 추가
+                .mailAuth(mailAuth)                 // 사용자 메일 인증여부 추가(일반 가입시 true)
+                .createDate(LocalDateTime.now()) // 계정 생성일 추가
+                .build(); // 빌드완료
 
-        Member member = new Member();
-        member.setUserName(userName);
-        member.setPassword(encoder.encode(password));
-        member.setNickName(nickName);
-        member.setRoadAddress(roadAddress);
-        member.setJibunAddress(jibunAddress);
-        member.setDetailAddress(detailAddress);
-        member.setExtraAddress(extraAddress);
-        member.setPostalNum(postalNum);
-        member.setPhone(phone);
-        member.setFirstName(firstName);
-        member.setLastName(lastName);
-        member.setGender(gender);
-        member.setBirthDate(birthDate);
-        member.setMailKey(mailKey);
-        member.setRole(role);
-        member.setMailAuth(mailAuth);
-        member.setCreateDate(LocalDateTime.now());
+//        Member member = new Member();
+//        member.setUserName(userName);
+//        member.setPassword(encoder.encode(password));
+//        member.setNickName(nickName);
+//        member.setRoadAddress(roadAddress);
+//        member.setJibunAddress(jibunAddress);
+//        member.setDetailAddress(detailAddress);
+//        member.setExtraAddress(extraAddress);
+//        member.setPostalNum(postalNum);
+//        member.setPhone(phone);
+//        member.setFirstName(firstName);
+//        member.setLastName(lastName);
+//        member.setGender(gender);
+//        member.setBirthDate(birthDate);
+//        member.setMailKey(mailKey);
+//        member.setRole(role);
+//        member.setMailAuth(mailAuth);
+//        member.setCreateDate(LocalDateTime.now());
 
         this.memberRepository.save(member);
         return "SUCCESS";

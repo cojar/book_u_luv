@@ -5,16 +5,19 @@ import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.Set;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
 public class Comment extends BaseEntity {
 //    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +37,6 @@ public class Comment extends BaseEntity {
 
     @ManyToOne
     private Member register;
-
-    @ManyToMany
-    Set<Member> commentLike;
-
 
 
 

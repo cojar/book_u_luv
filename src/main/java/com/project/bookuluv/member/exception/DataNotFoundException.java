@@ -1,4 +1,4 @@
-package com.project.bookuluv;
+package com.project.bookuluv.member.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
