@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+</head>
+<body>
+<h1>회원가입</h1>
+
+<form th:action="@{/member/join}" th:object="${memberJoinRequest}" method="post">
+    <!-- 사용자 아이디 (이메일) -->
+    <div>
+        <label for="userName">사용자 아이디 (이메일):</label>
+        <input type="email" id="userName" th:field="*{userName}" required>
+    </div>
+
+    <!-- 이메일 인증 -->
+    <div>
+        <label for="mailKey">이메일 인증번호:</label>
+        <input id="mailKey" th:field="*{mailKey}" type="text" placeholder="인증번호">
+        <input id="genMailKey" th:field="*{genMailKey}" type="hidden" placeholder="인증번호">
+        <button type="button" onclick="sendEmailConfirmation()">인증번호 전송</button>
+        <button type="button" onclick="validateMailKey()">인증 확인</button>
+        <span class="email-check-checkmark" style="display: none">✔️</span>
+        <span id="mail-key-errorMessage" style="display: none; color: red">인증번호가 일치하지 않습니다.</span>
+    </div>
+
+    <!-- 비밀번호 -->
+    <div>
+        <label for="password1">비밀번호:</label>
+        <input type="password" id="password1" th:field="*{password1}" required>
+    </div>
+
+    <!-- 비밀번호 확인 -->
+    <div>
+        <label for="password2">비밀번호 확인:</label>
+        <input type="password" id="password2" th:field="*{password2}" required>
+    </div>
+
+    <!-- 닉네임 -->
+    <div>
+        <label for="nickName">닉네임:</label>
+        <input type="text" id="nickName" th:field="*{nickName}" required>
+    </div>
+
+    <!-- 사용자 주소 -->
+    <div>
+        <label for="address">사용자 주소:</label>
+        <input type="text" id="address" th:field="*{address}" required>
+    </div>
+
+    <!-- 우편번호 -->
+    <div>
+        <label for="postalNum">우편번호:</label>
+        <input type="number" id="postalNum" th:field="*{postalNum}" required>
+    </div>
+
+    <!-- 연락처 -->
+    <div>
+        <label for="phone">연락처:</label>
+        <input type="number" id="phone" th:field="*{phone}" required>
+    </div>
+
+    <!-- 이름 -->
+    <div>
+        <label for="firstName">이름:</label>
+        <input type="text" id="firstName" th:field="*{firstName}" required>
+    </div>
+
+    <!-- 성 -->
+    <div>
+        <label for="lastName">성:</label>
+        <input type="text" id="lastName" th:field="*{lastName}" required>
+    </div>
+
+    <!-- 성별 -->
+    <div>
+        <label for="gender">성별:</label>
+        <select id="gender" th:field="*{gender}">
+            <option value="true">남성</option>
+            <option value="false">여성</option>
+        </select>
+    </div>
+
+    <!-- 생년월일 -->
+    <div>
+        <label for="birthDate">생년월일:</label>
+        <input type="date" id="birthDate" th:field="*{birthDate}">
+    </div>
+
+    <!-- 회원 가입 버튼 -->
+    <div>
+        <button type="submit">회원 가입</button>
+    </div>
+</form>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function sendEmailConfirmation() {
+        var email = $("#userName").val();
+        $.ajax({
+            url: "http://localhost:7070/mailCheck",
+            method: "GET",
+            data: {
+                email: email
+            },
+            success: function(data) {
+                alert("이메일 인증번호를 전송했습니다.");
+                $("#genMailKey").val(data);
+            },
+            error: function(xhr, status, error) {
+                alert("이메일 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+            }
+        });
+    }
+
+    function validateMailKey() {
+        const mailKey = document.getElementById('mailKey').value;
+        const genMailKey = document.getElementById('genMailKey').value;
+        const checkmark = document.querySelector('.email-check-checkmark');
+        const errorMessage = document.getElementById('mail-key-errorMessage');
+
+        if (mailKey.length === 5 && mailKey === genMailKey) {
+            checkmark.style.display = 'block';
+            errorMessage.style.display = 'none';
+        } else {
+            checkmark.style.display = 'none';
+            errorMessage.style.display = 'block';
+        }
+    }
+</script>
+</html>

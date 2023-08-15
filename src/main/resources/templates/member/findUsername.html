@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>아이디 찾기</title>
+</head>
+<body>
+<h1 class="find">Find ID</h1>
+<h3 class="findment">가입하신 정보를 입력해주세요</h3>
+
+<form onsubmit="sendInfoForId(); return false;">
+    <div th:if="${param.error}">
+        <div class="alert alert-danger">이름과 전화번호를 다시 확인해 주세요.</div>
+    </div>
+    <div class="mb-3">
+        <input type="text" name="firstName" id="firstName" class="form-control" placeholder="이름"/>
+    </div>
+    <div class="mb-3">
+        <input type="text" name="lastName" id="lastName" class="form-control" placeholder="성"/>
+    </div>
+    <div class="mb-3">
+        <input type="text" name="phone" id="phone" class="form-control" placeholder="전화번호"/>
+    </div>
+    <button type="submit" class="btn btn-primary">FIND-ID</button>
+</form>
+
+<!-- 아이디 찾기 결과 출력 -->
+<div th:if="${result}">
+    <p th:text="${result}"></p>
+</div>
+</body>
+<script>
+
+    function sendInfoForId() {
+        var firstName = $("#firstName").val();
+        var lastName = $("#lastName").val();
+        var phone = $("#phone").val();
+
+        // AJAX 요청 보내기
+        $.ajax({
+            url: "/member/findUsername", // 서버의 URL
+            method: "POST",
+            data: {firstName: firstName, lastName: lastName, phone: phone}, // 데이터 전송
+            success: function(response) {
+                // 서버로부터 받은 결과를 경고 창으로 표시
+                if (response) {
+                    alert(response);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("아이디를 찾지 못했습니다.");
+            }
+        });
+    }
+
+
+
+</script>
+</html>
