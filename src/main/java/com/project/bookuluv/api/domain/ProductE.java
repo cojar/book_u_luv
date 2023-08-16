@@ -51,9 +51,6 @@ public class ProductE extends BaseEntity {
     @Column(name = "mall_type")
     private String mallType; // 대분류
 
-    @Column(name = "stock_status")
-    private String stockStatus;
-
     @Column(name = "cover_img")
     private String coverImg; // 표지 URL
 
@@ -68,9 +65,6 @@ public class ProductE extends BaseEntity {
 
     @Column(name = "best_rank")
     private int bestRank;
-
-    @Column(name = "status")
-    private char status; // 책 상태(A~C, N , E)
 
     @Column(name = "is_active")
     private boolean isActive;

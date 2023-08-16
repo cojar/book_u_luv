@@ -54,7 +54,7 @@ public class MemberService {
                        String phone,
                        String firstName,
                        String lastName,
-                       boolean gender,
+                       Boolean gender,
                        LocalDate birthDate,
                        Integer mailKey,
                        MemberRole role,
@@ -86,25 +86,6 @@ public class MemberService {
                 .mailAuth(mailAuth)                 // 사용자 메일 인증여부 추가(일반 가입시 true)
                 .createDate(LocalDateTime.now()) // 계정 생성일 추가
                 .build(); // 빌드완료
-
-//        Member member = new Member();
-//        member.setUserName(userName);
-//        member.setPassword(encoder.encode(password));
-//        member.setNickName(nickName);
-//        member.setRoadAddress(roadAddress);
-//        member.setJibunAddress(jibunAddress);
-//        member.setDetailAddress(detailAddress);
-//        member.setExtraAddress(extraAddress);
-//        member.setPostalNum(postalNum);
-//        member.setPhone(phone);
-//        member.setFirstName(firstName);
-//        member.setLastName(lastName);
-//        member.setGender(gender);
-//        member.setBirthDate(birthDate);
-//        member.setMailKey(mailKey);
-//        member.setRole(role);
-//        member.setMailAuth(mailAuth);
-//        member.setCreateDate(LocalDateTime.now());
 
         this.memberRepository.save(member);
         return "SUCCESS";

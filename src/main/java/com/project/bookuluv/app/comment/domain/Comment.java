@@ -1,5 +1,6 @@
 package com.project.bookuluv.app.comment.domain;
 
+import com.project.bookuluv.api.domain.ProductE;
 import com.project.bookuluv.app.article.domain.Product;
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.member.domain.Member;
@@ -34,15 +35,9 @@ public class Comment extends BaseEntity {
 
     @ManyToOne
     private Product product;
-
+    @ManyToOne
+    private ProductE producte;
     @ManyToOne
     private Member register;
-
-
-
-
-
-
-
 
 }

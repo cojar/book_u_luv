@@ -75,7 +75,6 @@ public class MemberController {
 
     @GetMapping("/member/join")
     public String showSignup(MemberJoinRequest memberJoinRequest) {
-//        model.addAttribute("memberJoinRequest", new MemberJoinRequest());
         return "member/join";
     }
 
@@ -192,12 +191,6 @@ public class MemberController {
     @GetMapping("/member/profile")
     public String myPage(Model model, Principal principal) {
         Member member = memberService.getUser(principal.getName());
-//        List<Review> reviewList = reviewService.getReviewsByAuthor(user);
-//        List<Product> voterProducts = productService.getProductsByVoter(user);
-//        List<Product> wishProducts = productService.getProductsByWish(user);
-//        model.addAttribute("voterProducts", voterProducts);
-//        model.addAttribute("wishProducts", wishProducts);
-//        model.addAttribute("reviewList", reviewList);
         model.addAttribute("userName", member.getUserName());
         model.addAttribute("userNickName", member.getNickName());
         model.addAttribute("userBirthDate", member.getBirthDate());

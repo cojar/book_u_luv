@@ -20,10 +20,6 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public class Member extends BaseEntity {
 
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
-
     @Column(name = "user_name", unique = true)
     private String userName; // 사용자 계정이름(email타입, 가입 시 인증필수)
 
@@ -38,12 +34,6 @@ public class Member extends BaseEntity {
 
     @Column(name = "postal_num")
     private String postalNum; // 사용자 우편번호
-
-//    @Column(name = "create_date")
-//    private LocalDate createDate; // 사용자 가입일
-//
-//    @Column(name = "modify_date")
-//    private LocalDate modifyDate; // 사용자 정보 수정일
 
     @Column(name = "birth_date")
     private LocalDate birthDate; // 사용자 생년월일
@@ -74,7 +64,7 @@ public class Member extends BaseEntity {
     private MemberRole role; // 사용자 권한(Admin / User ..ETC)
 
     @Column(name = "gender")
-    private boolean gender; // 사용자 성별 (true : 남자 / false : 여자)
+    private Boolean gender; // 사용자 성별 (true : 남자 / false : 여자)
 
     @Column(name = "mail_auth")
     private boolean mailAuth; // 이메일 인증 여부(true : 인증함 / false : 인증하지 않음)
