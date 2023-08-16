@@ -5,6 +5,7 @@ import com.project.bookuluv.member.domain.Member;
 import com.project.bookuluv.member.dto.MemberRole;
 import com.project.bookuluv.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -43,6 +44,10 @@ public class MemberSecurityService implements UserDetailsService {
         Optional<Member> memberOp = memberRepository.findByUserName(userName);
         Member member = memberOp.orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
 
+        if (!member.isActive()) {
+            throw new DisabledException("해당 회원은 비활성화 되었습니다.");
+        }
+
         List<GrantedAuthority> authorities = new ArrayList<>();
         if (isAdmin()) {
             authorities.add(new SimpleGrantedAuthority(MemberRole.ADMIN.getValue()));
@@ -53,9 +58,7 @@ public class MemberSecurityService implements UserDetailsService {
         return new CustomMember(
                 member.getUserName(),
                 member.getPassword(),
-                authorities,
-                member.getNickName(),
-                member.getBirthDate()
-        );
+                member,
+                authorities);
     }
 }

@@ -85,13 +85,15 @@ public class MemberService {
                 .role(role)                         // 사용자 권한 추가
                 .mailAuth(mailAuth)                 // 사용자 메일 인증여부 추가(일반 가입시 true)
                 .createDate(LocalDateTime.now()) // 계정 생성일 추가
+                .isActive(true)
                 .build(); // 빌드완료
 
         this.memberRepository.save(member);
         return "SUCCESS";
     }
+
     public Member verifyEmailConfirmation(String userName, int mailKey) throws Exception {
-        Member member= this.getUserByUserName(userName);
+        Member member = this.getUserByUserName(userName);
         if (member == null) {
             throw new Exception("유효하지 않은 이메일입니다.");
         }
@@ -106,7 +108,7 @@ public class MemberService {
         return member;
     }
 
-    public Member getUserByUserName (String userName) {
+    public Member getUserByUserName(String userName) {
         Optional<Member> memberOp = this.memberRepository.findByUserName(userName);
         return memberOp.orElse(null);
     }
@@ -142,6 +144,7 @@ public class MemberService {
 
         return member;
     }
+
     public String generateTempPassword() {
         String characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         StringBuilder sb = new StringBuilder();
@@ -153,20 +156,6 @@ public class MemberService {
         }
         return sb.toString();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     // 이하 JWT 토큰 관련
@@ -209,8 +198,14 @@ public class MemberService {
         }
         throw new DataNotFoundException("Member not found");
     }
+
     public Member saveMember(Member member) {
         return memberRepository.save(member);
+    }
+
+    public void deactivateMember(Member member) {
+        member.deactivate();
+        this.memberRepository.save(member);
     }
 
 

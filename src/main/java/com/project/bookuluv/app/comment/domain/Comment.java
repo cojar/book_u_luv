@@ -6,6 +6,7 @@ import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.member.domain.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -34,10 +35,13 @@ public class Comment extends BaseEntity {
 //    private LocalDateTime modifyDate;
 
     @ManyToOne
+    @JoinColumn(name = "product_id")
     private Product product;
     @ManyToOne
+    @JoinColumn(name = "producte_id")
     private ProductE producte;
     @ManyToOne
+    @JoinColumn(name = "register_id")
     private Member register;
 
 }

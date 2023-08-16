@@ -7,6 +7,7 @@ import com.project.bookuluv.member.exception.OAuthTypeMatchNotFoundException;
 import com.project.bookuluv.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -328,6 +329,9 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         } else {
             member = memberRepository.findByUserName("%s_%s".formatted(oauthType, oauthId))
                     .orElseThrow(MemberNotFoundException::new);
+            if (!member.isActive()) {
+                throw new DisabledException("해당 회원은 비활성화 되었습니다.");
+            }
         }
 
         List<GrantedAuthority> authorities = new ArrayList<>();

@@ -1,7 +1,7 @@
 package com.project.bookuluv.configuration;
 
 import com.project.bookuluv.member.service.MemberService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,12 +14,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthenticationConfig {
-
-    private final MemberService memberService;
-    private final OAuth2UserService oAuth2UserService;
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private OAuth2UserService oAuth2UserService;
 
     @Value("${spring.jwt.secret}")
     private String secretKey;
@@ -71,6 +72,5 @@ public class AuthenticationConfig {
                 .invalidateHttpSession(true)
         ;
         return httpSecurity.build();
-
     }
 }

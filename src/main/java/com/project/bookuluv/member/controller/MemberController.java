@@ -28,6 +28,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -191,12 +193,16 @@ public class MemberController {
     @GetMapping("/member/profile")
     public String myPage(Model model, Principal principal) {
         Member member = memberService.getUser(principal.getName());
-        model.addAttribute("userName", member.getUserName());
-        model.addAttribute("userNickName", member.getNickName());
-        model.addAttribute("userBirthDate", member.getBirthDate());
-        model.addAttribute("userImg", member.getImgFilePath());
-
         return "member/profile";
+    }
+    @GetMapping("/api/getUserName")
+    public ResponseEntity<Map<String, String>> getUserName(Principal principal) {
+        Map<String, String> response = new HashMap<>();
+
+        // 사용자 아이디 정보 가져오기
+        String userName = principal.getName();
+        response.put("userName", userName);
+        return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -231,6 +237,13 @@ public class MemberController {
     @GetMapping("/member/login")
     public String login() {
         return "member/login";
+    }
+
+    @PostMapping("/member/delete")
+    public String deactivateMember(Principal principal) {
+        Member member = memberService.getUser(principal.getName());
+        memberService.deactivateMember(member);
+        return "redirect:/member/logout"; // 로그아웃 후 리다이렉트
     }
 
 //    @PostMapping("/member/login")
