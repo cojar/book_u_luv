@@ -69,17 +69,17 @@ public class ProductService {
             if (items != null) {
                 for (int i = 0; i < items.length(); i++) {
                     JSONObject item = items.getJSONObject(i);
-                    ProductDto result = new ProductDto();
-                    result.setCoverImg(item.optString("cover"));
-                    result.setTitle(item.optString("title"));
-                    result.setLink(item.optString("link"));
-                    result.setAuthor(item.optString("author"));
-                    result.setPubDate(item.optString("pubDate"));
-                    result.setIsbn(item.optString("isbn"));
-                    result.setCategoryName(item.optString("categoryName"));
-                    result.setPublisher(item.optString("publisher"));
-                    result.setPriceStandard(item.optLong("priceStandard"));
-                    result.setPriceSales(item.optLong("priceSales"));
+                    ProductDto result = ProductDto.builder()
+                            .coverImg(item.optString("cover"))
+                            .title(item.optString("title"))
+                            .link(item.optString("link"))
+                            .author(item.optString("author"))
+                            .pubDate(item.optString("pubDate"))
+                            .isbn(item.optString("isbn"))
+                            .categoryName(item.optString("categoryName"))
+                            .publisher(item.optString("publisher"))
+                            .priceStandard(item.optLong("priceStandard"))
+                            .priceSales(item.optLong("priceSales")).build();
                     results.add(result);
                 }
             } else {
