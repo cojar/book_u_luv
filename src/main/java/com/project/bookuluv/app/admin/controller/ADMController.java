@@ -48,7 +48,7 @@ public class ADMController {
     }
 
     @GetMapping("/article/list")
-    public String list(Model model) {
+    public String marketList(Model model) {
         List<Article> articleList = this.articleService.getAll();
         model.addAttribute("articleList", articleList);
         return "article_list";
@@ -89,4 +89,5 @@ public class ADMController {
         this.articleService.delete(article);
         return "redirect:/";
     }
+
 }
