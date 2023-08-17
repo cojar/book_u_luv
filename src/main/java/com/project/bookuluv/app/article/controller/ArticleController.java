@@ -29,30 +29,8 @@ public class ArticleController {
 
 
 
-    @GetMapping(value = "/detail/{id}")
-    private String detail(Model model, @PathVariable("id") Integer id) {
-        Article article = this.articleService.getById(id);
-        model.addAttribute("article", article);
-        return "article_detail";
-    }
 
-    @GetMapping("/create")
-    @PreAuthorize("isAuthenticated()")
-    private String create() {
-        return "article_form";
-    }
 
-    @PostMapping("/create")
-    @PreAuthorize("isAuthenticated()")
-    private String articleCreate(@Valid ArticleDto articleDto, BindingResult bindingResult, Principal principal, @RequestParam("files") MultipartFile[] files) throws IOException {
-        if (bindingResult.hasErrors()) {
-            return "article_form";
-        }
-
-        Member member = this.memberService.getMember(principal.getName());
-        this.articleService.create(articleDto.getSubject(), articleDto.getContent(), member, files);
-        return "redirect:/";
-    }
 
     @GetMapping("/a")
     @PreAuthorize("isAuthenticated()")
