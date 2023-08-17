@@ -29,13 +29,13 @@ public class ADMController {
 
     private final MemberService memberService;
 
-    @GetMapping("/create")
+    @GetMapping("/article/create")
     @PreAuthorize("isAuthenticated()")
     private String create() {
         return "article_form";
     }
 
-    @PostMapping("/create")
+    @PostMapping("/article/create")
     @PreAuthorize("isAuthenticated()")
     private String articleCreate(@Valid ArticleDto articleDto, BindingResult bindingResult, Principal principal, @RequestParam("files") MultipartFile[] files) throws IOException {
         if (bindingResult.hasErrors()) {
@@ -47,27 +47,27 @@ public class ADMController {
         return "redirect:/";
     }
 
-    @GetMapping("/list")
+    @GetMapping("/article/list")
     public String list(Model model) {
         List<Article> articleList = this.articleService.getAll();
         model.addAttribute("articleList", articleList);
         return "article_list";
     }
 
-    @GetMapping(value = "/detail/{id}")
+    @GetMapping(value = "/article/detail/{id}")
     private String detail(Model model, @PathVariable("id") Integer id) {
         Article article = this.articleService.getById(id);
         model.addAttribute("article", article);
         return "article_detail";
     }
 
-    @GetMapping("/modify/{id}")
+    @GetMapping("/article/modify/{id}")
     @PreAuthorize("isAuthenticated()")
     public String modify(@PathVariable("id") Integer id, Principal principal) {
         return "/article/article_form";
     }
 
-    @PostMapping("/modify/{id}")
+    @PostMapping("/article/modify/{id}")
     @PreAuthorize("isAuthenticated()")
     public String articleModify(@PathVariable("id") Integer id, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
@@ -79,4 +79,14 @@ public class ADMController {
         return "redirect:/";
     }
 
+    @PostMapping("/article/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(@PathVariable("id") Integer id, BindingResult bindingResult, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return "article_list";
+        }
+        Article article = this.articleService.getById(id);
+        this.articleService.delete(article);
+        return "redirect:/";
+    }
 }
