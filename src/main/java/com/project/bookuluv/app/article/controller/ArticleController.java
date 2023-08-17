@@ -32,23 +32,8 @@ public class ArticleController {
 
 
 
-    @GetMapping("/a")
-    @PreAuthorize("isAuthenticated()")
-    public String modify(@PathVariable("id") Integer id, Principal principal) {
-        return "";
-    }
 
-    @PostMapping("/b")
-    @PreAuthorize("isAuthenticated()")
-    public String articleModify(@PathVariable("id") Integer id, BindingResult bindingResult, Principal principal) {
-        if (bindingResult.hasErrors()) {
-            return "article_form";
-        }
 
-        Article article = this.articleService.getById(id);
-        this.articleService.modify(article.getSubject(), article.getContent(), article);
-        return "redirect:/";
-    }
 
     @PostMapping("/c")
     @PreAuthorize("isAuthenticated()")

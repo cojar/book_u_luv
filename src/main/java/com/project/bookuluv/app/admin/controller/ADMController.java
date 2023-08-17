@@ -60,4 +60,23 @@ public class ADMController {
         model.addAttribute("article", article);
         return "article_detail";
     }
+
+    @GetMapping("/modify/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String modify(@PathVariable("id") Integer id, Principal principal) {
+        return "/article/article_form";
+    }
+
+    @PostMapping("/modify/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String articleModify(@PathVariable("id") Integer id, BindingResult bindingResult, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return "/article/article_form";
+        }
+
+        Article article = this.articleService.getById(id);
+        this.articleService.modify(article.getSubject(), article.getContent(), article);
+        return "redirect:/";
+    }
+
 }
