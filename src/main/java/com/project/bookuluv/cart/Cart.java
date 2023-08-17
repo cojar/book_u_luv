@@ -1,7 +1,7 @@
 package com.project.bookuluv.cart;
 
 import com.project.bookuluv.api.domain.ProductE;
-import com.project.bookuluv.app.article.domain.Product;
+import com.project.bookuluv.app.admin.domain.Product;
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.member.domain.Member;
 import jakarta.persistence.Entity;

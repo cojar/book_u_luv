@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Search</title>
+</head>
+<body>
+<h1>Book Search</h1>
+
+<div th:if="${results}">
+    <h2>Search Results</h2>
+    <table>
+        <tbody>
+        <tr th:if="${response == 'NoData'}">
+            <td> 검색 결과를 찾지 못했습니다. 다시 검색해주세요.</td>
+        </tr>
+        <ul th:each="result : ${results}">
+            <li><a th:href="${result.link}"><img th:src="${result.coverImg}"></a></img>
+            </li>
+            <li><a th:href="${result.link}"><span th:text="${result.title}">Title</span></a>
+            </li>
+            <li><span th:text="${result.author}">Author</span>
+            </li>
+            <li><span th:text="${result.publisher}">Publisher</span>
+            </li>
+            <li><span th:text="${result.priceStandard}">PriceStandard</span>
+            </li>
+            <li><span th:text="${result.priceSales}">PriceStandard</span>
+            </li>
+        </ul>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
