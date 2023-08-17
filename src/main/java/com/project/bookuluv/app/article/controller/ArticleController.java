@@ -27,12 +27,7 @@ public class ArticleController {
 
     private final MemberService memberService;
 
-    @GetMapping("/list")
-    public String list(Model model) {
-        List<Article> articleList = this.articleService.getAll();
-        model.addAttribute("articleList", articleList);
-        return "article_list";
-    }
+
 
     @GetMapping(value = "/detail/{id}")
     private String detail(Model model, @PathVariable("id") Integer id) {
