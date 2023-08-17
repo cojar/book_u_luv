@@ -45,27 +45,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
 
-    // Validation
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    // 웹
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-
-    // 메일
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    // 캐시
-    implementation 'org.springframework.boot:spring-boot-starter-cache'
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
-    // 세션
-    implementation 'org.springframework.session:spring-session-core'
-    implementation 'org.springframework.session:spring-session-data-redis'
-
-    // Actuator
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-
     // Querydsl 추가
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
@@ -75,10 +54,6 @@ dependencies {
     // 배치
 //	implementation 'org.springframework.boot:spring-boot-starter-batch'
 //	testImplementation 'org.springframework.batch:spring-batch-test'
-
-    // DB
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     // thymeleaf
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
@@ -91,11 +66,6 @@ dependencies {
     // json
     implementation group: 'org.json', name: 'json', version: '+'
 
-    // Security
-    testImplementation 'org.springframework.security:spring-security-test'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
-
     // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
@@ -104,17 +74,6 @@ dependencies {
 
     // DB
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-
-    // thymeleaf
-    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
-    // mail
-    implementation 'com.sun.mail:jakarta.mail:2.0.1'
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    // json
-    implementation group: 'org.json', name: 'json', version: '20230227'
 
     // Oauth2
     implementation 'org.springframework.security:spring-security-oauth2-client'

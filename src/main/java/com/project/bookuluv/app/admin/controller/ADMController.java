@@ -1,6 +1,10 @@
 package com.project.bookuluv.app.admin.controller;
 
+import com.project.bookuluv.app.admin.domain.Product;
+import com.project.bookuluv.app.admin.service.NoticeService;
+import com.project.bookuluv.app.admin.service.ProductService;
 import com.project.bookuluv.app.article.domain.Article;
+import com.project.bookuluv.app.article.domain.Notice;
 import com.project.bookuluv.app.article.dto.ArticleDto;
 import com.project.bookuluv.app.article.service.ArticleService;
 import com.project.bookuluv.member.domain.Member;
@@ -29,6 +33,10 @@ public class ADMController {
 
     private final MemberService memberService;
 
+    private final NoticeService noticeService;
+
+    private final ProductService productService;
+
     @GetMapping("/article/create")
     @PreAuthorize("isAuthenticated()")
     private String create() {
@@ -47,19 +55,6 @@ public class ADMController {
         return "redirect:/";
     }
 
-    @GetMapping("/article/list")
-    public String marketList(Model model) {
-        List<Article> articleList = this.articleService.getAll();
-        model.addAttribute("articleList", articleList);
-        return "article_list";
-    }
-
-    @GetMapping(value = "/article/detail/{id}")
-    private String detail(Model model, @PathVariable("id") Integer id) {
-        Article article = this.articleService.getById(id);
-        model.addAttribute("article", article);
-        return "article_detail";
-    }
 
     @GetMapping("/article/modify/{id}")
     @PreAuthorize("isAuthenticated()")
@@ -90,4 +85,16 @@ public class ADMController {
         return "redirect:/";
     }
 
+    @GetMapping("/admin/list")
+    public String List(Model model) {
+        List<Member> memberList = this.memberService.getAll();
+        List<Notice> noticeList = this.noticeService.getAll();
+        List<Article> articleList = this.articleService.getAll();
+        List<Product> productList = this.productService.getAll();
+        model.addAttribute("memberList", memberList);
+        model.addAttribute("noticeList", noticeList);
+        model.addAttribute("articleList", articleList);
+        model.addAttribute("productList", productList);
+        return "/admin/list";
+    }
 }

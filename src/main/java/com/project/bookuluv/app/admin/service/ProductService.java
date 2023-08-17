@@ -1,9 +1,14 @@
 package com.project.bookuluv.app.admin.service;
 
+import com.project.bookuluv.app.admin.domain.Product;
 import com.project.bookuluv.app.admin.dto.ProductDto;
+import com.project.bookuluv.app.admin.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.json.JSONArray;
@@ -17,6 +22,10 @@ import java.util.List;
 public class ProductService {
 
     private final RestTemplate restTemplate;
+
+    private final OAuth2AuthorizedClientService clientService;
+
+    private final ProductRepository productRepository;
 
     @Value("${spring.aladin.api.key}")
     private String apiKey;
@@ -39,11 +48,11 @@ public class ProductService {
     }
 
     private String buildSearchUrl(String queryType, String query) {
-        return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=10" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
+        return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=12" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
     }
 
     private String buildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=10" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=4" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
     }
 
     private List<ProductDto> getBooksFromApi(String url) {
@@ -81,5 +90,26 @@ public class ProductService {
         }
 
         return results;
+    }
+
+    public String search(String query, Authentication authentication) {
+        OAuth2AuthorizedClient oAuth2Client = clientService.loadAuthorizedClient("google",
+                authentication.getName());
+        String accessToken = oAuth2Client.getAccessToken().getTokenValue();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(accessToken);
+
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+
+        String url = "https://www.googleapis.com/books/v1/volumes?q=" + query;
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+
+        return response.getBody();
+    }
+
+    public List<Product> getAll() {
+        return this.productRepository.findAll();
     }
 }
