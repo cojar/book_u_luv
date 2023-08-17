@@ -190,6 +190,7 @@ public class MemberController {
         memberService.saveMember(member);
         return "/";
     }
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/member/profile")
     public String myPage(Model model, Principal principal) {
         Member member = memberService.getUser(principal.getName());
@@ -238,7 +239,7 @@ public class MemberController {
     public String login() {
         return "member/login";
     }
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/member/delete")
     public String deactivateMember(Principal principal) {
         Member member = memberService.getUser(principal.getName());

@@ -3,20 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        .form_errors {
-          background-color: #ffcccc;
-          color: #ff0000;
-          padding: 10px;
-          border-radius: 4px;
-          margin-bottom: 10px;
-          font-weight: bold;
-          text-align: center;
-        }
-    </style>
+    <!-- 테일윈드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<div th:fragment="formErrorsFragment" class="form_errors" role="alert" th:if="${#fields.hasAnyErrors()}">
+<div th:fragment="formErrorsFragment" class="bg-red-100 text-red-600 p-4 rounded-md mb-4 font-semibold text-center" role="alert" th:if="${#fields.hasAnyErrors()}">
     <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
 </div>
 </body>
