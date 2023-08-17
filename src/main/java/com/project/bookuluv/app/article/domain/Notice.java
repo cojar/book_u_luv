@@ -19,22 +19,13 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class Article extends BaseEntity {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
+public class Notice extends BaseEntity {
 
     @Column(name = "subject")
     private String subject;
 
     @Column(name = "content")
     private String content;
-
-//    @Column(name = "create_date")
-//    private LocalDate createDate;
-//
-//    @Column(name = "modify_date")
-//    private LocalDate modifyDate;
 
     @Column(name = "hit")
     private int hit;

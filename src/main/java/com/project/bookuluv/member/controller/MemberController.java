@@ -1,27 +1,23 @@
 package com.project.bookuluv.member.controller;
 
-import com.project.bookuluv.DataNotFoundException;
 import com.project.bookuluv.mail.MailController;
 import com.project.bookuluv.member.domain.Member;
 import com.project.bookuluv.member.dto.MemberJoinRequest;
 import com.project.bookuluv.member.dto.MemberLoginRequest;
 import com.project.bookuluv.member.dto.MemberRole;
+import com.project.bookuluv.member.exception.DataNotFoundException;
 import com.project.bookuluv.member.service.MemberSecurityService;
 import com.project.bookuluv.member.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +28,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -79,7 +77,6 @@ public class MemberController {
 
     @GetMapping("/member/join")
     public String showSignup(MemberJoinRequest memberJoinRequest) {
-//        model.addAttribute("memberJoinRequest", new MemberJoinRequest());
         return "member/join";
     }
 
@@ -193,21 +190,19 @@ public class MemberController {
         memberService.saveMember(member);
         return "/";
     }
-    @GetMapping("/member/mypage")
+    @GetMapping("/member/profile")
     public String myPage(Model model, Principal principal) {
         Member member = memberService.getUser(principal.getName());
-//        List<Review> reviewList = reviewService.getReviewsByAuthor(user);
-//        List<Product> voterProducts = productService.getProductsByVoter(user);
-//        List<Product> wishProducts = productService.getProductsByWish(user);
-//        model.addAttribute("voterProducts", voterProducts);
-//        model.addAttribute("wishProducts", wishProducts);
-//        model.addAttribute("reviewList", reviewList);
-        model.addAttribute("userName", member.getUserName());
-        model.addAttribute("userNickName", member.getNickName());
-        model.addAttribute("userBirthDate", member.getBirthDate());
-        model.addAttribute("userImg", member.getImgFilePath());
-
         return "member/profile";
+    }
+    @GetMapping("/api/getUserName")
+    public ResponseEntity<Map<String, String>> getUserName(Principal principal) {
+        Map<String, String> response = new HashMap<>();
+
+        // 사용자 아이디 정보 가져오기
+        String userName = principal.getName();
+        response.put("userName", userName);
+        return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -239,26 +234,27 @@ public class MemberController {
         return "redirect:/";
     }
 
-
-    @GetMapping("/member/me")
-    public String me() {
-        return "profile";
-    }
     @GetMapping("/member/login")
     public String login() {
         return "member/login";
     }
 
-    @PostMapping("/member/login")
-    public String login(@RequestParam("userName") String userName, @RequestParam("password") String password, HttpSession session, Model model) {
-
-            UserDetails userDetails = memberSecurityService.loadUserByUsername(userName);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-
-            return "redirect:/";
+    @PostMapping("/member/delete")
+    public String deactivateMember(Principal principal) {
+        Member member = memberService.getUser(principal.getName());
+        memberService.deactivateMember(member);
+        return "redirect:/member/logout"; // 로그아웃 후 리다이렉트
     }
+
+//    @PostMapping("/member/login")
+//    public String login(@RequestParam("userName") String userName, HttpSession session) {
+//            UserDetails userDetails = memberSecurityService.loadUserByUsername(userName);
+//            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//            SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+//
+//            return "redirect:/";
+//    }
 
 }

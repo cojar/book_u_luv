@@ -1,6 +1,6 @@
 package com.project.bookuluv.mail;
 
-import com.project.bookuluv.DataNotFoundException;
+import com.project.bookuluv.member.exception.DataNotFoundException;
 import com.project.bookuluv.member.domain.Member;
 import com.project.bookuluv.member.repository.MemberRepository;
 import com.project.bookuluv.member.service.MemberService;

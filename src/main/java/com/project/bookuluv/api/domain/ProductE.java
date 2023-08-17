@@ -3,14 +3,20 @@ package com.project.bookuluv.api.domain;
 import com.project.bookuluv.base.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
 @Entity
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
 public class ProductE extends BaseEntity {
 
 //    @Id
@@ -45,9 +51,6 @@ public class ProductE extends BaseEntity {
     @Column(name = "mall_type")
     private String mallType; // 대분류
 
-    @Column(name = "stock_status")
-    private String stockStatus;
-
     @Column(name = "cover_img")
     private String coverImg; // 표지 URL
 
@@ -63,12 +66,8 @@ public class ProductE extends BaseEntity {
     @Column(name = "best_rank")
     private int bestRank;
 
-    @Column(name = "status")
-    private char status; // 책 상태(A~C, N , E)
-
     @Column(name = "is_active")
     private boolean isActive;
-
 
 }
 

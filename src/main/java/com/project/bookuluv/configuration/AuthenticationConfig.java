@@ -1,22 +1,26 @@
 package com.project.bookuluv.configuration;
 
 import com.project.bookuluv.member.service.MemberService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthenticationConfig {
-
-    private final MemberService memberService;
-
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private OAuth2UserService oAuth2UserService;
 
     @Value("${spring.jwt.secret}")
     private String secretKey;
@@ -24,9 +28,10 @@ public class AuthenticationConfig {
     @Bean
     public SecurityFilterChain jwtsecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        return httpSecurity
-                .httpBasic().disable()
-                .csrf().disable()
+        httpSecurity.httpBasic().disable()
+                .csrf(
+                        csrf -> csrf.disable()
+                )
                 .cors().and()
                 .authorizeHttpRequests()
                 .requestMatchers(
@@ -41,22 +46,31 @@ public class AuthenticationConfig {
                         "/**"
                 ).permitAll()
                 .and()
-                .formLogin()
-                .loginPage("/member/login") // 로그인 페이지를 지정해두면 스프링시큐리티의 통제를 받음(디버깅 과정에서 username을 못받아옴)
-                .defaultSuccessUrl("/")
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .and()
-                .oauth2Login()
-                .loginPage("/member/login")
-                .and()
-                .build();
+                .formLogin(
+                        formLogin -> formLogin
+                                .loginPage("/member/login") // GET
+                                .loginProcessingUrl("/member/login") // POST
+                                .defaultSuccessUrl("/")
+                )
 //                .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
 //                .and()
 //                .addFilterBefore(new JwtFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class)
 //                .build();
+                // OAuth 로그인
+                .oauth2Login(
+                        oauth2Login -> oauth2Login
+                                .loginPage("/member/login")
+                                .defaultSuccessUrl("/")
+                                .userInfoEndpoint(
+                                        userInfoEndpoint -> userInfoEndpoint
+                                                .userService(oAuth2UserService)
+                                )
+                )
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+        ;
+        return httpSecurity.build();
     }
 }

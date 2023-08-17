@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout/layout.html}">
+<html layout:decorate="~{layout/layout.html}" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
     <title>마이페이지</title>
 </head>
 
 <body>
-<main layout:fragment="main">
+<main layout:fragment="content">
     <section class="section section-profile flex-grow flex flex-col items-center justify-center">
 
         <div class="max-w-md w-full px-2 pt-4">
@@ -15,54 +15,222 @@
                 프로파일
             </h1>
 
+            <!--회원아이디-->
             <div class="flex flex-col gap-3">
                 <div class="form-control">
                     <label class="label">
-                        <span class="label-text">아이디</span>
+                        <span class="label-text" id="label-text">아이디</span>
                     </label>
-                    <div class="badge badge-primary" th:text="${@rq.member.username}"></div>
+                    <div class="badge badge-primary" id="formatted-username"></div>
                 </div>
 
+                <script>
+                // AJAX 요청을 통해 사용자 아이디 가져오기
+                fetch('/api/getUserName')
+                    .then(response => response.json())
+                    .then(data => {
+                        var userName = data.userName; // 백엔드에서 전달한 사용자 아이디 값
+                        var formattedUserName = userName;
+                        var labelText = "아이디";
+
+                        /*조건에 맞게 userName을 가져옴*/
+
+                        if (userName.startsWith("KAKAO_")) {
+                            formattedUserName = userName.substring(userName.indexOf("_") + 1);
+                            labelText = "아이디(카카오 소셜계정)";
+                        } else if (userName.startsWith("NAVER_")) {
+                            formattedUserName = userName.substring(userName.indexOf("_") + 1);
+                            labelText = "아이디(네이버 소셜계정)";
+                        } else if (userName.includes("@")) { // userName에 "@" 포함하면 이메일 형태
+                            formattedUserName = userName;
+                            labelText = "아이디(이메일 계정)";
+                        } else {
+                            formattedUserName = userName.substring(userName.indexOf("_") + 1);
+                            labelText = "아이디(소셜계정)";
+                        }
+                        document.getElementById("label-text").textContent = labelText;
+                        document.getElementById("formatted-username").textContent = formattedUserName;
+                    });
+                </script>
+
+                <!--회원등록일-->
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">가입날짜</span>
                     </label>
-                    <div class="badge badge-primary"
-                         th:text="${#temporals.format(@rq.member.createDate, 'yy-MM-dd HH:mm')}"></div>
+                    <div class="badge badge-primary" th:text="${#temporals.format(#authentication.principal.createDate, 'yy-MM-dd HH:mm')}"></div>
+                    <!--                    <div class="badge badge-primary"-->
+                    <!--                         th:text="${#temporals.format(@rq.member.createDate, 'yy-MM-dd HH:mm')}"></div>-->
                 </div>
 
-                <div class="form-control">
+                <!--회원이메일-->
+                <div class="form-control" th:if="${#authentication.principal.email}">
                     <label class="label">
                         <span class="label-text">이메일</span>
                     </label>
-                    <div class="badge badge-primary" th:text="${@rq.member.email}"></div>
+                    <div class="badge badge-primary" th:if="${#authentication.principal.email}" th:text="${#authentication.principal.email}"></div>
                 </div>
 
+                <!--회원닉네임-->
                 <div class="form-control">
                     <label class="label">
-                        <span class="label-text">필명</span>
+                        <span class="label-text">닉네임</span>
                     </label>
-                    <div class="badge badge-primary"
-                         th:text="${@rq.member.nickname != null ? @rq.member.nickname : '-'}"></div>
+                    <div class="badge badge-primary" th:text="${#authentication.principal.nickName + ' 님'}"></div>
                 </div>
 
+                <!--회원연락처-->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">연락처</span>
+                    </label>
+                    <div class="badge badge-primary" th:if="${#authentication.principal.phone}" th:text="${#authentication.principal.phone}"></div>
+                    <div class="badge badge-primary" th:unless="${#authentication.principal.phone}" th:text="미등록"></div>
+                </div>
+
+                <!--회원 성-->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">성</span>
+                    </label>
+                    <div class="badge badge-primary" th:if="${#authentication.principal.lastname}" th:text="${#authentication.principal.lastname}"></div>
+                    <div class="badge badge-primary" th:unless="${#authentication.principal.lastname}" th:text="미등록"></div>
+                </div>
+
+                <!--회원 이름-->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">이름</span>
+                    </label>
+                    <div class="badge badge-primary" th:if="${#authentication.principal.firstname}" th:text="${#authentication.principal.firstname}"></div>
+                    <div class="badge badge-primary" th:unless="${#authentication.principal.firstname}" th:text="미등록"></div>
+                </div>
+
+                <!--회원성별-->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">성별</span>
+                    </label>
+                    <div class="badge badge-primary" th:if="${#authentication.principal.gender}" th:text="${#authentication.principal.gender ? '남자' : '여자'}"></div>
+                    <div class="badge badge-primary" th:unless="${#authentication.principal.gender}" th:text="미등록"></div>
+                </div>
+
+                <!--회원생년월일-->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">생년월일</span>
+                    </label>
+                    <div class="badge badge-primary" th:if="${#authentication.principal.birthDate}" th:text="${#temporals.format(#authentication.principal.birthDate, 'yyyy-MM-dd')}"></div>
+                    <div class="badge badge-primary" th:unless="${#authentication.principal.birthDate}" th:text="미등록"></div>
+                </div>
+
+                <!--회원주소-->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">주소</span>
+                    </label>
+                    <div class="badge badge-primary" th:if="${#authentication.principal.roadAddress != null && #authentication.principal.extraAddress != null && #authentication.principal.detailAddress != null && #authentication.principal.postalNum != null}" th:text="${#authentication.principal.roadAddress + ' ' + #authentication.principal.extraAddress + ' ' + #authentication.principal.detailAddress + ' (' + #authentication.principal.postalNum + ')'}"></div>
+                    <div class="badge badge-primary" th:unless="${#authentication.principal.roadAddress != null && #authentication.principal.extraAddress != null && #authentication.principal.detailAddress != null && #authentication.principal.postalNum != null}" th:text="미등록"></div>
+                </div>
+
+                <!--회원프로필사진-->
                 <div class="form-control">
                     <label class="label">
                         <span class="label-text">프로필이미지</span>
                     </label>
-                    <svg width="100" height="100" th:data-jdenticon-value="${@rq.member.jdenticon}"></svg>
+                    <img alt="" th:if="${#authentication.principal.imgFilePath}" th:src="${#authentication.principal.imgFilePath}"/>
+                    <img alt="" src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
+                         th:unless="${#authentication.principal.imgFilePath}"/>
                 </div>
 
+
+
+
+                <!-- 장바구니 -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">장바구니</span>
+                    </label>
+                    <div class="badge badge-primary">
+                        <!-- 여기에 장바구니 내용을 표시 -->
+                        <!-- 예시: -->
+                        <p>장바구니 내용을 여기에 표시</p>
+                    </div>
+                </div>
+
+                <!-- 좋아요한 제품 -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">좋아요한 제품</span>
+                    </label>
+                    <div class="badge badge-primary">
+                        <!-- 여기에 좋아요한 제품 내용을 표시 -->
+                        <!-- 예시: -->
+                        <p>좋아요한 제품 내용을 여기에 표시</p>
+                    </div>
+                </div>
+
+                <!-- 좋아요한 댓글 -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">좋아요한 댓글</span>
+                    </label>
+                    <div class="badge badge-primary">
+                        <!-- 여기에 좋아요한 댓글 내용을 표시 -->
+                        <!-- 예시: -->
+                        <p>좋아요한 댓글 내용을 여기에 표시</p>
+                    </div>
+                </div>
+
+                <!-- 구매내역 -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">구매내역</span>
+                    </label>
+                    <div class="badge badge-primary">
+                        <!-- 여기에 구매내역 내용을 표시 -->
+                        <!-- 예시: -->
+                        <p>구매내역 내용을 여기에 표시</p>
+                    </div>
+                </div>
+
+                <!-- 내용 수정/추가 -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">내용 수정/추가</span>
+                    </label>
+                    <a href="/member/edit" class="btn btn-secondary btn-outline">내용 수정/추가</a>
+                </div>
+
+                <!-- 회원탈퇴 -->
+                <section class="section section-profile flex-grow flex flex-col items-center justify-center">
+
+                    <div class="max-w-md w-full px-2 pt-4">
+                        <h1 class="font-bold text-lg">
+                            <i class="fa-solid fa-user-plus"></i>
+                            회원탈퇴
+                        </h1>
+
+                        <p>정말로 회원탈퇴하시겠습니까?</p>
+                        <form th:action="@{/member/delete}" method="post">
+                            <button type="submit" class="btn btn-danger">회원탈퇴</button>
+                        </form>
+                    </div>
+                </section>
+
+
+
+
+
+
                 <div class="grid grid-cols-2 mt-2 gap-2">
-                    <a href="/member/modifyPassword" class="btn btn-secondary btn-outline">비밀번호 변경</a>
-                    <a th:unless="${@rq.hasAuthority('AUTHOR')}" href="/member/beAuthor" class="btn btn-primary">작가활동 시작</a>
-                    <a th:if="${@rq.hasAuthority('AUTHOR')}" class="btn btn-primary btn-disabled">이미 작가회원입니다.</a>
+                    <a th:unless="${#authentication.principal.userName.startsWith('KAKAO_') || #authentication.principal.userName.startsWith('NAVER_')}" href="/member/modifyPassword" class="btn btn-secondary btn-outline">비밀번호 변경</a>
+                    <!--                    <a th:unless="${@rq.hasAuthority('AUTHOR')}" href="/member/beAuthor" class="btn btn-primary">작가활동 시작</a>-->
+                    <!--                    <a th:if="${@rq.hasAuthority('AUTHOR')}" class="btn btn-primary btn-disabled">이미 작가회원입니다.</a>-->
                 </div>
             </div>
         </div>
-
     </section>
-
 </main>
 </body>
 </html>

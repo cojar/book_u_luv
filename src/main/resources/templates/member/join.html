@@ -1,244 +1,325 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
 </head>
+
 <body>
-<h1>회원가입</h1>
+<main layout:fragment="content">
+    <section class="section section-join flex-grow flex flex-col items-center justify-center">
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg">
+                <i class="fa-solid fa-user-plus"></i>
+                회원가입
+            </h1>
 
-<form method="post" th:action="@{/member/join}" th:object="${memberJoinRequest}">
-    <!-- 사용자 아이디 (이메일) -->
-    <div>
-        <label for="userName">사용자 아이디 (이메일):</label>
-        <input id="userName" required th:field="*{userName}" type="email">
-    </div>
+            <form class="flex flex-col gap-3" method="POST" th:action="@{/member/join}"
+                  th:object="${memberJoinRequest}">
+                <!-- 사용자 아이디 (이메일) -->
+                <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">사용자 아이디 (이메일):</span>
+                    </label>
+                    <input autofocus class="input input-bordered" id="userName" maxlength="50" placeholder="아이디"
+                           required th:field="*{userName}" type="email">
+                </div>
 
-    <!-- 이메일 인증 -->
-    <div>
-        <label for="mailKey">이메일 인증번호:</label>
-        <input id="mailKey" placeholder="인증번호" th:field="*{mailKey}" type="text">
-        <input id="genMailKey" placeholder="인증번호" th:field="*{genMailKey}" type="hidden">
-        <button onclick="sendEmailConfirmation()" type="button">인증번호 전송</button>
-        <button onclick="validateMailKey()" type="button">인증 확인</button>
-        <span class="email-check-checkmark" style="display: none">✔️</span>
-        <span id="mail-key-errorMessage" style="display: none; color: red">인증번호가 일치하지 않습니다.</span>
-    </div>
+                <!-- 사용자 아이디 (이메일) -->
+                <!--                <div>-->
+                <!--                    <label for="userName">사용자 아이디 (이메일):</label>-->
+                <!--                    <input id="userName" required th:field="*{userName}" type="email">-->
+                <!--                </div>-->
 
-    <!-- 비밀번호 -->
-    <div>
-        <label for="password1">비밀번호:</label>
-        <input id="password1" required th:field="*{password1}" type="password">
-    </div>
+                <!-- 이메일 인증 -->
+                <div class="form-control">
+                    <label class="label" for="mailKey">
+                        <span class="label-text">이메일 인증번호:</span>
+                    </label>
+                    <input class="input input-bordered" id="mailKey" placeholder="인증번호" th:field="*{mailKey}"
+                           type="text">
+                    <input class="input input-bordered" id="genMailKey" placeholder="인증번호" th:field="*{genMailKey}"
+                           type="hidden">
+                    <button onclick="sendEmailConfirmation()" type="button">인증번호 전송</button>
+                    <button onclick="validateMailKey()" type="button">인증 확인</button>
+                    <span class="email-check-checkmark" style="display: none">✔️</span>
+                    <span id="mail-key-errorMessage" style="display: none; color: red">인증번호가 일치하지 않습니다.</span>
+                </div>
+                <script>
+                    function sendEmailConfirmation() {
+                      var email = $("#userName").val();
+                      $.ajax({
+                        url: "http://localhost:7070/mailCheck",
+                        method: "GET",
+                        data: {
+                          email: email
+                        },
+                        success: function(data) {
+                          alert("이메일 인증번호를 전송했습니다.");
+                          $("#genMailKey").val(data);
+                        },
+                        error: function(xhr, status, error) {
+                          alert("이메일 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
+                        }
+                      });
+                    }
 
-    <!-- 비밀번호 확인 -->
-    <div>
-        <label for="password2">비밀번호 확인:</label>
-        <input id="password2" required th:field="*{password2}" type="password">
-    </div>
+                    function validateMailKey() {
+                      const mailKey = document.getElementById('mailKey').value;
+                      const genMailKey = document.getElementById('genMailKey').value;
+                      const checkmark = document.querySelector('.email-check-checkmark');
+                      const errorMessage = document.getElementById('mail-key-errorMessage');
+                      if (mailKey.length === 5 && mailKey === genMailKey) {
+                        checkmark.style.display = 'block';
+                        errorMessage.style.display = 'none';
+                      } else {
+                        checkmark.style.display = 'none';
+                        errorMessage.style.display = 'block';
+                      }
+                    }
 
-    <!-- 닉네임 -->
-    <div>
-        <label for="nickName">닉네임:</label>
-        <input id="nickName" required th:field="*{nickName}" type="text">
-    </div>
 
-    <!-- 사용자 주소 -->
-<!--    <div>-->
-<!--        <label for="address">사용자 주소:</label>-->
-<!--        <input id="address" required th:field="*{address}" type="text">-->
-<!--    </div>-->
 
-    <!--카카오 주소검색 API-->
-    <div>
-        <label for="sample4_postcode">우편번호:</label>
-        <input id="sample4_postcode" required type="text" th:field="*{postalNum}">
-    </div>
-    <input type="button" onclick="sample4_execDaumPostcode()" value="우편번호 찾기"><br>
-    <div>
-        <label for="sample4_roadAddress">도로명주소:</label>
-        <input id="sample4_roadAddress" type="text" th:field="*{roadAddress}">
-    </div>
-    <div>
-        <label for="sample4_jibunAddress">지번주소:</label>
-        <input id="sample4_jibunAddress" type="text" th:field="*{jibunAddress}">
-    </div>
-    <span id="guide" style="color:#999;display:none"></span>
-    <div>
-        <label for="sample4_detailAddress">상세주소:</label>
-        <input id="sample4_detailAddress" type="text" th:field="*{detailAddress}">
-    </div>
-    <div>
-        <label for="sample4_extraAddress">참고항목:</label>
-        <input id="sample4_extraAddress" type="text" th:field="*{extraAddress}">
-    </div>
 
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script>
-    //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
-    function sample4_execDaumPostcode() {
-        new daum.Postcode({
-            oncomplete: function(data) {
-                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
-                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
-                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-                var roadAddr = data.roadAddress; // 도로명 주소 변수
-                var extraRoadAddr = ''; // 참고 항목 변수
+                </script>
+                <div class="form-control">
+                    <label class="label" for="password1">
+                        <span class="label-text">비밀번호:</span>
+                    </label>
+                    <input class="input input-bordered" id="password1" maxlength="50" placeholder="비밀번호"
+                           required th:field="*{password1}" type="password">
+                </div>
 
-                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
-                    extraRoadAddr += data.bname;
+                <!-- 비밀번호 -->
+                <!--                <div>-->
+                <!--                    <label for="password1">비밀번호:</label>-->
+                <!--                    <input id="password1" required th:field="*{password1}" type="password">-->
+                <!--                </div>-->
+
+                <div class="form-control">
+                    <label class="label" for="password2">
+                        <span class="label-text">비밀번호 확인:</span>
+                    </label>
+                    <input class="input input-bordered" id="password2" maxlength="50" placeholder="비밀번호 확인"
+                           required th:field="*{password2}" type="password">
+                </div>
+
+                <!-- 비밀번호 확인 -->
+                <!--                <div>-->
+                <!--                    <label for="password2">비밀번호 확인:</label>-->
+                <!--                    <input id="password2" required th:field="*{password2}" type="password">-->
+                <!--                </div>-->
+
+                <!-- 닉네임 -->
+                <div class="form-control">
+                    <label class="label" for="nickName">
+                        <span class="label-text">닉네임:</span>
+                    </label>
+                    <input class="input input-bordered" id="nickName" maxlength="50" placeholder="닉네임"
+                           required th:field="*{nickName}" type="text">
+                </div>
+
+                <!-- 사용자 주소 -->
+                <!--    <div>-->
+                <!--        <label for="address">사용자 주소:</label>-->
+                <!--        <input id="address" required th:field="*{address}" type="text">-->
+                <!--    </div>-->
+
+                <!--카카오 주소검색 API-->
+                <input onclick="sample4_execDaumPostcode()" type="button" value="우편번호 찾기"><br>
+                <div class="form-control">
+                    <label class="label" for="sample4_postcode">
+                        <span class="label-text">우편번호:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_postcode" required th:field="*{postalNum}"
+                           type="text">
+                </div>
+                <div class="form-control">
+                    <label class="label" for="sample4_roadAddress">
+                        <span class="label-text">도로명주소:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_roadAddress" required th:field="*{roadAddress}"
+                           type="text">
+                </div>
+                <div class="form-control">
+                    <label class="label" for="sample4_jibunAddress">
+                        <span class="label-text">지번주소:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_jibunAddress" required th:field="*{jibunAddress}"
+                           type="text">
+                </div>
+                <span id="guide" style="color:#999;display:none"></span>
+                <div class="form-control">
+                    <label class="label" for="sample4_detailAddress">
+                        <span class="label-text">상세주소:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_detailAddress" required th:field="*{detailAddress}"
+                           type="text">
+                </div>
+                <div class="form-control">
+                    <label class="label" for="sample4_extraAddress">
+                        <span class="label-text">참고항목:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_extraAddress" required th:field="*{extraAddress}"
+                           type="text">
+                </div>
+
+                <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+                <script>
+                //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+                function sample4_execDaumPostcode() {
+                  new daum.Postcode({
+                    oncomplete: function(data) {
+                      // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+                      // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                      // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                      var roadAddr = data.roadAddress; // 도로명 주소 변수
+                      var extraRoadAddr = ''; // 참고 항목 변수
+                      // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                      // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                      if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraRoadAddr += data.bname;
+                      }
+                      // 건물명이 있고, 공동주택일 경우 추가한다.
+                      if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                      }
+                      // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                      if (extraRoadAddr !== '') {
+                        extraRoadAddr = ' (' + extraRoadAddr + ')';
+                      }
+                      // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                      document.getElementById('sample4_postcode').value = data.zonecode;
+                      document.getElementById("sample4_roadAddress").value = roadAddr;
+                      document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
+                      // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                      if (roadAddr !== '') {
+                        document.getElementById("sample4_extraAddress").value = extraRoadAddr;
+                      } else {
+                        document.getElementById("sample4_extraAddress").value = '';
+                      }
+                      var guideTextBox = document.getElementById("guide");
+                      // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                      if (data.autoRoadAddress) {
+                        var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                        guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                        guideTextBox.style.display = 'block';
+                      } else if (data.autoJibunAddress) {
+                        var expJibunAddr = data.autoJibunAddress;
+                        guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                        guideTextBox.style.display = 'block';
+                      } else {
+                        guideTextBox.innerHTML = '';
+                        guideTextBox.style.display = 'none';
+                      }
+                    }
+                  }).open();
                 }
-                // 건물명이 있고, 공동주택일 경우 추가한다.
-                if(data.buildingName !== '' && data.apartment === 'Y'){
-                   extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-                }
-                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-                if(extraRoadAddr !== ''){
-                    extraRoadAddr = ' (' + extraRoadAddr + ')';
-                }
 
-                // 우편번호와 주소 정보를 해당 필드에 넣는다.
-                document.getElementById('sample4_postcode').value = data.zonecode;
-                document.getElementById("sample4_roadAddress").value = roadAddr;
-                document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
+                </script>
 
-                // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
-                if(roadAddr !== ''){
-                    document.getElementById("sample4_extraAddress").value = extraRoadAddr;
-                } else {
-                    document.getElementById("sample4_extraAddress").value = '';
-                }
+                <!-- 카카오맵 지도영역 API -->
+<!--                <div id="map" style="width:500px;height:400px;"></div>-->
+<!--                <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=29a0c927015ac2aacc00215b1a91d7f3"-->
+<!--                        type="text/javascript"></script>-->
+<!--                <script>-->
+<!--                var container = document.getElementById('map');-->
+<!--                var options = {-->
+<!--                  center: new kakao.maps.LatLng(36.349405, 127.376768),-->
+<!--                  level: 3-->
+<!--                };-->
+<!--                var map = new kakao.maps.Map(container, options);-->
+<!--                // 마커가 표시될 위치입니다-->
+<!--                var markerPosition = new kakao.maps.LatLng(36.349405, 127.376768);-->
+<!--                // 마커를 생성합니다-->
+<!--                var marker = new kakao.maps.Marker({-->
+<!--                  position: markerPosition-->
+<!--                });-->
+<!--                // 마커가 지도 위에 표시되도록 설정합니다-->
+<!--                marker.setMap(map);-->
+<!--                // 아래 코드는 지도 위의 마커를 제거하는 코드입니다-->
+<!--                // marker.setMap(null);-->
+<!--                </script>-->
 
-                var guideTextBox = document.getElementById("guide");
-                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
-                if(data.autoRoadAddress) {
-                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
-                    guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
-                    guideTextBox.style.display = 'block';
+                <!-- 연락처 -->
+                <div class="form-control">
+                    <label class="label" for="phone">
+                        <span class="label-text">연락처:</span>
+                    </label>
+                    <input class="input input-bordered" id="phone" placeholder="연락처" required th:field="*{phone}"
+                           type="number">
+                </div>
 
-                } else if(data.autoJibunAddress) {
-                    var expJibunAddr = data.autoJibunAddress;
-                    guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
-                    guideTextBox.style.display = 'block';
-                } else {
-                    guideTextBox.innerHTML = '';
-                    guideTextBox.style.display = 'none';
-                }
-            }
-        }).open();
-    }
-</script>
+                <!-- 이름 -->
+                <div class="form-control">
+                    <label class="label" for="firstName">
+                        <span class="label-text">이름:</span>
+                    </label>
+                    <input class="input input-bordered" id="firstName" placeholder="이름" required th:field="*{firstName}"
+                           type="text">
+                </div>
 
-    <!-- 카카오맵 지도영역 API -->
-    <div id="map" style="width:500px;height:400px;"></div>
-    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=29a0c927015ac2aacc00215b1a91d7f3"
-            type="text/javascript"></script>
-    <script>
-		var container = document.getElementById('map');
-		var options = {
-			center: new kakao.maps.LatLng(36.349405, 127.376768),
-			level: 3
-		};
+                <!-- 성 -->
+                <div class="form-control">
+                    <label class="label" for="lastName">
+                        <span class="label-text">성:</span>
+                    </label>
+                    <input class="input input-bordered" id="lastName" placeholder="성" required th:field="*{lastName}"
+                           type="text">
+                </div>
 
-		var map = new kakao.maps.Map(container, options);
+                <!-- 성별 -->
+                <div class="form-control">
+                    <label class="label" for="gender">
+                        <span class="label-text">성별:</span>
+                    </label>
+                    <select id="gender" th:field="*{gender}">
+                        <option value="true">남성</option>
+                        <option value="false">여성</option>
+                    </select>
+                </div>
 
-		// 마커가 표시될 위치입니다
-        var markerPosition  = new kakao.maps.LatLng(36.349405, 127.376768);
+                <!-- 생년월일 -->
+                <div class="form-control">
+                    <label class="label" for="birthDate">
+                        <span class="label-text">생년월일:</span>
+                    </label>
+                    <input class="input input-bordered" id="birthDate" pattern="\d{4}-\d{2}-\d{2}" required
+                           th:field="*{birthDate}"
+                           type="date">
+                    <span class="hid-ast" id="birthDateError"
+                          style='color: #E50122; visibility: hidden; font-size:12px'>올바른 날짜 형식을 입력해주세요. (예: 1993-11-03)</span>
+                </div>
+                <script>
+                    document.getElementById("birthDate").addEventListener("input", function() {
+                      const inputDate = document.getElementById("birthDate");
+                      const inputDateError = document.getElementById("birthDateError");
+                      const datePattern = /^\d{4}-\d{2}-\d{2}$/;
 
-        // 마커를 생성합니다
-        var marker = new kakao.maps.Marker({
-            position: markerPosition
-        });
+                      if (!datePattern.test(inputDate.value)) {
+                        inputDateError.style.visibility = "visible";
+                      } else {
+                        inputDateError.style.visibility = "hidden";
+                      }
+                    });
 
-        // 마커가 지도 위에 표시되도록 설정합니다
-        marker.setMap(map);
 
-        // 아래 코드는 지도 위의 마커를 제거하는 코드입니다
-        // marker.setMap(null);
-    </script>
-    <!-- 우편번호 -->
-<!--    <div>-->
-<!--        <label for="postalNum">우편번호:</label>-->
-<!--        <input id="postalNum" required th:field="*{postalNum}" type="number">-->
-<!--    </div>-->
+                </script>
+                <div class="grid grid-cols-2 mt-2 gap-2">
+                    <a class="btn btn-secondary btn-outline" href="/member/login">로그인</a>
+                    <input class="btn btn-primary" type="submit" value="회원가입">
+                </div>
 
-    <!-- 연락처 -->
-    <div>
-        <label for="phone">연락처:</label>
-        <input id="phone" required th:field="*{phone}" type="number">
-    </div>
-
-    <!-- 이름 -->
-    <div>
-        <label for="firstName">이름:</label>
-        <input id="firstName" required th:field="*{firstName}" type="text">
-    </div>
-
-    <!-- 성 -->
-    <div>
-        <label for="lastName">성:</label>
-        <input id="lastName" required th:field="*{lastName}" type="text">
-    </div>
-
-    <!-- 성별 -->
-    <div>
-        <label for="gender">성별:</label>
-        <select id="gender" th:field="*{gender}">
-            <option value="true">남성</option>
-            <option value="false">여성</option>
-        </select>
-    </div>
-
-    <!-- 생년월일 -->
-    <div>
-        <label for="birthDate">생년월일:</label>
-        <input id="birthDate" th:field="*{birthDate}" type="date">
-    </div>
-
-    <!-- 회원 가입 버튼 -->
-    <div>
-        <button type="submit">회원 가입</button>
-    </div>
-</form>
+                <div class="flex justify-center">
+                    <a class="btn btn-link" href="/member/findUsername">아이디찾기</a>
+                    <a class="btn btn-link" href="/member/findPassword">비밀번호 찾기</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
 </body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    function sendEmailConfirmation() {
-        var email = $("#userName").val();
-        $.ajax({
-            url: "http://localhost:7070/mailCheck",
-            method: "GET",
-            data: {
-                email: email
-            },
-            success: function(data) {
-                alert("이메일 인증번호를 전송했습니다.");
-                $("#genMailKey").val(data);
-            },
-            error: function(xhr, status, error) {
-                alert("이메일 인증번호 전송에 실패했습니다. 다시 시도해주세요.");
-            }
-        });
-    }
-
-    function validateMailKey() {
-        const mailKey = document.getElementById('mailKey').value;
-        const genMailKey = document.getElementById('genMailKey').value;
-        const checkmark = document.querySelector('.email-check-checkmark');
-        const errorMessage = document.getElementById('mail-key-errorMessage');
-
-        if (mailKey.length === 5 && mailKey === genMailKey) {
-            checkmark.style.display = 'block';
-            errorMessage.style.display = 'none';
-        } else {
-            checkmark.style.display = 'none';
-            errorMessage.style.display = 'block';
-        }
-    }
-
-
-</script>
 </html>
