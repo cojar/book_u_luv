@@ -35,11 +35,11 @@ public class MemberService {
     private Long expiredMs = 1000 * 60 * 60l;
 
     public Member getUser(String userName) {
-        Optional<Member> siteUser = this.memberRepository.findByUserName(userName);
-        if (siteUser.isPresent()) {
-            return siteUser.get();
+        Optional<Member> member = this.memberRepository.findByUserName(userName);
+        if (member.isPresent()) {
+            return member.get();
         } else {
-            throw new DataNotFoundException("siteUser not found");
+            throw new DataNotFoundException("member not found");
         }
     }
 
