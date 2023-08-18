@@ -1,85 +1,125 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" layout:decorate="~{layout/layout.html}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>관리자 페이지</title>
+    <!-- 테일윈드 스타일시트 링크 추가 -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-<h1>회원 관리</h1>
-<table>
-    <tr>
-        <th>NO.</th>
-        <th>ID</th>
-        <th>성</th>
-        <th>이름</th>
-        <th>닉네임</th>
-        <th>성별</th>
-        <th>생년월일</th>
-        <th>전화번호</th>
-        <th>활성 여부</th>
-    </tr>
-    <tr th:each="member : ${memberList}">
-        <td th:text="${member.id}">NO.</td>
-        <td th:text="${member.userName}"></td>
-        <td th:text="${member.lastName}"></td>
-        <td th:text="${member.firstName}"></td>
-        <td th:text="${member.nickName}"></td>
-        <td th:text="${member.gender}"></td>
-        <td th:text="${member.birthDate}"></td>
-        <td th:text="${member.phone}"></td>
-        <td th:text="${member.isActive}"></td>
-    </tr>
-</table>
-<h1>공지사항 관리</h1>
-<table>
-    <tr>
-        <th>NO.</th>
-        <th>제목</th>
-        <th>작성자</th>
-        <th>작성일자</th>
-        <th>수정일자</th>
-    </tr>
-    <tr th:each="notice : ${noticeList}">
-        <td th:text="${notice.id}"></td>
-        <td th:text="${notice.subject}"></td>
-        <td th:text="${notice.register}"></td>
-        <td th:text="${notice.createDate}"></td>
-        <td th:text="${notice.modifyDate}"></td>
-    </tr>
-</table>
-<h1>도서 관리</h1>
-<table>
-    <tr>
-        <th>NO.</th>
-        <th>제목</th>
-        <th>작가</th>
-        <th>출판일</th>
-        <th>출판사</th>
-    </tr>
-    <tr th:each="product : ${productList}">
-        <th th:text="${product.id}"></th>
-        <th th:text="${product.title}"></th>
-        <th th:text="${product.author}"></th>
-        <th th:text="${product.pubDate}"></th>
-        <th th:text="${product.publisher}"></th>
-    </tr>
-</table>
-<h1>판매글 관리</h1>
-<table>
-    <tr>
-        <th>NO.</th>
-        <th>제목</th>
-        <th>작성자</th>
-        <th>작성일자</th>
-        <th>수정일자</th>
-    </tr>
-    <tr th:each="article : ${articleList}">
-        <th th:text="${article.id}"></th>
-        <th th:text="${article.subject}"></th>
-        <th th:text="${article.register}"></th>
-        <th th:text="${article.createDate}"></th>
-        <th th:text="${article.modifyDate}"></th>
-    </tr>
-</table>
+<body class="bg-gray-100 p-20" layout:fragment="content">
+
+    <!-- 회원 관리 테이블 -->
+    <h1 class="text-3xl font-semibold mb-4">회원 관리</h1>
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead>
+            <tr>
+                <th class="py-2 px-4 border">NO.</th>
+                <th class="py-2 px-4 border">ID</th>
+                <th class="py-2 px-4 border">성</th>
+                <th class="py-2 px-4 border">이름</th>
+                <th class="py-2 px-4 border">닉네임</th>
+                <th class="py-2 px-4 border">성별</th>
+                <th class="py-2 px-4 border">생년월일</th>
+                <th class="py-2 px-4 border">전화번호</th>
+                <th class="py-2 px-4 border">활성 여부</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="bg-white" th:each="member : ${memberList}">
+                <td class="py-2 px-4 border" th:text="${member.id}"></td>
+                <td class="py-2 px-4 border" th:text="${member.userName}"></td>
+                <td class="py-2 px-4 border" th:text="${member.lastName}"></td>
+                <td class="py-2 px-4 border" th:text="${member.firstName}"></td>
+                <td class="py-2 px-4 border" th:text="${member.nickName}"></td>
+                <td class="py-2 px-4 border" th:text="${member.gender}"></td>
+                <td class="py-2 px-4 border" th:text="${member.birthDate}"></td>
+                <td class="py-2 px-4 border" th:text="${member.phone}"></td>
+                <td class="py-2 px-4 border" th:text="${member.isActive}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 공지사항 관리 테이블 -->
+    <h1 class="text-3xl font-semibold mt-8 mb-4">공지사항 관리</h1>
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead>
+            <tr>
+                <th class="py-2 px-4 border">NO.</th>
+                <th class="py-2 px-4 border">제목</th>
+                <th class="py-2 px-4 border">작성자</th>
+                <th class="py-2 px-4 border">작성일자</th>
+                <th class="py-2 px-4 border">수정일자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="bg-white" th:each="notice : ${noticeList}">
+                <td class="py-2 px-4 border" th:text="${notice.id}"></td>
+                <td class="py-2 px-4 border" th:text="${notice.subject}"></td>
+                <td class="py-2 px-4 border" th:text="${notice.register}"></td>
+                <td class="py-2 px-4 border" th:text="${notice.createDate}"></td>
+                <td class="py-2 px-4 border" th:text="${notice.modifyDate}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 도서 관리 테이블 -->
+    <h1 class="text-3xl font-semibold mt-8 mb-4">도서 관리</h1>
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead>
+            <tr>
+                <th class="py-2 px-4 border">NO.</th>
+                <th class="py-2 px-4 border">제목</th>
+                <th class="py-2 px-4 border">작가</th>
+                <th class="py-2 px-4 border">출판일</th>
+                <th class="py-2 px-4 border">출판사</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="bg-white" th:each="product : ${productList}">
+                <th class="py-2 px-4 border" th:text="${product.id}"></th>
+                <th class="py-2 px-4 border" th:text="${product.title}"></th>
+                <th class="py-2 px-4 border" th:text="${product.author}"></th>
+                <th class="py-2 px-4 border" th:text="${product.pubDate}"></th>
+                <th class="py-2 px-4 border" th:text="${product.publisher}"></th>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 판매글 관리 테이블 -->
+    <h1 class="text-3xl font-semibold mt-8 mb-4">판매글 관리</h1>
+    <div class="overflow-x-auto">
+        <table class="min-w-full">
+            <thead>
+            <tr>
+                <th class="py-2 px-4 border">NO.</th>
+                <th class="py-2 px-4 border">제목</th>
+                <th class="py-2 px-4 border">작성자</th>
+                <th class="py-2 px-4 border">작성일자</th>
+                <th class="py-2 px-4 border">수정일자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="article : ${articleList}">
+                <th class="py-2 px-4 border" th:text="${article.id}">NO.</th>
+                <th class="py-2 px-4 border" th:text="${article.subject}"></th>
+                <th class="py-2 px-4 border" th:text="${article.register}"></th>
+                <th class="py-2 px-4 border" th:text="${article.createDate}"></th>
+                <th class="py-2 px-4 border" th:text="${article.modifyDate}"></th>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 </body>
 </html>
