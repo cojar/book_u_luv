@@ -18,7 +18,7 @@
         <th>전화번호</th>
         <th>활성 여부</th>
     </tr>
-    <tr th:each="member : ${members}">
+    <tr th:each="member : ${memberList}">
         <td th:text="${member.id}">NO.</td>
         <td th:text="${member.userName}"></td>
         <td th:text="${member.lastName}"></td>
