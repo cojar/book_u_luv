@@ -45,38 +45,23 @@
                 </div>
             </form>
         </div>
-        <style>
-            .login-logo {
-	width: 100%;
-	display: flex;
-	position: relative;
-	justify-content: center;
-}
-.login-logo > .logo {
-	width: 12%;
-}
-.login-logo > .logo img {
-	width: 50%;
-	object-fit: cover;
-	border-radius: 0.5rem;
-}
-        </style>
-        <div class="login-logo">
-            <div class="logo" id="login-kakao">
-                <a href="http://localhost:7070/oauth2/authorization/kakao">
-                    <img th:src="@{/image/login_kakao.png}" alt="">
+        <div class="w-full flex relative justify-center">
+
+            <div class="w-[10%]" id="login-kakao">
+                <a class="flex justify-center" href="http://localhost:7070/oauth2/authorization/kakao">
+                    <img class="w-1/2 object-cover rounded-lg" th:src="@{/image/login_kakao.png}" alt="">
                 </a>
             </div>
-            <div class="logo" id="login-naver">
-                <a href="http://localhost:7070/oauth2/authorization/naver">
-                    <img th:src="@{/image/login_naver.png}" alt="">
+            <div class="w-[10%]" id="login-naver">
+                <a class="flex justify-center" href="http://localhost:7070/oauth2/authorization/naver">
+                    <img class="w-1/2 object-cover rounded-lg" th:src="@{/image/login_naver.png}" alt="">
                 </a>
             </div>
-            <div class="logo" id="login_google">
-                <a href="http://localhost:7070/oauth2/authorization/google">
-                    <img th:src="@{/image/login_google.png}" alt="">
-                </a>
-            </div>
+<!--            <div class="w-[10%]" id="login_google">-->
+<!--                <a class="flex justify-center" href="http://localhost:7070/oauth2/authorization/google">-->
+<!--                    <img class="w-1/2 object-cover rounded-lg" th:src="@{/image/login_google.png}" alt="">-->
+<!--                </a>-->
+<!--            </div>-->
         </div>
     </section>
 
