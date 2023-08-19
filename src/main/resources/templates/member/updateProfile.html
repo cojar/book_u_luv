@@ -15,15 +15,54 @@
                 <i class="fa-solid fa-user-plus"></i>
                 회원정보 수정
             </h1>
+            <!-- 프로필 이미지 업로드 폼 -->
+            <form enctype="multipart/form-data" method="POST" th:action="@{/member/updateProfileImg}">
+                <div class="user-profile-register">
+                    <div class="user-img-box flex items-center gap-4">
+                        <label class="text-gray-600 cursor-pointer flex items-center space-x-2" for="avatar1">
+                            <!-- 실시간 이미지 미리보기 -->
+                            <img class="preview-image h-20 w-20 rounded-full"
+                                 th:if="${#authentication.principal.imgFilePath}"
+                                 th:src="${#authentication.principal.imgFilePath}"/>
+                            <img class="preview-image h-20 w-20"
+                                 src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
+                                 th:unless="${#authentication.principal.imgFilePath}" />
+                            <input accept="image/png, image/jpeg, image/jpg" class="hidden" id="avatar1" name="file"
+                                   type="file" onchange="previewImage(event)">
+                            <button class="btn btn-primary btn-action img-btn" type="submit">저장하기</button>
+                        </label>
+                    </div>
+                </div>
+            </form>
 
-            <form class="flex flex-col gap-3" method="POST" th:action="@{/member/updateprofile}"
-                  th:object="${memberUpdateRequest}" enctype="multipart/form-data">
+            <script>
+    function previewImage(event) {
+        const previewImages = document.querySelectorAll(".preview-image");
+        const selectedImage = event.target.files[0];
+
+        if (selectedImage) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                previewImages.forEach(image => {
+                    image.src = reader.result;
+                });
+            };
+            reader.readAsDataURL(selectedImage);
+        }
+    }
+</script>
+
+
+
+            <form class="flex flex-col gap-3" method="POST"
+                  th:action="@{/member/updateprofile}" th:object="${memberUpdateRequest}">
                 <!-- 사용자 아이디 (이메일) -->
                 <div class="form-control">
                     <label class="label" for="userName">
                         <span class="label-text">사용자 아이디 (이메일):</span>
                     </label>
-                    <input autofocus class="input input-bordered" disabled type="email" id="userName" name="username" th:field="*{userName}">
+                    <input autofocus class="input input-bordered" disabled id="userName" name="username" th:field="*{userName}"
+                           type="email">
                 </div>
 
                 <!--비밀번호 수정-->
@@ -33,7 +72,8 @@
                     <label class="label" for="password1">
                         <span class="label-text">기존 비밀번호:</span>
                     </label>
-                    <input class="input input-bordered" type="password" id="password" name="password" th:field="*{password1}">
+                    <input class="input input-bordered" id="password" name="password" th:field="*{password1}"
+                           type="password">
                 </div>
 
                 <!-- 변경 비밀번호 -->
@@ -41,7 +81,7 @@
                     <label class="label" for="password2">
                         <span class="label-text">변경 비밀번호:</span>
                     </label>
-                    <input class="input input-bordered" type="password" id="password1" th:field="*{password1}">
+                    <input class="input input-bordered" id="password1" th:field="*{password1}" type="password">
                 </div>
 
                 <!-- 변경 비밀번호 확인 -->
@@ -49,7 +89,7 @@
                     <label class="label" for="password2">
                         <span class="label-text">변경 비밀번호 확인:</span>
                     </label>
-                    <input class="input input-bordered" type="password" id="password2" th:field="*{password2}">
+                    <input class="input input-bordered" id="password2" th:field="*{password2}" type="password">
                 </div>
 
                 <!-- 닉네임 -->
@@ -57,7 +97,7 @@
                     <label class="label">
                         <span class="label-text">닉네임:</span>
                     </label>
-                    <input autofocus class="input input-bordered" type="text" th:field="*{nickName}">
+                    <input autofocus class="input input-bordered" th:field="*{nickName}" type="text">
                 </div>
 
                 <!-- 연락처 -->
@@ -65,7 +105,8 @@
                     <label class="label" for="phone">
                         <span class="label-text">연락처:</span>
                     </label>
-                    <input autofocus class="input input-bordered" type="number" id="phone" name="phone" th:field="*{phone}">
+                    <input autofocus class="input input-bordered" id="phone" name="phone" th:field="*{phone}"
+                           type="number">
                 </div>
 
                 <!-- 성 -->
@@ -73,7 +114,8 @@
                     <label class="label" for="lastName">
                         <span class="label-text">성:</span>
                     </label>
-                    <input autofocus class="input input-bordered" type="text" id="lastName" name="lastName" th:field="*{lastName}">
+                    <input autofocus class="input input-bordered" id="lastName" name="lastName" th:field="*{lastName}"
+                           type="text">
                 </div>
 
                 <!-- 이름 -->
@@ -81,7 +123,8 @@
                     <label class="label" for="firstName">
                         <span class="label-text">이름:</span>
                     </label>
-                    <input autofocus class="input input-bordered" type="text" id="firstName" name="firstName" th:field="*{firstName}">
+                    <input autofocus class="input input-bordered" id="firstName" name="firstName" th:field="*{firstName}"
+                           type="text">
                 </div>
 
                 <!-- 성별 -->
@@ -101,9 +144,9 @@
                     <label class="label" for="birthDate">
                         <span class="label-text">생년월일:</span>
                     </label>
-                    <input autofocus class="input input-bordered" id="birthDate" pattern="\d{4}-\d{2}-\d{2}"
-                           type="date" name="birthDate" th:field="*{birthDate}"
-                           th:value="${#dates.format(birthDate, 'yyyy-MM-dd')}">
+                    <input autofocus class="input input-bordered" id="birthDate" name="birthDate"
+                           pattern="\d{4}-\d{2}-\d{2}" th:field="*{birthDate}" th:value="${#dates.format(birthDate, 'yyyy-MM-dd')}"
+                           type="date">
                     <span class="hid-ast" id="birthDateError"
                           style='color: #E50122; visibility: hidden; font-size:12px'>올바른 날짜 형식을 입력해주세요. (예: 1993-11-03)</span>
                 </div>
@@ -120,6 +163,7 @@
                         inputDateError.style.visibility = "hidden";
                       }
                     });
+
                 </script>
 
                 <!--카카오 주소검색 API-->
@@ -130,8 +174,9 @@
                     <label class="label" for="sample4_postcode">
                         <span class="label-text">우편번호:</span>
                     </label>
-                    <input class="input input-bordered" id="sample4_postcode" required name="postalNum" th:field="*{postalNum}"
-                           type="text" disabled>
+                    <input class="input input-bordered" disabled id="sample4_postcode" name="postalNum"
+                           required
+                           th:field="*{postalNum}" type="text">
                 </div>
 
                 <!-- 도로명주소 -->
@@ -139,16 +184,18 @@
                     <label class="label" for="sample4_roadAddress">
                         <span class="label-text">도로명주소:</span>
                     </label>
-                    <input class="input input-bordered" id="sample4_roadAddress" required name="roadAddress" th:field="*{roadAddress}"
-                           type="text" disabled>
+                    <input class="input input-bordered" disabled id="sample4_roadAddress" name="roadAddress"
+                           required
+                           th:field="*{roadAddress}" type="text">
                 </div>
                 <!-- 지번주소 -->
                 <div class="form-control">
                     <label class="label" for="sample4_jibunAddress">
                         <span class="label-text">지번주소:</span>
                     </label>
-                    <input class="input input-bordered" id="sample4_jibunAddress" required name="jibunAddress" th:field="*{jibunAddress}"
-                           type="text" disabled>
+                    <input class="input input-bordered" disabled id="sample4_jibunAddress" name="jibunAddress"
+                           required
+                           th:field="*{jibunAddress}" type="text">
                 </div>
                 <span id="guide" style="color:#999;display:none"></span>
                 <!-- 상세주소 -->
@@ -156,7 +203,8 @@
                     <label class="label" for="sample4_detailAddress">
                         <span class="label-text">상세주소:</span>
                     </label>
-                    <input class="input input-bordered" id="sample4_detailAddress" required name="detailAddress" th:field="*{detailAddress}"
+                    <input class="input input-bordered" id="sample4_detailAddress" name="detailAddress" required
+                           th:field="*{detailAddress}"
                            type="text">
                 </div>
                 <!-- 참고주소 -->
@@ -164,8 +212,9 @@
                     <label class="label" for="sample4_extraAddress">
                         <span class="label-text">참고항목:</span>
                     </label>
-                    <input class="input input-bordered" id="sample4_extraAddress" required name="extraAddress" th:field="*{extraAddress}"
-                           type="text" disabled>
+                    <input class="input input-bordered" disabled id="sample4_extraAddress" name="extraAddress"
+                           required
+                           th:field="*{extraAddress}" type="text">
                 </div>
                 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
                 <script>
@@ -218,6 +267,7 @@
                     }
                   }).open();
                 }
+
                 </script>
 
                 <!-- 수정 완료 버튼 -->
