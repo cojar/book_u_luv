@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>회원정보 수정</title>
+</head>
+
+<body>
+<main layout:fragment="content">
+    <section class="section section-join flex-grow flex flex-col items-center justify-center">
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg">
+                <i class="fa-solid fa-user-plus"></i>
+                회원정보 수정
+            </h1>
+
+            <form class="flex flex-col gap-3" method="POST" th:action="@{/member/updateprofile}"
+                  th:object="${memberUpdateRequest}" enctype="multipart/form-data">
+                <!-- 사용자 아이디 (이메일) -->
+                <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">사용자 아이디 (이메일):</span>
+                    </label>
+                    <input autofocus class="input input-bordered" disabled type="email" id="userName" name="username" th:field="*{userName}">
+                </div>
+
+                <!--비밀번호 수정-->
+
+                <!-- 기존 비밀번호 -->
+                <div class="form-control">
+                    <label class="label" for="password1">
+                        <span class="label-text">기존 비밀번호:</span>
+                    </label>
+                    <input class="input input-bordered" type="password" id="password" name="password" th:field="*{password1}">
+                </div>
+
+                <!-- 변경 비밀번호 -->
+                <div class="form-control">
+                    <label class="label" for="password2">
+                        <span class="label-text">변경 비밀번호:</span>
+                    </label>
+                    <input class="input input-bordered" type="password" id="password1" th:field="*{password1}">
+                </div>
+
+                <!-- 변경 비밀번호 확인 -->
+                <div class="form-control">
+                    <label class="label" for="password2">
+                        <span class="label-text">변경 비밀번호 확인:</span>
+                    </label>
+                    <input class="input input-bordered" type="password" id="password2" th:field="*{password2}">
+                </div>
+
+                <!-- 닉네임 -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">닉네임:</span>
+                    </label>
+                    <input autofocus class="input input-bordered" type="text" th:field="*{nickName}">
+                </div>
+
+
+                <!-- 연락처 -->
+                <div class="form-control">
+                    <label class="label" for="phone">
+                        <span class="label-text">연락처:</span>
+                    </label>
+                    <input autofocus class="input input-bordered" type="number" id="phone" name="phone" th:field="*{phone}">
+                </div>
+
+                <!-- 성 -->
+                <div class="form-control">
+                    <label class="label" for="lastName">
+                        <span class="label-text">성:</span>
+                    </label>
+                    <input autofocus class="input input-bordered" type="text" id="lastName" name="lastName" th:field="*{lastName}">
+                </div>
+
+                <!-- 이름 -->
+                <div class="form-control">
+                    <label class="label" for="firstName">
+                        <span class="label-text">이름:</span>
+                    </label>
+                    <input autofocus class="input input-bordered" type="text" id="firstName" name="firstName" th:field="*{firstName}">
+                </div>
+
+                <!-- 성별 -->
+                <div class="form-control">
+                    <label class="label" for="gender">
+                        <span class="label-text">성별:</span>
+                    </label>
+                    <select autofocus id="gender" th:field="*{gender}">
+                        <option value="">선택해주세요</option>
+                        <option value="true">남성</option>
+                        <option value="false">여성</option>
+                    </select>
+                </div>
+
+                <!-- 생년월일 -->
+                <div class="form-control">
+                    <label class="label" for="birthDate">
+                        <span class="label-text">생년월일:</span>
+                    </label>
+                    <input autofocus class="input input-bordered" id="birthDate" pattern="\d{4}-\d{2}-\d{2}"
+                           type="date" name="birthDate" th:field="*{birthDate}">
+                    <span class="hid-ast" id="birthDateError"
+                          style='color: #E50122; visibility: hidden; font-size:12px'>올바른 날짜 형식을 입력해주세요. (예: 1993-11-03)</span>
+                </div>
+                <script>
+                    document.getElementById("birthDate").addEventListener("input", function() {
+                      const inputDate = document.getElementById("birthDate");
+                      const inputDateError = document.getElementById("birthDateError");
+                      const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+                      if (!datePattern.test(inputDate.value)) {
+                        inputDateError.style.visibility = "visible";
+                      } else {
+                        inputDateError.style.visibility = "hidden";
+                      }
+                    });
+                </script>
+
+                <!--카카오 주소검색 API-->
+                <!-- 우편번호 찾기 버튼 -->
+                <input onclick="sample4_execDaumPostcode()" type="button" value="우편번호 찾기"><br>
+                <!-- 우편번호 -->
+                <div class="form-control">
+                    <label class="label" for="sample4_postcode">
+                        <span class="label-text">우편번호:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_postcode" required name="postalNum" th:field="*{postalNum}"
+                           type="text" disabled>
+                </div>
+
+                <!-- 도로명주소 -->
+                <div class="form-control">
+                    <label class="label" for="sample4_roadAddress">
+                        <span class="label-text">도로명주소:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_roadAddress" required name="roadAddress" th:field="*{roadAddress}"
+                           type="text" disabled>
+                </div>
+                <!-- 지번주소 -->
+                <div class="form-control">
+                    <label class="label" for="sample4_jibunAddress">
+                        <span class="label-text">지번주소:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_jibunAddress" required name="jibunAddress" th:field="*{jibunAddress}"
+                           type="text" disabled>
+                </div>
+                <span id="guide" style="color:#999;display:none"></span>
+                <!-- 상세주소 -->
+                <div class="form-control">
+                    <label class="label" for="sample4_detailAddress">
+                        <span class="label-text">상세주소:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_detailAddress" required name="detailAddress" th:field="*{detailAddress}"
+                           type="text">
+                </div>
+                <!-- 참고주소 -->
+                <div class="form-control">
+                    <label class="label" for="sample4_extraAddress">
+                        <span class="label-text">참고항목:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_extraAddress" required name="extraAddress" th:field="*{extraAddress}"
+                           type="text" disabled>
+                </div>
+                <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+                <script>
+                //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+                function sample4_execDaumPostcode() {
+                  new daum.Postcode({
+                    oncomplete: function(data) {
+                      // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+                      // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                      // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                      var roadAddr = data.roadAddress; // 도로명 주소 변수
+                      var extraRoadAddr = ''; // 참고 항목 변수
+                      // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                      // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                      if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraRoadAddr += data.bname;
+                      }
+                      // 건물명이 있고, 공동주택일 경우 추가한다.
+                      if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                      }
+                      // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                      if (extraRoadAddr !== '') {
+                        extraRoadAddr = ' (' + extraRoadAddr + ')';
+                      }
+                      // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                      document.getElementById('sample4_postcode').value = data.zonecode;
+                      document.getElementById("sample4_roadAddress").value = roadAddr;
+                      document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
+                      // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                      if (roadAddr !== '') {
+                        document.getElementById("sample4_extraAddress").value = extraRoadAddr;
+                      } else {
+                        document.getElementById("sample4_extraAddress").value = '';
+                      }
+                      var guideTextBox = document.getElementById("guide");
+                      // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                      if (data.autoRoadAddress) {
+                        var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                        guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                        guideTextBox.style.display = 'block';
+                      } else if (data.autoJibunAddress) {
+                        var expJibunAddr = data.autoJibunAddress;
+                        guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                        guideTextBox.style.display = 'block';
+                      } else {
+                        guideTextBox.innerHTML = '';
+                        guideTextBox.style.display = 'none';
+                      }
+                    }
+                  }).open();
+                }
+                </script>
+
+                <!-- 수정 완료 버튼 -->
+                <div class="grid grid-cols-2 mt-2 gap-2">
+                    <input class="btn btn-primary" type="submit" value="회원정보 수정 완료">
+                </div>
+
+                <div class="flex justify-center">
+                    <a class="btn btn-link" href="/member/findUsername">아이디찾기</a>
+                    <a class="btn btn-link" href="/member/findPassword">비밀번호 찾기</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+</body>
+</html>

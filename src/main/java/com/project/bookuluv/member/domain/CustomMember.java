@@ -32,9 +32,9 @@ public class CustomMember extends User {
     private final String extraAddress;
 
 
-    public CustomMember(String username, String password, Member member, Collection<? extends GrantedAuthority> authorities) {
-        super(username,
-                password,
+    public CustomMember(Member member, Collection<? extends GrantedAuthority> authorities) {
+        super(member.getUserName(),
+                member.getPassword(),
                 authorities);
         this.id = member.getId();
         this.userName = member.getUserName();

@@ -5,6 +5,7 @@ import com.project.bookuluv.member.domain.Member;
 import com.project.bookuluv.member.dto.MemberJoinRequest;
 import com.project.bookuluv.member.dto.MemberLoginRequest;
 import com.project.bookuluv.member.dto.MemberRole;
+import com.project.bookuluv.member.dto.MemberUpdateRequest;
 import com.project.bookuluv.member.exception.DataNotFoundException;
 import com.project.bookuluv.member.service.MemberSecurityService;
 import com.project.bookuluv.member.service.MemberService;
@@ -23,6 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
@@ -37,9 +39,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberSecurityService memberSecurityService;
-
     private final MailController mailController;
-
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/api/v1/members/join")
@@ -79,7 +79,6 @@ public class MemberController {
     public String showSignup(MemberJoinRequest memberJoinRequest) {
         return "member/join";
     }
-
 
     @PostMapping("/member/join")
     public String signup(@Valid MemberJoinRequest dto,
@@ -134,6 +133,66 @@ public class MemberController {
         }
         return "redirect:/";
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/member/updateprofile")
+    public String profileModify(@ModelAttribute("memberUpdateRequest") MemberUpdateRequest memberUpdateRequest,
+                                Principal principal,
+                                Model model) {
+        Member member = memberService.getUser(principal.getName());
+        if (!member.getUserName().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+
+        memberUpdateRequest.setUserName(member.getUserName());
+        memberUpdateRequest.setNickName(member.getNickName());
+        memberUpdateRequest.setPhone(member.getPhone());
+        memberUpdateRequest.setFirstName(member.getFirstName());
+        memberUpdateRequest.setLastName(member.getLastName());
+        memberUpdateRequest.setGender(member.getGender());
+        memberUpdateRequest.setBirthDate(member.getBirthDate());
+        memberUpdateRequest.setPostalNum(member.getPostalNum());
+        memberUpdateRequest.setRoadAddress(member.getRoadAddress());
+        memberUpdateRequest.setJibunAddress(member.getJibunAddress());
+        memberUpdateRequest.setDetailAddress(member.getDetailAddress());
+        memberUpdateRequest.setExtraAddress(member.getExtraAddress());
+
+        model.addAttribute("member",member);
+
+        return "member/updateProfile";
+    }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/member/updateprofile")
+    public String updateProfileImg(@Valid @ModelAttribute("memberJoinRequest") MemberJoinRequest memberJoinRequest,
+                                   BindingResult bindingResult,
+                                   Principal principal,
+                                   @RequestParam("file") MultipartFile file,
+                                   RedirectAttributes redirectAttributes,
+                                   HttpServletResponse response) throws Exception {
+        Member member = this.memberService.getUser(principal.getName());
+
+        // 업로드된 파일을 임시 폴더에 저장
+        String tempFolderPath = System.getProperty("java.io.tmpdir");
+        File tempFile = File.createTempFile("temp", file.getOriginalFilename(), new File(tempFolderPath));
+        file.transferTo(tempFile);
+
+        // 프로필 이미지 업데이트
+        memberService.updateProfile(member, tempFile);
+        // TODO : 이미지파일 불러올 때 안정적으로 불러올 수 있도록 처리예정.
+
+        // 이미지 캐싱 방지를 위한 헤더 설정
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setHeader("Expires", "0"); // Proxies.
+
+        redirectAttributes.addFlashAttribute("successMessage", "프로필 이미지가 업데이트되었습니다.");
+
+        return "redirect:/";
+    }
+
+
 
 
     @GetMapping("/member/findUsername")
@@ -196,6 +255,7 @@ public class MemberController {
         Member member = memberService.getUser(principal.getName());
         return "member/profile";
     }
+
     @GetMapping("/api/getUserName")
     public ResponseEntity<Map<String, String>> getUserName(Principal principal) {
         Map<String, String> response = new HashMap<>();
@@ -206,34 +266,6 @@ public class MemberController {
         return ResponseEntity.ok(response);
     }
 
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/member/updateprofile")
-    public String updateProfileImg(@Valid @ModelAttribute("memberJoinRequest") MemberJoinRequest memberJoinRequest,
-                                   BindingResult bindingResult,
-                                   Principal principal,
-                                   @RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes,
-                                   HttpServletResponse response) throws Exception {
-        Member member = this.memberService.getUser(principal.getName());
-
-        // 업로드된 파일을 임시 폴더에 저장
-        String tempFolderPath = System.getProperty("java.io.tmpdir");
-        File tempFile = File.createTempFile("temp", file.getOriginalFilename(), new File(tempFolderPath));
-        file.transferTo(tempFile);
-
-        // 프로필 이미지 업데이트
-        memberService.updateProfile(member, tempFile);
-        // TODO : 이미지파일 불러올 때 안정적으로 불러올 수 있도록 처리예정.
-
-        // 이미지 캐싱 방지를 위한 헤더 설정
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-        response.setHeader("Expires", "0"); // Proxies.
-
-        redirectAttributes.addFlashAttribute("successMessage", "프로필 이미지가 업데이트되었습니다.");
-
-        return "redirect:/";
-    }
 
     @GetMapping("/member/login")
     public String login() {
