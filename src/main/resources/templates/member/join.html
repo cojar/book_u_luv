@@ -17,14 +17,15 @@
                 회원가입
             </h1>
 
-            <form class="flex flex-col gap-3" method="POST" th:action="@{/member/join}"
+            <form class="flex flex-col gap-3 mt-[50px]" method="POST" th:action="@{/member/join}"
                   th:object="${memberJoinRequest}">
                 <!-- 사용자 아이디 (이메일) -->
                 <div class="form-control">
                     <div class="flex items-center">
                         <input autofocus class="input input-bordered w-full" id="userName" maxlength="50"
                                placeholder="아이디" required th:field="*{userName}" type="email">
-                        <button onclick="sendEmailConfirmation()" type="button" class="btn btn-secondary ml-2">인증번호 전송
+                        <button onclick="sendEmailConfirmation()" type="button"
+                                class="btn btn-secondary btn-outline ml-2">인증번호 전송
                         </button>
                     </div>
                 </div>
@@ -35,7 +36,8 @@
                                th:field="*{mailKey}" type="text">
                         <input class="input input-bordered" id="genMailKey" placeholder="인증번호" th:field="*{genMailKey}"
                                type="hidden">
-                        <button onclick="validateMailKey()" type="button" class="btn btn-primary">인증 확인</button>
+                        <button onclick="validateMailKey()" type="button" class="btn btn-primary btn-outline">인증 확인
+                        </button>
                         <span class="email-check-checkmark ml-2" style="display: none">✔️</span>
                     </div>
                     <span id="mail-key-errorMessage" style="display: none; color: red">인증번호가 일치하지 않습니다.</span>
@@ -73,6 +75,8 @@
                       }
                     }
 
+
+
                 </script>
                 <div class="form-control">
                     <input class="input input-bordered" id="password1" maxlength="50" placeholder="비밀번호"
@@ -93,7 +97,7 @@
                         <input class="input input-bordered" id="sample4_postcode" placeholder="우편번호" required
                                th:field="*{postalNum}" type="text">
                         <input onclick="sample4_execDaumPostcode()" type="button" value="우편번호 찾기"
-                               class="btn btn-secondary ml-2">
+                               class="btn btn-secondary ml-2 btn-outline">
                     </div>
                 </div>
                 <div class="form-control">
@@ -170,6 +174,8 @@
                   }).open();
                 }
 
+
+
                 </script>
                 <div class="form-control">
                     <input class="input input-bordered" id="phone" placeholder="연락처" required th:field="*{phone}"
@@ -218,16 +224,10 @@
                       }
                     });
 
-
                 </script>
                 <div class="grid grid-cols-2 mt-2 gap-2">
-                    <a class="btn btn-secondary btn-outline" href="/member/login">로그인</a>
-                    <input class="btn btn-primary" type="submit" value="회원가입">
-                </div>
-
-                <div class="flex justify-center">
-                    <a class="btn btn-link" href="/member/findUsername">아이디찾기</a>
-                    <a class="btn btn-link" href="/member/findPassword">비밀번호 찾기</a>
+                    <a class="btn btn-secondary btn-outline" href="/member/login">취소</a>
+                    <input class="btn btn-primary btn-outline" type="submit" value="회원가입">
                 </div>
             </form>
         </div>

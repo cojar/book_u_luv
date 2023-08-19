@@ -80,6 +80,22 @@ public class ProductService {
                             .publisher(item.optString("publisher"))
                             .priceStandard(item.optLong("priceStandard"))
                             .priceSales(item.optLong("priceSales")).build();
+
+                    Product product = Product.builder()
+                            .coverImg(result.getCoverImg())
+                            .title(result.getTitle())
+                            .link(result.getLink())
+                            .author(result.getAuthor())
+                            .publisher(result.getPublisher())
+                            .isbn(result.getIsbn())
+                            .categoryName(result.getCategoryName())
+                            .priceStandard(result.getPriceStandard())
+                            .priceSales(result.getPriceSales())
+                            .build();
+
+                    productRepository.save(product);
+
+
                     results.add(result);
                 }
             } else {
