@@ -26,6 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'commons-io:commons-io:2.11.0'
+    implementation 'org.springframework.boot:spring-boot-starter'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
@@ -42,6 +43,28 @@ dependencies {
     // Security
     testImplementation 'org.springframework.security:spring-security-test'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+
+    // Querydsl 추가
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // 배치
+//	implementation 'org.springframework.boot:spring-boot-starter-batch'
+//	testImplementation 'org.springframework.batch:spring-batch-test'
+
+    // thymeleaf
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // mail
+    implementation 'com.sun.mail:jakarta.mail:2.0.1'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // json
+    implementation group: 'org.json', name: 'json', version: '+'
 
     // Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
@@ -52,26 +75,13 @@ dependencies {
     // DB
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
-    // thymeleaf
-    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
+    // Oauth2
+    implementation 'org.springframework.security:spring-security-oauth2-client'
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
 
-    // mail
-    implementation 'com.sun.mail:jakarta.mail:2.0.1'
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-
-    // emailAuth
-    implementation 'com.sun.mail:jakarta.mail:2.0.1'
-    implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.1'
-
-    // OAuth
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
-    // assertj
-    implementation 'org.assertj:assertj-core:3.11.1'
+    // gson
+    implementation group: 'com.google.code.gson', name: 'gson'
 }
-
 
 tasks.named('test') {
     useJUnitPlatform()
