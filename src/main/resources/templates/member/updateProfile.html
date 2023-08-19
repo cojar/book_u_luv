@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>회원정보 수정</title>
+    <title>BOOKU_LUV 회원정보 수정</title>
 </head>
 
 <body>
@@ -60,7 +60,6 @@
                     <input autofocus class="input input-bordered" type="text" th:field="*{nickName}">
                 </div>
 
-
                 <!-- 연락처 -->
                 <div class="form-control">
                     <label class="label" for="phone">
@@ -103,10 +102,12 @@
                         <span class="label-text">생년월일:</span>
                     </label>
                     <input autofocus class="input input-bordered" id="birthDate" pattern="\d{4}-\d{2}-\d{2}"
-                           type="date" name="birthDate" th:field="*{birthDate}">
+                           type="date" name="birthDate" th:field="*{birthDate}"
+                           th:value="${#dates.format(birthDate, 'yyyy-MM-dd')}">
                     <span class="hid-ast" id="birthDateError"
                           style='color: #E50122; visibility: hidden; font-size:12px'>올바른 날짜 형식을 입력해주세요. (예: 1993-11-03)</span>
                 </div>
+
                 <script>
                     document.getElementById("birthDate").addEventListener("input", function() {
                       const inputDate = document.getElementById("birthDate");
