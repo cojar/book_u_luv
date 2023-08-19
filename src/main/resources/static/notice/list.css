@@ -1,0 +1,215 @@
+/* 리셋 */
+body {
+    line-height: 1.6;
+}
+
+input[type=radio],
+input[type=checkbox] {
+    vertical-align: middle;
+}
+
+input[type=text],
+input[type=email],
+input[type=password] {
+    vertical-align: middle;
+}
+
+a,
+a:hover,
+a:active,
+a:focus {
+    text-decoration: none;
+    cursor: pointer;
+
+}
+
+*,
+*:before,
+*:after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+
+/* ----------------------------------- */
+/* 공통 */
+/* ----------------------------------- */
+
+.hidden {
+    visibility: hidden;
+    overflow: hidden;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 0;
+    line-height: 0;
+}
+
+h1.subtitle {
+    padding: 80px 0 40px;
+    font-size: 28px;
+    font-weight: 500;
+    text-align: left;
+    color : black;
+}
+
+
+#wrapper {
+    position: relative;
+    min-width: 1220px;
+    max-width: 1440px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+#container {
+    overflow: hidden;
+    position: relative;
+    z-index: 5;
+    padding-bottom: 240px;
+    min-height: calc(100vh - 180px);
+    background: #fff;
+}
+
+#container .containerbody {
+    min-width: 1220px;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+/* ----------------------------------- */
+/* 네비바 스타일 */
+/* ----------------------------------- */
+
+
+/* ----------------------------------- */
+/* 중앙 */
+/* ----------------------------------- */
+
+#boardlist {
+    width: 80%;
+    height: 50px;
+    margin-bottom: 20px;
+    text-align: center;
+    display: inline-block;
+}
+
+#boardlist .sort{
+    display: table-row;
+    float: right;
+    padding-bottom: 10px;
+}
+
+#boardlist>ul>li {
+    display: table-cell;
+    width: 17%;
+    font-size: 13px;
+}
+
+#boardlist>ul>li>a {
+    display: block;
+    position: relative;
+    height: 40px;
+    border-right: 1px solid #e0e0e0;
+    line-height: 40px;
+    outline: 0px;
+}
+
+#boardlist>ul>li.cate_all>a,
+#boardlist>ul>li.selected>a {
+    border-bottom: 1px solid #fff;
+    color: #FF6C00;
+    font-weight: bold;
+}
+
+#boardlist .board_col {
+    table-layout: fixed;
+    clear: both;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#boardlist .board_col caption {
+    padding-bottom: 20px;
+    font-weight: bold;
+    text-align: left;
+}
+
+#boardlist .board_col>thead>tr>th {
+    padding: 15px 0;
+    border-top: 2px solid #000;
+    border-bottom: 1px solid #000;
+    font-weight: normal;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#boardlist .board_col>tbody>tr>td {
+    padding: 15px 0;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#boardlist .board_col>tbody>tr>td,
+#boardlist .board_col>tbody>tr>td * {
+    color: #666;
+}
+
+#boardlist .board_col>tbody>tr>td>a:hover {
+    color: #FF6C00;
+}
+
+#boardlist .board_col>tbody>tr>td.tal {
+    padding-left: 15px !important;
+}
+
+#boardlist .board_col>tbody>tr>td.subject img {
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+#boardlist .paging li {
+    display: inline;
+    padding: 0 10px;
+    vertical-align: middle;
+}
+
+#boardlist .paging li strong {
+    display: inline-block;
+    border-bottom: 1px solid #333;
+    font-weight: 700;
+}
+
+#boardlist .paging li a {
+    display: inline-block;
+    line-height: 37px;
+    border-right: 1px solid #fff;
+}
+
+/*search_box*/
+.search_box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+#dropdown {
+  padding: 5px;
+}
+.search_box select,
+.search_box input[type="text"],
+.search_box button {
+  margin-right: 10px;
+  border-radius: 5px;
+}
+.search_box input[type="text"] {
+  padding: 5px;
+}
+
+.search_box button {
+  padding: 5px 10px;
+  border: 1px solid;
+}

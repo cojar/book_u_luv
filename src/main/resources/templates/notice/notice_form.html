@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/notice/notice_form.css"/>
+    <title>공지사항 작성</title>
+</head>
+<body>
+<div th:fragment="content">
+    <h1>공지사항 글쓰기</h1>
+    <form th:object="${noticeDto}" method="post" class="form">
+        <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+        <label for="subject">제목</label>
+        <input type="text" id="subject" name="subject" th:field="${noticeDto.subject}" placeholder="제목을 입력하세요">
+        <label for="content">내용</label>
+        <textarea id="content" name="content" th:field="${noticeDto.content}" placeholder="내용을 입력하세요"></textarea>
+        <div class="button">
+            <input type="submit" value="작성">
+            <button type="button"><a href="#">취소</a></button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

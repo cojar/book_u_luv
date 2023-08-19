@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/notice/list.css"/>
+    <link rel="stylesheet" href="/layout/layout.html"/>
+    <title>NoticList</title>
+</head>
+
+<body>
+<main layout:fragment="content">
+    <div id="wrapper">
+        <!-- 중앙 -->
+        <div id="container">
+            <div class="containerbody">
+
+                <div id="boardlist">
+
+                    <table class="board_col">
+                        <h1 class="subtitle">공지사항</h1>
+                        <button>
+                            <a th:href="@{/notice/create}">글쓰기</a>
+                        </button>
+                        <caption class="hidden">글목록</caption>
+                        <colgroup>
+                            <col style="width:10%">
+                            <col style="width:30%">
+                            <col style="width:20%">
+                            <col style="width:10%">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th scope="col">번호</th>
+                            <th scope="col">제목</th>
+                            <th scope="col">작성일</th>
+                            <th scope="col">조회수</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="notice, stat : ${noticeList}" th:if="${stat.index < 10}">
+                            <td><strong>[공지]</strong></td>
+                            <td class="tal">
+                                <a th:href="@{|/notice/detail/${notice.id}|}" th:text="${notice.subject}"></a>
+                            </td>
+                            <td th:text="${notice.createDate}"></td>
+                            <td th:text="${notice.viewCount}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="search_box">
+            <select id="dropdown">
+                <option value="title">제목</option>
+                <option value="content">내용</option>
+            </select>
+            <input type="text" id="search_input"/>
+            <button type="button">검색</button>
+        </div>
+    </div>
+</main>
+</body>
+</html>

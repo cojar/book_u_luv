@@ -76,8 +76,8 @@ dependencies {
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     // Oauth2
-    implementation 'org.springframework.security:spring-security-oauth2-client'
-    implementation 'org.springframework.security:spring-security-oauth2-jose'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
 
     // gson
     implementation group: 'com.google.code.gson', name: 'gson'
