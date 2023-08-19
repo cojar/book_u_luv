@@ -93,7 +93,9 @@ public class ProductService {
                             .priceSales(result.getPriceSales())
                             .build();
 
-                    productRepository.save(product);
+                    if (productRepository.countByIsbn(product.getIsbn())==0L) {
+                        productRepository.save(product);
+                    }
 
 
                     results.add(result);
