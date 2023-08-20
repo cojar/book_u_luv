@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Search</title>
+</head>
+<body layout:fragment="content">
+<div class="text-center mt-[50px]">
+    <span class="text-[50px] font-bold">검색 결과</span>
+</div>
+<div th:if="${results}" class="flex justify-center items-center">
+    <div class="my-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-6 mt-8">
+            <div th:each="result : ${results}" class="flex flex-col mx-auto w-80 p-4">
+                <div class="text-center">
+                    <a th:href="${result.link}">
+                        <img class="mx-auto w-48 h-72" th:src="${result.coverImg}" alt="Book Cover">
+                    </a>
+                    <a th:href="${result.link}" class="block text-lg font-semibold my-4"
+                       th:text="${result.title}">Title</a>
+                    <span th:text="${result.author}" class="block text-gray-600 mb-2"></span>
+                    <span th:text="${result.publisher}" class="block text-gray-600 mb-2"></span>
+                    <div class="mt-2">
+                        <span class="text-gray-500">정가 : </span>
+                        <span th:text="${result.priceStandard}" class="line-through text-gray-500"></span>
+                        <span class="text-gray-500">할인가 : </span>
+                        <span th:text="${result.priceSales}" class="text-green-600"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

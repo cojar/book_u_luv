@@ -1,27 +1,17 @@
-package com.project.bookuluv.app.article.domain;
+package com.project.bookuluv.app.admin.domain;
 
 import com.project.bookuluv.base.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
 @Entity
 @Setter
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@SuperBuilder
 public class Product extends BaseEntity {
-
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
 
     @Column(name = "title")
     private String title;
@@ -70,8 +60,5 @@ public class Product extends BaseEntity {
 
     @Column(name = "status")
     private char status; // 책 상태(A~C, N , E)
-
-    @Column(name = "is_active")
-    private boolean isActive;
 
 }

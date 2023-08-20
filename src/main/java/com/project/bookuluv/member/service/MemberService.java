@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
@@ -205,6 +206,10 @@ public class MemberService {
     public void deactivateMember(Member member) {
         member.deactivate();
         this.memberRepository.save(member);
+    }
+
+    public List<Member> getAll() {
+        return this.memberRepository.findAll();
     }
 
 

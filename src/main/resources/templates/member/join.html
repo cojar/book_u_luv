@@ -18,6 +18,7 @@
 
             <form class="flex flex-col gap-3" method="POST" th:action="@{/member/join}"
                   th:object="${memberJoinRequest}">
+
                 <!-- 사용자 아이디 (이메일) -->
                 <div class="form-control">
                     <label class="label" for="userName">
@@ -26,12 +27,6 @@
                     <input autofocus class="input input-bordered" id="userName" maxlength="50" placeholder="아이디"
                            required th:field="*{userName}" type="email">
                 </div>
-
-                <!-- 사용자 아이디 (이메일) -->
-                <!--                <div>-->
-                <!--                    <label for="userName">사용자 아이디 (이메일):</label>-->
-                <!--                    <input id="userName" required th:field="*{userName}" type="email">-->
-                <!--                </div>-->
 
                 <!-- 이메일 인증 -->
                 <div class="form-control">
@@ -79,11 +74,6 @@
                         errorMessage.style.display = 'block';
                       }
                     }
-
-
-
-
-
                 </script>
                 <div class="form-control">
                     <label class="label" for="password1">
@@ -93,12 +83,6 @@
                            required th:field="*{password1}" type="password">
                 </div>
 
-                <!-- 비밀번호 -->
-                <!--                <div>-->
-                <!--                    <label for="password1">비밀번호:</label>-->
-                <!--                    <input id="password1" required th:field="*{password1}" type="password">-->
-                <!--                </div>-->
-
                 <div class="form-control">
                     <label class="label" for="password2">
                         <span class="label-text">비밀번호 확인:</span>
@@ -106,12 +90,6 @@
                     <input class="input input-bordered" id="password2" maxlength="50" placeholder="비밀번호 확인"
                            required th:field="*{password2}" type="password">
                 </div>
-
-                <!-- 비밀번호 확인 -->
-                <!--                <div>-->
-                <!--                    <label for="password2">비밀번호 확인:</label>-->
-                <!--                    <input id="password2" required th:field="*{password2}" type="password">-->
-                <!--                </div>-->
 
                 <!-- 닉네임 -->
                 <div class="form-control">
@@ -121,12 +99,6 @@
                     <input class="input input-bordered" id="nickName" maxlength="50" placeholder="닉네임"
                            required th:field="*{nickName}" type="text">
                 </div>
-
-                <!-- 사용자 주소 -->
-                <!--    <div>-->
-                <!--        <label for="address">사용자 주소:</label>-->
-                <!--        <input id="address" required th:field="*{address}" type="text">-->
-                <!--    </div>-->
 
                 <!--카카오 주소검색 API-->
                 <input onclick="sample4_execDaumPostcode()" type="button" value="우편번호 찾기"><br>
@@ -218,31 +190,30 @@
                     }
                   }).open();
                 }
-
                 </script>
 
                 <!-- 카카오맵 지도영역 API -->
-<!--                <div id="map" style="width:500px;height:400px;"></div>-->
-<!--                <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=29a0c927015ac2aacc00215b1a91d7f3"-->
-<!--                        type="text/javascript"></script>-->
-<!--                <script>-->
-<!--                var container = document.getElementById('map');-->
-<!--                var options = {-->
-<!--                  center: new kakao.maps.LatLng(36.349405, 127.376768),-->
-<!--                  level: 3-->
-<!--                };-->
-<!--                var map = new kakao.maps.Map(container, options);-->
-<!--                // 마커가 표시될 위치입니다-->
-<!--                var markerPosition = new kakao.maps.LatLng(36.349405, 127.376768);-->
-<!--                // 마커를 생성합니다-->
-<!--                var marker = new kakao.maps.Marker({-->
-<!--                  position: markerPosition-->
-<!--                });-->
-<!--                // 마커가 지도 위에 표시되도록 설정합니다-->
-<!--                marker.setMap(map);-->
-<!--                // 아래 코드는 지도 위의 마커를 제거하는 코드입니다-->
-<!--                // marker.setMap(null);-->
-<!--                </script>-->
+                <!--                <div id="map" style="width:500px;height:400px;"></div>-->
+                <!--                <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=29a0c927015ac2aacc00215b1a91d7f3"-->
+                <!--                        type="text/javascript"></script>-->
+                <!--                <script>-->
+                <!--                var container = document.getElementById('map');-->
+                <!--                var options = {-->
+                <!--                  center: new kakao.maps.LatLng(36.349405, 127.376768),-->
+                <!--                  level: 3-->
+                <!--                };-->
+                <!--                var map = new kakao.maps.Map(container, options);-->
+                <!--                // 마커가 표시될 위치입니다-->
+                <!--                var markerPosition = new kakao.maps.LatLng(36.349405, 127.376768);-->
+                <!--                // 마커를 생성합니다-->
+                <!--                var marker = new kakao.maps.Marker({-->
+                <!--                  position: markerPosition-->
+                <!--                });-->
+                <!--                // 마커가 지도 위에 표시되도록 설정합니다-->
+                <!--                marker.setMap(map);-->
+                <!--                // 아래 코드는 지도 위의 마커를 제거하는 코드입니다-->
+                <!--                // marker.setMap(null);-->
+                <!--                </script>-->
 
                 <!-- 연락처 -->
                 <div class="form-control">
