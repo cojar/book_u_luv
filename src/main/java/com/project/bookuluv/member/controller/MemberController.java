@@ -9,7 +9,6 @@ import com.project.bookuluv.member.dto.MemberUpdateRequest;
 import com.project.bookuluv.member.exception.DataNotFoundException;
 import com.project.bookuluv.member.service.MemberSecurityService;
 import com.project.bookuluv.member.service.MemberService;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -25,9 +24,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -144,6 +141,7 @@ public class MemberController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
 
+        // 기존 회원정보를 회원정보 수정 입력창에 세팅
         memberUpdateRequest.setUserName(member.getUserName());
         memberUpdateRequest.setNickName(member.getNickName());
         memberUpdateRequest.setPhone(member.getPhone());
@@ -157,41 +155,32 @@ public class MemberController {
         memberUpdateRequest.setDetailAddress(member.getDetailAddress());
         memberUpdateRequest.setExtraAddress(member.getExtraAddress());
 
-        model.addAttribute("member",member);
+        // 소셜 계정인 경우 userName 가공
+        if (member.getUserName().startsWith("KAKAO_")) {
+            memberUpdateRequest.setUserName(member.getUserName().substring(member.getUserName().indexOf("_") + 1));
+        } else if (member.getUserName().startsWith("NAVER_")) {
+            memberUpdateRequest.setUserName(member.getUserName().substring(member.getUserName().indexOf("_") + 1));
+        } else if (member.getUserName().startsWith("GOOGLE_")) {
+            memberUpdateRequest.setUserName(member.getUserName().substring(member.getUserName().indexOf("_") + 1));
+        }
+
+        model.addAttribute("member", member);
 
         return "member/updateProfile";
     }
 
-
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/member/updateprofile")
-    public String updateProfileImg(@Valid @ModelAttribute("memberJoinRequest") MemberJoinRequest memberJoinRequest,
-                                   BindingResult bindingResult,
-                                   Principal principal,
-                                   @RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes,
-                                   HttpServletResponse response) throws Exception {
-        Member member = this.memberService.getUser(principal.getName());
-
-        // 업로드된 파일을 임시 폴더에 저장
-        String tempFolderPath = System.getProperty("java.io.tmpdir");
-        File tempFile = File.createTempFile("temp", file.getOriginalFilename(), new File(tempFolderPath));
-        file.transferTo(tempFile);
-
-        // 프로필 이미지 업데이트
-        memberService.updateProfile(member, tempFile);
-        // TODO : 이미지파일 불러올 때 안정적으로 불러올 수 있도록 처리예정.
-
-        // 이미지 캐싱 방지를 위한 헤더 설정
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-        response.setHeader("Expires", "0"); // Proxies.
-
-        redirectAttributes.addFlashAttribute("successMessage", "프로필 이미지가 업데이트되었습니다.");
-
-        return "redirect:/";
+    @PostMapping("/member/updateProfileImg")
+    @ResponseBody
+    public ResponseEntity<String> updateProfileImg(@RequestParam("file") MultipartFile file, Principal principal) {
+        try {
+            Member member = memberService.getUser(principal.getName());
+            memberService.updateProfile(member, file);
+            return ResponseEntity.ok("프로필 이미지가 업데이트되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("프로필 이미지 업데이트 중 오류가 발생했습니다.");
+        }
     }
-
 
 
 
@@ -234,21 +223,42 @@ public class MemberController {
             return "fail";
         }
     }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/mypage/changePassword")
+    public String showModifyPassword() {
+        return "member/modifyPassword";
+    }
 
     @PostMapping("/mypage/changePassword")
     @ResponseBody
-    public String changePassword(@RequestParam("newpassword") String newpw, @RequestParam("newpasswordcf") String newpwcf) {
+    public Map<String, Object> changePasswordAjax(@RequestParam("oldpassword") String oldPassword,
+                                                  @RequestParam("newpassword") String newpw,
+                                                  @RequestParam("newpasswordcf") String newpwcf) {
+        Map<String, Object> resultMap = new HashMap<>();
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Member member = memberService.getMember(username);
 
-        if (!newpw.equals(newpwcf)) {
-            return "변경할 비밀번호와 확인 비밀번호가 일치하지 않습니다.";
+        if (!passwordEncoder.matches(oldPassword, member.getPassword())) {
+            resultMap.put("success", false);
+            resultMap.put("message", "기존 비밀번호가 일치하지 않습니다.");
+        } else if (!newpw.equals(newpwcf)) {
+            resultMap.put("success", false);
+            resultMap.put("message", "새로운 비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+        } else if (oldPassword.equals(newpw) || oldPassword.equals(newpwcf)) {
+            resultMap.put("success", false);
+            resultMap.put("message", "기존 비밀번호와 동일한 비밀번호를 사용할 수 없습니다.");
+        } else {
+            member.setPassword(passwordEncoder.encode(newpw));
+            memberService.saveMember(member);
+            resultMap.put("success", true);
         }
-        member.setPassword(passwordEncoder.encode(newpw));
-        memberService.saveMember(member);
-        return "/";
+
+        return resultMap;
     }
+
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/member/profile")
     public String myPage(Model model, Principal principal) {
