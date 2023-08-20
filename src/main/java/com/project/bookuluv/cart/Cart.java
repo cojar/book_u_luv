@@ -1,6 +1,6 @@
 package com.project.bookuluv.cart;
 
-import com.project.bookuluv.api.domain.ProductE;
+import com.project.bookuluv.api.domain.Ebook;
 import com.project.bookuluv.app.admin.domain.Product;
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.member.domain.Member;
@@ -24,5 +24,5 @@ public class Cart extends BaseEntity {
     private Product product;
 
     @ManyToOne
-    private ProductE producte;
+    private Ebook ebook;
 }

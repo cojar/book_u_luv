@@ -1,6 +1,6 @@
 package com.project.bookuluv.app.article.domain;
 
-import com.project.bookuluv.api.domain.ProductE;
+import com.project.bookuluv.api.domain.Ebook;
 import com.project.bookuluv.app.admin.domain.Product;
 import com.project.bookuluv.base.entity.BaseEntity;
 import jakarta.persistence.Entity;
@@ -23,7 +23,7 @@ public class HashTag extends BaseEntity {
     private Product product;
 
     @ManyToOne
-    private ProductE producte;
+    private Ebook ebook;
 
 
 }

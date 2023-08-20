@@ -17,18 +17,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class ProductE extends BaseEntity {
-
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "id")
-//    private Long id;
+public class Ebook extends BaseEntity {
 
     @Column(name = "title")
     private String title;
-
-    @Column(name = "link")
-    private String link; // 책 링크(URL)
 
     @Column(name = "author")
     private String author;
@@ -42,14 +34,8 @@ public class ProductE extends BaseEntity {
     @Column(name = "isbn")
     private String isbn;
 
-    @Column(name = "isbn13")
-    private String isbn13;
-
     @Column(name = "price_standard")
     private int priceStandard;
-
-    @Column(name = "mall_type")
-    private String mallType; // 대분류
 
     @Column(name = "cover_img")
     private String coverImg; // 표지 URL
@@ -62,12 +48,6 @@ public class ProductE extends BaseEntity {
 
     @Column(name = "customer_review_rank")
     private int customerReviewRank;
-
-    @Column(name = "best_rank")
-    private int bestRank;
-
-    @Column(name = "is_active")
-    private boolean isActive;
 
 }
 

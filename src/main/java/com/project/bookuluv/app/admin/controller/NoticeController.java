@@ -37,13 +37,13 @@ public class NoticeController {
     }
 
     @GetMapping("/create")
-   // @PreAuthorize("isAuthenticated()")
-    public String create() {
+    // @PreAuthorize("isAuthenticated()")
+    public String create(NoticeDto noticeDto) {
         return "notice/notice_form";
     }
 
     @PostMapping("/create")
-   // @PreAuthorize("isAuthenticated()")
+    // @PreAuthorize("isAuthenticated()")
     public String noticeCreate(@Valid NoticeDto noticeDto, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "notice/notice_form";
@@ -56,13 +56,13 @@ public class NoticeController {
 
 
     @GetMapping("/modify/{id}")
-   // @PreAuthorize("isAuthenticated()")
+    // @PreAuthorize("isAuthenticated()")
     public String modify(@PathVariable("id") Integer id, Principal principal) {
         return "notice/notice_form";
     }
 
     @PostMapping("/modify/{id}")
-   // @PreAuthorize("isAuthenticated()")
+    // @PreAuthorize("isAuthenticated()")
     public String noticeModify(@PathVariable("id") Integer id, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "notice/notice_form";
@@ -74,7 +74,7 @@ public class NoticeController {
     }
 
     @PostMapping("/delete/{id}")
-   // @PreAuthorize("isAuthenticated()")
+    // @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable("id") Integer id, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "notice/list";
@@ -83,6 +83,4 @@ public class NoticeController {
         this.noticeService.delete(notice);
         return "redirect:/";
     }
-
-
 }

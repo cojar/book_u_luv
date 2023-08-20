@@ -25,7 +25,7 @@ public class Product extends BaseEntity {
     private String author;
 
     @Column(name = "pub_date")
-    private LocalDate pubDate;
+    private String pubDate;
 
     @Column(name = "description")
     private String description;

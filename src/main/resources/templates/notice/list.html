@@ -4,61 +4,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/notice/list.css"/>
-    <link rel="stylesheet" href="/layout/layout.html"/>
-    <title>NoticList</title>
+    <title>NoticeList</title>
 </head>
+
 
 <body>
 <main layout:fragment="content">
-    <div id="wrapper">
+    <div id="wrapper" class="w-[1440px] min-w-1220 max-w-1440 mx-auto mt-[50px]">
         <!-- 중앙 -->
-        <div id="container">
-            <div class="containerbody">
-
-                <div id="boardlist">
-
-                    <table class="board_col">
-                        <h1 class="subtitle">공지사항</h1>
-                        <button>
-                            <a th:href="@{/notice/create}">글쓰기</a>
-                        </button>
-                        <caption class="hidden">글목록</caption>
-                        <colgroup>
-                            <col style="width:10%">
-                            <col style="width:30%">
-                            <col style="width:20%">
-                            <col style="width:10%">
-                        </colgroup>
+        <div id="container" class="overflow-hidden relative z-5 pb-240 min-h-[calc(100vh-180px)] bg-white">
+            <div class="containerbody min-w-1220 max-w-1440 mx-auto">
+                <div id="boardlist" class="w-full mx-auto mb-20 text-center inline-block">
+                    <div class="text-start">
+                        <h1 class="text-[50px] mb-4">공지사항</h1>
+                    </div>
+                    <a class="btn btn-secondary btn-outline" th:href="@{/notice/create}">글쓰기</a>
+                    <table class="w-full border-collapse">
                         <thead>
-                        <tr>
-                            <th scope="col">번호</th>
-                            <th scope="col">제목</th>
-                            <th scope="col">작성일</th>
-                            <th scope="col">조회수</th>
+                        <tr class="border-y">
+                            <th class="py-2">번호</th>
+                            <th class=" py-2">제목</th>
+                            <th class=" py-2">작성자</th>
+                            <th class=" py-2">작성일</th>
+                            <th class=" py-2">수정일</th>
+                            <!--                            <th class="py-2">조회수</th>-->
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="notice, stat : ${noticeList}" th:if="${stat.index < 10}">
-                            <td><strong>[공지]</strong></td>
-                            <td class="tal">
+                        <tr th:each="notice : ${noticeList}" class="border-b">
+                            <td th:text="${notice.id}" class="py-2"></td>
+                            <td>
                                 <a th:href="@{|/notice/detail/${notice.id}|}" th:text="${notice.subject}"></a>
                             </td>
-                            <td th:text="${notice.createDate}"></td>
-                            <td th:text="${notice.viewCount}"></td>
+                            <td th:text="${notice.register}" class="py-2"></td>
+                            <td th:text="${notice.createDate}" class="py-2"></td>
+                            <td th:text="${notice.modifyDate}" class="py-2"></td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <div class="search_box">
-            <select id="dropdown">
+        <div class="search_box flex items-center justify-center mt-8">
+            <select id="dropdown" class="p-2 border rounded">
                 <option value="title">제목</option>
                 <option value="content">내용</option>
             </select>
-            <input type="text" id="search_input"/>
-            <button type="button">검색</button>
+            <input type="text" id="search_input" class="p-2 border rounded mx-2">
+            <button type="button" class="p-2 border">검색</button>
         </div>
     </div>
 </main>

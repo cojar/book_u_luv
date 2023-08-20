@@ -1,26 +1,30 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/html">
+
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="/notice/notice_form.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
     <title>공지사항 작성</title>
 </head>
+
 <body>
-<div th:fragment="content">
-    <h1>공지사항 글쓰기</h1>
-    <form th:object="${noticeDto}" method="post" class="form">
+<div class="max-w-3xl mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-4">공지사항 글쓰기</h1>
+    <form th:object="${noticeDto}" method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div th:replace="~{form_errors :: formErrorsFragment}"></div>
-        <label for="subject">제목</label>
-        <input type="text" id="subject" name="subject" th:field="${noticeDto.subject}" placeholder="제목을 입력하세요">
-        <label for="content">내용</label>
-        <textarea id="content" name="content" th:field="${noticeDto.content}" placeholder="내용을 입력하세요"></textarea>
-        <div class="button">
-            <input type="submit" value="작성">
-            <button type="button"><a href="#">취소</a></button>
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="subject">제목</label>
+        <input type="text" id="subject" name="subject" th:field="${noticeDto.subject}" placeholder="제목을 입력하세요"
+               class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        <label class="block text-gray-700 text-sm font-bold mb-2 mt-4" for="content">내용</label>
+        <textarea id="content" name="content" th:field="${noticeDto.content}" placeholder="내용을 입력하세요"
+                  class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32"></textarea>
+        <div class="mt-6">
+            <input type="submit" value="작성" class="btn btn-primary btn-outline font-bold py-2 px-4 rounded">
+            <button type="button" class="ml-4"><a href="#" class="btn btn-primary btn-outline">취소</a></button>
         </div>
     </form>
 </div>
 </body>
+
 </html>

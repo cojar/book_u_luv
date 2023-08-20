@@ -1,5 +1,6 @@
 package com.project.bookuluv.app.admin.service;
 
+import com.project.bookuluv.app.admin.dto.NoticeDto;
 import com.project.bookuluv.app.admin.repository.NoticeRepository;
 import com.project.bookuluv.app.article.domain.Article;
 import com.project.bookuluv.app.article.domain.Notice;
@@ -30,12 +31,11 @@ public class NoticeService {
     }
 
     public void create(String subject, String content, Member member) {
-        Notice notice = new Notice();
-        notice.setSubject(subject);
-        notice.setContent(content);
-        notice.setCreateDate(LocalDateTime.now());
-        notice.setRegister(member);
-        this.noticeRepository.save(notice);
+        NoticeDto noticeDto = NoticeDto.builder()
+                .subject(subject)
+                .content(content)
+                .register(member)
+                .build();
     }
 
     public void modify(String subject, String content, Notice notice) {
