@@ -38,15 +38,13 @@
                 </div>
 
                 <script>
-                // AJAX 요청을 통해 사용자 아이디 가져오기
-                fetch('/api/getUserName')
-                    .then(response => response.json())
-                    .then(data => {
-                        var userName = data.userName; // 백엔드에서 전달한 사용자 아이디 값
+                $(document).ready(function() {
+                    $.get('/api/getUserName', function(data) {
+                        var userName = data.userName;
                         var formattedUserName = userName;
                         var labelText = "아이디";
 
-                        /*조건에 맞게 userName을 가져옴*/
+                        /* 조건에 맞게 userName을 가져옴 */
 
                         if (userName.startsWith("KAKAO_")) {
                             formattedUserName = userName.substring(userName.indexOf("_") + 1);
@@ -54,6 +52,9 @@
                         } else if (userName.startsWith("NAVER_")) {
                             formattedUserName = userName.substring(userName.indexOf("_") + 1);
                             labelText = "아이디(네이버 소셜계정)";
+                        } else if (userName.startsWith("GOOGLE_")) {
+                            formattedUserName = userName.substring(userName.indexOf("_") + 1);
+                            labelText = "아이디(구글 소셜계정)";
                         } else if (userName.includes("@")) { // userName에 "@" 포함하면 이메일 형태
                             formattedUserName = userName;
                             labelText = "아이디(이메일 계정)";
@@ -61,9 +62,10 @@
                             formattedUserName = userName.substring(userName.indexOf("_") + 1);
                             labelText = "아이디(소셜계정)";
                         }
-                        document.getElementById("label-text").textContent = labelText;
-                        document.getElementById("formatted-username").textContent = formattedUserName;
+                        $("#label-text").text(labelText);
+                        $("#formatted-username").text(formattedUserName);
                     });
+                });
                 </script>
 
                 <!--회원등록일-->
