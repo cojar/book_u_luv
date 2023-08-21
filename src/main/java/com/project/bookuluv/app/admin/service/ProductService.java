@@ -52,7 +52,7 @@ public class ProductService {
     }
 
     private String buildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=4" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
     }
 
     private List<ProductDto> getBooksFromApi(String url) {
@@ -75,11 +75,32 @@ public class ProductService {
                             .link(item.optString("link"))
                             .author(item.optString("author"))
                             .pubDate(item.optString("pubDate"))
+                            .description(item.optString("description"))
                             .isbn(item.optString("isbn"))
                             .categoryName(item.optString("categoryName"))
                             .publisher(item.optString("publisher"))
                             .priceStandard(item.optLong("priceStandard"))
                             .priceSales(item.optLong("priceSales")).build();
+
+                    Product product = Product.builder()
+                            .coverImg(result.getCoverImg())
+                            .title(result.getTitle())
+                            .link(result.getLink())
+                            .author(result.getAuthor())
+                            .pubDate(item.optString("pubDate"))
+                            .description(item.optString("description"))
+                            .publisher(result.getPublisher())
+                            .isbn(result.getIsbn())
+                            .categoryName(result.getCategoryName())
+                            .priceStandard(result.getPriceStandard())
+                            .priceSales(result.getPriceSales())
+                            .build();
+
+                    if (productRepository.countByIsbn(product.getIsbn()) == 0L) {//productRepository에 isbn이 0개라면 저장해라(0L의 L은 Long 타입이라 사용)
+                        productRepository.save(product);
+                    }
+
+
                     results.add(result);
                 }
             } else {
@@ -91,24 +112,6 @@ public class ProductService {
 
         return results;
     }
-
-    public String search(String query, Authentication authentication) {
-        OAuth2AuthorizedClient oAuth2Client = clientService.loadAuthorizedClient("google",
-                authentication.getName());
-        String accessToken = oAuth2Client.getAccessToken().getTokenValue();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(accessToken);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-
-        String url = "https://www.googleapis.com/books/v1/volumes?q=" + query;
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-
-        return response.getBody();
-    }
-
     public List<Product> getAll() {
         return this.productRepository.findAll();
     }

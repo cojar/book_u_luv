@@ -27,6 +27,6 @@ public class ArticleController {
     private String detail(Model model, @PathVariable("id") Integer id) {
         Article article = this.articleService.getById(id);
         model.addAttribute("article", article);
-        return "article_detail";
+        return "article/detail";
     }
 }

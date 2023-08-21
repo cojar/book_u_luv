@@ -5,12 +5,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
 @Entity
 @Setter
 @Getter
+@SuperBuilder
 public class Product extends BaseEntity {
 
     @Column(name = "title")
@@ -23,7 +25,7 @@ public class Product extends BaseEntity {
     private String author;
 
     @Column(name = "pub_date")
-    private LocalDate pubDate;
+    private String pubDate;
 
     @Column(name = "description")
     private String description;
@@ -35,7 +37,10 @@ public class Product extends BaseEntity {
     private String isbn13;
 
     @Column(name = "price_standard")
-    private int priceStandard;
+    private Long priceStandard;
+
+    @Column(name = "price_sales")
+    private Long priceSales;
 
     @Column(name = "mall_type")
     private String mallType; // 대분류
@@ -60,5 +65,8 @@ public class Product extends BaseEntity {
 
     @Column(name = "status")
     private char status; // 책 상태(A~C, N , E)
+
+    @Column(name = "category_name")
+    private String categoryName;
 
 }
