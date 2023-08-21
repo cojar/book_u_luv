@@ -231,7 +231,7 @@
 
 
                 <div class="grid grid-cols-2 mt-2 gap-2">
-                    <a th:unless="${#authentication.principal.userName.startsWith('KAKAO_') || #authentication.principal.userName.startsWith('NAVER_')}" href="/mypage/changePassword" class="btn btn-secondary btn-outline">비밀번호 변경</a>
+                    <a th:unless="${#authentication.principal.userName.startsWith('KAKAO_') || #authentication.principal.userName.startsWith('NAVER_') || #authentication.principal.userName.startsWith('GOOGLE_')}" href="/mypage/changePassword" class="btn btn-secondary btn-outline">비밀번호 변경</a>
                     <!--                    <a th:unless="${@rq.hasAuthority('AUTHOR')}" href="/member/beAuthor" class="btn btn-primary">작가활동 시작</a>-->
                     <!--                    <a th:if="${@rq.hasAuthority('AUTHOR')}" class="btn btn-primary btn-disabled">이미 작가회원입니다.</a>-->
                 </div>

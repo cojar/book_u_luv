@@ -9,6 +9,7 @@ import com.project.bookuluv.member.dto.MemberUpdateRequest;
 import com.project.bookuluv.member.exception.DataNotFoundException;
 import com.project.bookuluv.member.service.MemberSecurityService;
 import com.project.bookuluv.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -225,7 +226,15 @@ public class MemberController {
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage/changePassword")
-    public String showModifyPassword() {
+    public String showModifyPassword(HttpServletRequest request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Member member = memberService.getMember(username);
+        if (username.startsWith("KAKAO_") || username.startsWith("NAVER_") || username.startsWith("GOOGLE_")) {
+            request.setAttribute("isSocialAccount", "true"); // 소셜 계정 여부를 전달
+            return "redirect:/"; // 비밀번호 변경 페이지 로드
+        }
+        request.setAttribute("isSocialAccount", "false"); // 소셜 계정이 아님을 전달
         return "member/modifyPassword";
     }
 
