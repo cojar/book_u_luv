@@ -39,8 +39,6 @@ public class AuthenticationConfig {
                         "/api/v1/users/join",
                         "/member/join",
                         "/member/login",
-                        "/join",
-                        "/login",
                         "/swagger-ui/**",
                         "/v3/api-docs",
                         "/**"
@@ -56,16 +54,16 @@ public class AuthenticationConfig {
 //                .and()
 //                .addFilterBefore(new JwtFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class)
 //                .build();
-                // OAuth 로그인
+        // OAuth 로그인
                 .oauth2Login(
-                        oauth2Login -> oauth2Login
-                                .loginPage("/member/login")
-                                .defaultSuccessUrl("/")
-                                .userInfoEndpoint(
-                                        userInfoEndpoint -> userInfoEndpoint
-                                                .userService(oAuth2UserService)
-                                )
-                )
+                oauth2Login -> oauth2Login
+                        .loginPage("/member/login")
+                        .defaultSuccessUrl("/")
+                        .userInfoEndpoint(
+                                userInfoEndpoint -> userInfoEndpoint
+                                        .userService(oAuth2UserService)
+                        )
+        )
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                 .logoutSuccessUrl("/")
