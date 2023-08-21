@@ -1,13 +1,13 @@
 package com.project.bookuluv.domain.admin.controller;
 
+import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.service.ProductService;
+import com.project.bookuluv.domain.article.domain.Article;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +23,19 @@ public class ProductController {
         List<ProductDto> results = productService.searchBooks(query);
         model.addAttribute("results", results);
         return "searchBooks";
+    }
+
+    @GetMapping("/list")
+    public String list(Model model) {
+        List<Product> productList = productService.getAll();
+        model.addAttribute("productList", productList);
+        return "/product/list";
+    }
+
+    @GetMapping(value = "/detail/{id}")
+    private String detail(Model model, @PathVariable("id") Integer id) {
+        Product products = this.productService.getById(id);
+        model.addAttribute("products", products);
+        return "article/detail";
     }
 }

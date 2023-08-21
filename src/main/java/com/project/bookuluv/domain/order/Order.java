@@ -1,7 +1,5 @@
-package com.project.bookuluv.domain.cart;
+package com.project.bookuluv.domain.order;
 
-import com.project.bookuluv.domain.api.domain.Ebook;
-import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.domain.member.domain.Member;
 import jakarta.persistence.Entity;
@@ -9,21 +7,25 @@ import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
-public class Cart extends BaseEntity {
-    @ManyToOne
-    private Member member;
+public class Order extends BaseEntity {
 
-    @ManyToOne
-    private Product product;
+    @ManyToOne(fetch = LAZY)
+    private Member buyer;
 
-    @ManyToOne
-    private Ebook ebook;
+    private String name;
+
+    private boolean isPaid;
+
+    private boolean isCanceled;
+
+    private boolean isRefunded;
 }

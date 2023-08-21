@@ -119,4 +119,8 @@ public class ProductService {
     public List<Product> getAll() {
         return this.productRepository.findAll();
     }
+
+    public Product getById(Integer id) {
+        return this.productRepository.getById(id);
+    }
 }
