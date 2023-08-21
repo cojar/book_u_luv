@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 public class Keyword extends BaseEntity {
     @Column(name = "keyword")
     private String keyword;

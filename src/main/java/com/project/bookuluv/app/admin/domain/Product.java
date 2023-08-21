@@ -5,12 +5,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
 @Entity
 @Setter
 @Getter
+@SuperBuilder(toBuilder = true)
 public class Product extends BaseEntity {
 
     @Column(name = "title")

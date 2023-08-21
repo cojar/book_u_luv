@@ -74,7 +74,7 @@
                         success: function (response) {
                             // 이미지 업로드 성공 처리 및 메시지 표시
                             console.log(response); // 서버에서 반환한 응답 확인
-                            alert('프로필 이미지가 업데이트되었습니다.');
+                            alert('프로필 이미지가 업데이트되었습니다.\n재접속 하시면 이미지가 반영됩니다.');
                         },
                         error: function (xhr, status, error) {
                             // 이미지 업로드 실패 처리
@@ -87,6 +87,7 @@
 
             <form class="flex flex-col gap-3 pt-4" method="POST"
                   th:action="@{/member/updateprofile}" th:object="${memberUpdateRequest}">
+                <div th:replace="~{form_errors :: formErrorsFragment}"></div>
                 <!-- 사용자 아이디 (이메일) -->
                 <div class="form-control">
                     <label class="label" for="userName" id="label-text">
@@ -200,7 +201,7 @@
                     <label class="label" for="sample4_postcode">
                         <span class="label-text">우편번호:</span>
                     </label>
-                    <input class="input input-bordered" disabled id="sample4_postcode" name="postalNum"
+                    <input class="input input-bordered" id="sample4_postcode" name="postalNum"
                            required
                            th:field="*{postalNum}" type="text" placeholder="(우편번호)">
                 </div>
@@ -210,7 +211,7 @@
                     <label class="label" for="sample4_roadAddress">
                         <span class="label-text">도로명주소:</span>
                     </label>
-                    <input class="input input-bordered" disabled id="sample4_roadAddress" name="roadAddress"
+                    <input class="input input-bordered" id="sample4_roadAddress" name="roadAddress"
                            required
                            th:field="*{roadAddress}" type="text" placeholder="(도로명주소)">
                 </div>
@@ -219,11 +220,21 @@
                     <label class="label" for="sample4_jibunAddress">
                         <span class="label-text">지번주소:</span>
                     </label>
-                    <input class="input input-bordered" disabled id="sample4_jibunAddress" name="jibunAddress"
+                    <input class="input input-bordered" id="sample4_jibunAddress" name="jibunAddress"
                            required
                            th:field="*{jibunAddress}" type="text" placeholder="(지번주소)">
                 </div>
                 <span id="guide" style="color:#999;display:none"></span>
+
+                <!-- 참고주소 -->
+                <div class="form-control">
+                    <label class="label" for="sample4_extraAddress">
+                        <span class="label-text">참고주소:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_extraAddress" name="extraAddress"
+                           required
+                           th:field="*{extraAddress}" type="text" placeholder="(참고주소)">
+                </div>
                 <!-- 상세주소 -->
                 <div class="form-control">
                     <label class="label" for="sample4_detailAddress">
@@ -232,15 +243,6 @@
                     <input class="input input-bordered" id="sample4_detailAddress" name="detailAddress" required
                            th:field="*{detailAddress}"
                            type="text" placeholder="상세주소를 입력해주세요 ex) 101동 101호">
-                </div>
-                <!-- 참고주소 -->
-                <div class="form-control">
-                    <label class="label" for="sample4_extraAddress">
-                        <span class="label-text">참고주소:</span>
-                    </label>
-                    <input class="input input-bordered" disabled id="sample4_extraAddress" name="extraAddress"
-                           required
-                           th:field="*{extraAddress}" type="text" placeholder="(참고주소)">
                 </div>
                 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
                 <script>
@@ -276,6 +278,11 @@
                       } else {
                         document.getElementById("sample4_extraAddress").value = '';
                       }
+                      // 이 부분에서 상세주소를 제외한 나머지 필드를 readOnly로 변경한다.
+                      // 상세주소 필드는 사용자가 직접 입력해야 하므로 readOnly 해제
+                      document.getElementById("sample4_roadAddress").readOnly = true;
+                      document.getElementById("sample4_jibunAddress").readOnly = true;
+                      document.getElementById("sample4_extraAddress").readOnly = true;
                       var guideTextBox = document.getElementById("guide");
                       // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
                       if (data.autoRoadAddress) {
@@ -300,12 +307,19 @@
                     <a class="btn btn-secondary btn-outline" href="/member/profile">취소하기</a>
                     <input class="btn btn-primary" type="submit" value="회원정보 수정 완료">
                 </div>
-
-                <div class="flex justify-center">
-                    <a class="btn btn-link" href="/member/findUsername">아이디찾기</a>
-                    <a class="btn btn-link" href="/member/findPassword">비밀번호 찾기</a>
-                </div>
             </form>
+        </div>
+        <!-- 메시지 표시 부분 -->
+        <div th:if="${successUpdateProfile}">
+            <script>
+                // 메시지 표시
+                alert('회원정보가 변경되었습니다.\n다시 접속해주세요.');
+                    window.location.href = '/member/logout';
+                // 1초 뒤에 로그아웃 페이지로 리다이렉트
+<!--                setTimeout(function() {-->
+<!--                    window.location.href = '/member/logout';-->
+<!--                }, 1000); // 1000밀리초 = 1초-->
+            </script>
         </div>
     </section>
 </main>

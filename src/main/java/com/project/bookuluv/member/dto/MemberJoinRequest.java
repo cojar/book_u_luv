@@ -41,7 +41,7 @@ public class MemberJoinRequest {
     private String lastName;
 
     @NotNull(message = "성별은 필수항목입니다.")
-    private boolean gender;
+    private Boolean gender = null;
 
     private LocalDate birthDate;
 

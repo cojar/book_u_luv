@@ -55,7 +55,7 @@ public class MemberController {
                 dto.getPhone(),
                 dto.getFirstName(),
                 dto.getLastName(),
-                dto.isGender(),
+                dto.getGender(),
                 dto.getBirthDate(),
                 dto.getMailKey(),
                 role,
@@ -108,7 +108,7 @@ public class MemberController {
                         dto.getPhone(),
                         dto.getFirstName(),
                         dto.getLastName(),
-                        dto.isGender(),
+                        dto.getGender(),
                         dto.getBirthDate(),
                         dto.getMailKey(),
                         role,
@@ -141,7 +141,6 @@ public class MemberController {
         if (!member.getUserName().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-
         // 기존 회원정보를 회원정보 수정 입력창에 세팅
         memberUpdateRequest.setUserName(member.getUserName());
         memberUpdateRequest.setNickName(member.getNickName());
@@ -171,19 +170,38 @@ public class MemberController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @PostMapping("/member/updateprofile")
+    public String profileModify(@Valid MemberUpdateRequest memberUpdateRequest,
+                                Model model,
+                                Principal principal,
+                                BindingResult bindingResult) {
+        Member member = memberService.getUser(principal.getName());
+        if (!member.getUserName().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+        if (bindingResult.hasErrors()) {
+            return "member/updateProfile";
+        }
+        if (true) {
+            memberService.updateProfile(memberUpdateRequest, principal.getName());
+            model.addAttribute("successUpdateProfile", true);
+            return "member/updateProfile";
+        }
+        return "redirect:/member/logout";
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/member/updateProfileImg")
     @ResponseBody
     public ResponseEntity<String> updateProfileImg(@RequestParam("file") MultipartFile file, Principal principal) {
         try {
             Member member = memberService.getUser(principal.getName());
             memberService.updateProfile(member, file);
-            return ResponseEntity.ok("프로필 이미지가 업데이트되었습니다.");
+            return ResponseEntity.ok("프로필 이미지가 업데이트되었습니다. 재접속 하시면 이미지가 반영됩니다.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("프로필 이미지 업데이트 중 오류가 발생했습니다.");
         }
     }
-
-
 
     @GetMapping("/member/findUsername")
     public String findUsername() {
@@ -263,7 +281,6 @@ public class MemberController {
             memberService.saveMember(member);
             resultMap.put("success", true);
         }
-
         return resultMap;
     }
 

@@ -147,12 +147,6 @@
                     <div class="badge badge-primary" th:if="${#authentication.principal.roadAddress != null && #authentication.principal.extraAddress != null && #authentication.principal.detailAddress != null && #authentication.principal.postalNum != null}" th:text="${#authentication.principal.roadAddress + ' ' + #authentication.principal.extraAddress + ' ' + #authentication.principal.detailAddress + ' (' + #authentication.principal.postalNum + ')'}"></div>
                     <div class="badge badge-primary" th:unless="${#authentication.principal.roadAddress != null && #authentication.principal.extraAddress != null && #authentication.principal.detailAddress != null && #authentication.principal.postalNum != null}" th:text="미등록"></div>
                 </div>
-
-
-
-
-
-
                 <!-- 장바구니 -->
                 <div class="form-control">
                     <label class="label">

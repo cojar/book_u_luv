@@ -2,6 +2,7 @@ package com.project.bookuluv.member.service;
 
 import com.project.bookuluv.member.domain.Member;
 import com.project.bookuluv.member.dto.MemberRole;
+import com.project.bookuluv.member.dto.MemberUpdateRequest;
 import com.project.bookuluv.member.exception.AppException;
 import com.project.bookuluv.member.exception.DataNotFoundException;
 import com.project.bookuluv.member.exception.ErrorCode;
@@ -141,6 +142,26 @@ public class MemberService {
         memberRepository.save(member);
 
         return member;
+    }
+
+    public void updateProfile(MemberUpdateRequest memberUpdateRequest, String username) {
+        Member existingMember = memberRepository.findByUserName(username)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
+
+        Member updatedMember = existingMember.toBuilder()
+                .nickName(memberUpdateRequest.getNickName())
+                .phone(memberUpdateRequest.getPhone())
+                .lastName(memberUpdateRequest.getLastName())
+                .firstName(memberUpdateRequest.getFirstName())
+                .gender(memberUpdateRequest.getGender())
+                .birthDate(memberUpdateRequest.getBirthDate())
+                .postalNum(memberUpdateRequest.getPostalNum())
+                .roadAddress(memberUpdateRequest.getRoadAddress())
+                .jibunAddress(memberUpdateRequest.getJibunAddress())
+                .extraAddress(memberUpdateRequest.getExtraAddress())
+                .detailAddress(memberUpdateRequest.getDetailAddress())
+                .build();
+        memberRepository.save(updatedMember);
     }
 
     public String generateTempPassword() {
