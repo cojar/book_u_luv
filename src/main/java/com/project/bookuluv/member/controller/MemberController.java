@@ -290,6 +290,8 @@ public class MemberController {
     public String login() {
         return "member/login";
     }
+
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/member/delete")
     public String deactivateMember(Principal principal) {

@@ -26,6 +26,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MemberService {
 
+    @Value("${custom.genFileDirPath}")
+    private String genFileDirPath;
+
     private final MemberRepository memberRepository;
 
     private final BCryptPasswordEncoder encoder;
@@ -124,22 +127,17 @@ public class MemberService {
 //    }
 
     public Member updateProfile(Member member, MultipartFile file) throws IOException {
-        String projectPath = System.getProperty("user.dir") +
-                File.separator + "src" +
-                File.separator + "main" +
-                File.separator + "resources" +
-                File.separator + "static" +
-                File.separator + "files";
+        String projectPath = genFileDirPath;
 
         UUID uuid = UUID.randomUUID();
         String fileName = uuid + "_" + file.getOriginalFilename();
-        String filePath = "/files/" + fileName;
+        String filePath = "/img_upload/" + fileName;
 
         File saveFile = new File(projectPath, fileName);
         file.transferTo(saveFile); // 업로드된 파일 저장
-
         member.setImgFileName(fileName);
         member.setImgFilePath(filePath);
+
         memberRepository.save(member);
 
         return member;

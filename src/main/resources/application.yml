@@ -36,3 +36,8 @@ springdoc:
     tagsSorter: alpha
     operations-sorter: alpha
     display-request-duration: true
+custom:
+  genFileDirPath: C:/Users/INSEONG/Desktop/img_upload
+  resourcePath: file:///Users/INSEONG/Desktop/img_upload/
+  requestPath: /img_upload/**
+  originPath: /img_upload/
