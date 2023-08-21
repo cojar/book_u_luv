@@ -8,10 +8,10 @@ import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.dto.MemberRole;
 import com.project.bookuluv.standard.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -123,25 +123,24 @@ public class MemberService {
 //        }
 //    }
 
-    public Member updateProfile(Member member, File file) throws IOException {
-        String projectPath =
-                System.getProperty("user.dir") +
-                        File.separator + "src" +
-                        File.separator + "main" +
-                        File.separator + "resources" +
-                        File.separator + "static" +
-                        File.separator + "files";
+    public Member updateProfile(Member member, MultipartFile file) throws IOException {
+        String projectPath = System.getProperty("user.dir") +
+                File.separator + "src" +
+                File.separator + "main" +
+                File.separator + "resources" +
+                File.separator + "static" +
+                File.separator + "files";
 
         UUID uuid = UUID.randomUUID();
-        String fileName = uuid + "_" + file.getName();
+        String fileName = uuid + "_" + file.getOriginalFilename();
         String filePath = "/files/" + fileName;
 
         File saveFile = new File(projectPath, fileName);
-        FileUtils.copyFile(file, saveFile); // 임시 파일을 실제 저장 경로로 복사
+        file.transferTo(saveFile); // 업로드된 파일 저장
 
         member.setImgFileName(fileName);
         member.setImgFilePath(filePath);
-        this.memberRepository.save(member);
+        memberRepository.save(member);
 
         return member;
     }
