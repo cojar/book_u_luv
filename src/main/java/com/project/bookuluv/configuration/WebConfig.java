@@ -13,6 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Value("${custom.requestPath}")
     private String requestPath;
 
+    // WebMvcConfigurer를 이용해서 이미지파일 업로드시 실시간 반영
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry resourceHandlerRegistry) {
         resourceHandlerRegistry.addResourceHandler(requestPath).addResourceLocations(resourcePath);
