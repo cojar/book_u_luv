@@ -3,7 +3,6 @@ package com.project.bookuluv.domain.admin.controller;
 import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.service.ProductService;
-import com.project.bookuluv.domain.article.domain.Article;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/api")
 @RequiredArgsConstructor
+@RequestMapping("/product")
 public class ProductController {
 
     private final ProductService productService;
@@ -25,17 +24,24 @@ public class ProductController {
         return "searchBooks";
     }
 
-    @GetMapping("/list")
-    public String list(Model model) {
-        List<Product> productList = productService.getAll();
-        model.addAttribute("productList", productList);
-        return "/product/list";
+    @GetMapping("/domestic/list")
+    public String domesticList(Model model) {
+        List<ProductDto> domestic = productService.getDomestic();
+        model.addAttribute("domestic", domestic);
+        return "product/domestic_list";
+    }
+
+    @GetMapping("/foreign/list")
+    public String foreignList(Model model) {
+        List<ProductDto> foreign = productService.getForeign();
+        model.addAttribute("foreign", foreign);
+        return "product/foreign_list";
     }
 
     @GetMapping(value = "/detail/{id}")
     private String detail(Model model, @PathVariable("id") Integer id) {
         Product products = this.productService.getById(id);
         model.addAttribute("products", products);
-        return "article/detail";
+        return "product/detail";
     }
 }

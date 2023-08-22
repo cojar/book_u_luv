@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
+
+<head>
+    <title>BOOKU_LUV 도서 목록</title>
+</head>
+
+<body layout:fragment="content">
+<div class="text-center mt-[50px]">
+    <span class="text-[50px] font-bold">외국 도서</span>
+</div>
+<div th:if="${foreign}" class="flex justify-center items-center">
+    <div class="my-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-8">
+            <div th:each="product : ${foreign}" class="flex flex-col mx-auto w-80 p-4">
+                <div class="text-center">
+                    <img class="mx-auto w-48 h-72" th:src="${product.coverImg}" alt="Book Cover">
+                    <span class="block text-lg font-semibold my-4"
+                          th:text="${product.title}"></span>
+                    <span th:text="${product.author}" class="block text-gray-600 mb-2"></span>
+                    <span th:text="${product.publisher}" class="block text-gray-600 mb-2"></span>
+                    <div class="mt-2">
+                        <span class="text-gray-500">정가 : </span>
+                        <span th:text="${product.priceStandard}" class="line-through text-gray-500"></span>
+                        <span class="text-gray-500">할인가 : </span>
+                        <span th:text="${product.priceSales}" class="text-green-600"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

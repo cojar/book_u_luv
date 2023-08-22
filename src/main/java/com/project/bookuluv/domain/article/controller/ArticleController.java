@@ -20,7 +20,7 @@ public class ArticleController {
     public String marketList(Model model) {
         List<Article> articleList = this.articleService.getAll();
         model.addAttribute("articleList", articleList);
-        return "article_list";
+        return "article/list";
     }
 
     @GetMapping(value = "/article/detail/{id}")
