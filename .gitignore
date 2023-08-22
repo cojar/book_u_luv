@@ -49,3 +49,14 @@ out/
 /src/main/generated/com/project/bookuluv/app/article/domain/QNotice.java
 /src/main/generated/com/project/bookuluv/app/admin/domain/QProduct.java
 /src/main/generated/com/project/bookuluv/api/domain/QProductE.java
+/src/main/generated/com/project/bookuluv/domain/article/domain/QArticle.java
+/src/main/generated/com/project/bookuluv/domain/cart/QCart.java
+/src/main/generated/com/project/bookuluv/domain/comment/domain/QComment.java
+/src/main/generated/com/project/bookuluv/domain/api/domain/QEbook.java
+/src/main/generated/com/project/bookuluv/domain/article/domain/QHashTag.java
+/src/main/generated/com/project/bookuluv/domain/article/domain/QKeyword.java
+/src/main/generated/com/project/bookuluv/domain/like/QLikeIt.java
+/src/main/generated/com/project/bookuluv/domain/member/domain/QMember.java
+/src/main/generated/com/project/bookuluv/domain/article/domain/QNotice.java
+/src/main/generated/com/project/bookuluv/domain/admin/domain/QProduct.java
+/src/main/generated/*
