@@ -5,6 +5,14 @@ import com.project.bookuluv.domain.admin.domain.Notice;
 import com.project.bookuluv.domain.member.dto.MemberRole;
 import jakarta.persistence.*;
 import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
@@ -16,7 +24,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 public class Member extends BaseEntity {
 
     @Column(name = "user_name", unique = true)

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -68,7 +68,7 @@
 
                 <a href="#" class="inline-flex hover:text-red-500 flex-shrink-0">
                     <span class="ml-[2px] hidden lg:block">
-                        중고도서
+                        Book U Luv Reader
                     </span>
                 </a>
             </div>
@@ -87,7 +87,7 @@
             </form>
         </div>
 
-        <div class="flex gap-3 hidden xl:flex">
+        <div class="flex gap-3 hidden xl:flex items-center">
             <a href="/member/login" class="inline-flex flex-shrink-0" sec:authorize="isAnonymous()">
                 <span class="ml-[2px]">
                     로그인
@@ -100,13 +100,6 @@
                 </span>
             </a>
 
-            <a href="/member/logout" class="inline-flex flex-shrink-0" sec:authorize="isAuthenticated()">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                <span class="ml-[2px]">
-                    로그아웃
-                </span>
-            </a>
-
             <a href="/member/profile" class="inline-flex items-center" sec:authorize="isAuthenticated()">
                 <img class="fa-solid fa-user w-12 h-12 rounded-full" alt=""
                      th:if="${#authentication.principal.imgFilePath}"
@@ -114,23 +107,19 @@
                 <img class="fa-solid fa-user w-12 h-12 rounded-full" alt=""
                      src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
                      th:unless="${#authentication.principal.imgFilePath}"/>
-
                 <span class="ml-[2px]">
                 </span>
-                <span class="ml-[2px]">
-                   00회원
+                <span class="ml-[2px] hidden lg:block items-center" th:if="${#authentication.principal.nickName}" th:text="${#authentication.principal.nickName + ' 님'}">
                 </span>
             </a>
-
+            <a href="/admin/list" class="inline-flex items-center">
+                <span class="ml-[2px] hidden lg:block items-center">
+                    관리자페이지
+                  </span>
+              </a>
             <a href="/notice/list" class="inline-flex flex-shrink-0">
                 <span class="ml-[2px]">
                     공지사항
-                </span>
-            </a>
-
-            <a href="#" class="inline-flex flex-shrink-0">
-                <span class="ml-[2px]">
-                    메뉴 2
                 </span>
             </a>
 
@@ -140,11 +129,17 @@
                 </span>
             </a>
 
+            <a href="/member/logout" class="inline-flex flex-shrink-0" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span class="ml-[2px]">
+                    로그아웃
+                </span>
+            </a>
         </div>
     </div>
 </header>
 
-<div class="flex-grow flex flex-col py-5">
+<div class="flex-grow flex flex-col py-32">
     <main layout:fragment="content" class="flex-grow flex flex-col"></main>
 </div>
 
@@ -155,12 +150,16 @@
                 <div>
                     <img class="w-[100px]" src="https://i.imgur.com/9qCFLjc.png"  alt="">
                 </div>
-                <div class="ml-[20px]">
+
+                <div class="ml-[20px] text-white">
+
                     <div class="mb-[10px]">
                         <span>고우영</span>
                     </div>
                     <div class="mb-[10px]">
+                      
                         <span>이메일 : wooyoung0407@naver.com</span>
+
                     </div>
                     <div class="mb-[10px]">
                         <span>Front/React</span>
@@ -170,16 +169,20 @@
                     </div>
                 </div>
             </div>
-            <div class="flex md:flex-row gap-x-36 md:gap-x-0 justify-around">
+
+            <div class="flex md:flex-row gap-x-36 md:gap-x-0 justify-around mx-[10px]">
                 <div>
                     <img class="w-[100px]" src="https://i.imgur.com/EgByDhq.jpg"  alt="">
                 </div>
-                <div class="ml-[20px]">
+                <div class="ml-[20px] text-white">
+
                     <div class="mb-[10px]">
                         <span>박창규</span>
                     </div>
                     <div class="mb-[10px]">
+
                         <span>이메일 : wooyoung0407@naver.com</span>
+                      
                     </div>
                     <div class="mb-[10px]">
                         <span>박창규</span>
@@ -194,7 +197,9 @@
                 <div>
                     <img class="w-[100px]" src="https://i.imgur.com/Q42WfBv.png"  alt="">
                 </div>
-                <div class="ml-[20px]">
+              
+                <div class="ml-[20px] text-white">
+
                     <div class="mb-[10px]">
                         <span>황인성</span>
                     </div>
@@ -228,8 +233,6 @@
         }
         return true;
     }
-
-
 
 </script>
 </body>

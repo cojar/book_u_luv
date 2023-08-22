@@ -1,11 +1,12 @@
 package com.project.bookuluv.domain.member.service;
 
+import com.project.bookuluv.domain.member.domain.Member;
+import com.project.bookuluv.domain.member.dto.MemberRole;
+import com.project.bookuluv.domain.member.dto.MemberUpdateRequest;
 import com.project.bookuluv.domain.member.exception.AppException;
 import com.project.bookuluv.domain.member.exception.DataNotFoundException;
 import com.project.bookuluv.domain.member.exception.ErrorCode;
 import com.project.bookuluv.domain.member.repository.MemberRepository;
-import com.project.bookuluv.domain.member.domain.Member;
-import com.project.bookuluv.domain.member.dto.MemberRole;
 import com.project.bookuluv.standard.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,9 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+
+    @Value("${custom.genFileDirPath}")
+    private String genFileDirPath;
 
     private final MemberRepository memberRepository;
 
@@ -124,25 +128,40 @@ public class MemberService {
 //    }
 
     public Member updateProfile(Member member, MultipartFile file) throws IOException {
-        String projectPath = System.getProperty("user.dir") +
-                File.separator + "src" +
-                File.separator + "main" +
-                File.separator + "resources" +
-                File.separator + "static" +
-                File.separator + "files";
+        String projectPath = genFileDirPath;
 
         UUID uuid = UUID.randomUUID();
         String fileName = uuid + "_" + file.getOriginalFilename();
-        String filePath = "/files/" + fileName;
+        String filePath = "/img_upload/" + fileName;
 
         File saveFile = new File(projectPath, fileName);
         file.transferTo(saveFile); // 업로드된 파일 저장
-
         member.setImgFileName(fileName);
         member.setImgFilePath(filePath);
+
         memberRepository.save(member);
 
         return member;
+    }
+
+    public void updateProfile(MemberUpdateRequest memberUpdateRequest, String username) {
+        Member existingMember = memberRepository.findByUserName(username)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원을 찾을 수 없습니다."));
+
+        Member updatedMember = existingMember.toBuilder()
+                .nickName(memberUpdateRequest.getNickName())
+                .phone(memberUpdateRequest.getPhone())
+                .lastName(memberUpdateRequest.getLastName())
+                .firstName(memberUpdateRequest.getFirstName())
+                .gender(memberUpdateRequest.getGender())
+                .birthDate(memberUpdateRequest.getBirthDate())
+                .postalNum(memberUpdateRequest.getPostalNum())
+                .roadAddress(memberUpdateRequest.getRoadAddress())
+                .jibunAddress(memberUpdateRequest.getJibunAddress())
+                .extraAddress(memberUpdateRequest.getExtraAddress())
+                .detailAddress(memberUpdateRequest.getDetailAddress())
+                .build();
+        memberRepository.save(updatedMember);
     }
 
     public String generateTempPassword() {

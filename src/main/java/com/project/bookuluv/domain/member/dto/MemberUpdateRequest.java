@@ -1,9 +1,13 @@
 package com.project.bookuluv.domain.member.dto;
 
-import jakarta.validation.constraints.*;
-import lombok.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -16,13 +20,13 @@ public class MemberUpdateRequest {
     @Email
     private String userName;
 
-    @NotEmpty(message = "비밀번호는 필수항목입니다.")
-//    @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*\\(\\)\\-_=+\\[\\{\\]}\\|;:'\",<.>\\/?])[A-Za-z\\d!@#$%^&*\\(\\)\\-_=+\\[\\{\\]}\\|;:'\",<.>\\/?]{8,30}")
-    private String password1;
-
-    @NotEmpty(message = "비밀번호 확인은 필수항목입니다.")
-//    @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*\\(\\)\\-_=+\\[\\{\\]}\\|;:'\",<.>\\/?])[A-Za-z\\d!@#$%^&*\\(\\)\\-_=+\\[\\{\\]}\\|;:'\",<.>\\/?]{8,30}")
-    private String password2;
+//    @NotEmpty(message = "비밀번호는 필수항목입니다.")
+////    @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*\\(\\)\\-_=+\\[\\{\\]}\\|;:'\",<.>\\/?])[A-Za-z\\d!@#$%^&*\\(\\)\\-_=+\\[\\{\\]}\\|;:'\",<.>\\/?]{8,30}")
+//    private String password1;
+//
+//    @NotEmpty(message = "비밀번호 확인은 필수항목입니다.")
+////    @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*\\(\\)\\-_=+\\[\\{\\]}\\|;:'\",<.>\\/?])[A-Za-z\\d!@#$%^&*\\(\\)\\-_=+\\[\\{\\]}\\|;:'\",<.>\\/?]{8,30}")
+//    private String password2;
 
     @NotEmpty(message = "닉네임을 입력해주세요")
 //    @Pattern(regexp = "(?=.*[a-zA-Z가-힣])[a-zA-Z가-힣\\d]{2,15}")
@@ -38,7 +42,7 @@ public class MemberUpdateRequest {
     private String lastName;
 
     @NotNull(message = "성별은 필수항목입니다.")
-    private Boolean gender = null;
+    private Boolean gender;
 
     @NotNull(message = "생년월일은 필수항목입니다.")
     private LocalDate birthDate;
@@ -53,16 +57,4 @@ public class MemberUpdateRequest {
     private String detailAddress;
     @NotEmpty(message = "참고주소는 필수항목입니다.")
     private String extraAddress;
-
-    private MultipartFile file;
-
-    private Integer mailKey = null;
-
-    private Integer genMailKey;
-
-    private boolean mailAuth;
-    public Boolean isGender() {
-        return gender;
-    }
-
 }

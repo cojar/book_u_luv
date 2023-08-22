@@ -16,7 +16,7 @@
         <!-- 도서 목록 -->
         <div class="flex flex-wrap justify-center mt-8">
             <!-- 각 도서 -->
-            <div th:each="newBook : ${newBooks}" class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4 p-4">
+            <div th:each="newBook : ${newBooks}" class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/5 p-4">
                 <div class="text-center">
                     <a th:href="${newBook.link}">
                         <img class="mx-auto w-48 h-72" th:src="${newBook.coverImg}" alt="Book Cover">
@@ -27,9 +27,10 @@
                     <span th:text="${newBook.publisher}" class="block text-gray-600 mb-[20px]"></span>
                     <div class="mt-2">
                         <span class="text-gray-500">정가 : </span>
-                        <span class="line-through text-gray-500" th:text="${newBook.priceStandard}"></span>
+                        <span class="line-through text-gray-500" th:text="${newBook.priceStandard} + '원'"></span>
+                        <span>/</span>
                         <span class="text-gray-500">할인가 : </span>
-                        <span th:text="${newBook.priceSales}" class="text-green-600"></span>
+                        <span th:text="${newBook.priceSales} + '원'" class="text-green-600"></span>
                     </div>
                 </div>
             </div>
@@ -43,7 +44,7 @@
         <!-- 도서 목록 -->
         <div class="flex flex-wrap justify-center mt-8">
             <!-- 각 도서 -->
-            <div th:each="bestseller : ${bestsellers}" class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4 p-4">
+            <div th:each="bestseller : ${bestsellers}" class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/5 p-4">
                 <div class="text-center">
                     <a th:href="${bestseller.link}">
                         <img class="mx-auto w-48 h-72" th:src="${bestseller.coverImg}" alt="Book Cover">
@@ -54,9 +55,10 @@
                     <span th:text="${bestseller.publisher}" class="block text-gray-600 mb-[20px]"></span>
                     <div class="mt-2">
                         <span class="text-gray-500">정가 : </span>
-                        <span th:text="${bestseller.priceStandard}" class="line-through text-gray-500"></span>
+                        <span th:text="${bestseller.priceStandard} + '원'" class="line-through text-gray-500"></span>
+                        <span>/</span>
                         <span class="text-gray-500">할인가 : </span>
-                        <span th:text="${bestseller.priceSales}" class="text-green-600"></span>
+                        <span th:text="${bestseller.priceSales}  + '원'" class="text-green-600"></span>
                     </div>
                 </div>
             </div>
