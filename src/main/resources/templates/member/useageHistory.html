@@ -9,9 +9,9 @@
     <title>BOOKU_LUV 마이페이지</title>
 </head>
 <body class="bg-gray-100" layout:fragment="content">
-<main class="container mx-auto py-6">
-    <div class="flex justify-around items-start py-10">
-        <div class="">
+<main class="container mx-auto pb-6">
+    <div class="flex justify-around pb-10">
+        <div class="w-2/5 flex justify-center">
             <div class="form-control">
                 <img class="preview-image h-40 w-40 rounded-full border-solid border-black border"
                      th:if="${#authentication.principal.imgFilePath}"
@@ -21,19 +21,19 @@
                      th:unless="${#authentication.principal.imgFilePath}"/>
             </div>
         </div>
-        <div class="info-content">
+        <div class="info-content w-3/5 flex flex-col justify-center">
             <div class="info-box">
                 <div class="user-info-box">
-                    <div class="nickname-box">
-                        <div class="nickname" th:text="${#authentication.principal.nickName}"></div>
-                        <div class="subtitle"> 님</div>
+                    <div class="nickname-box flex justify-between">
+                        <div>아이디 : </div>
+                        <div class="nickname" th:text="${#authentication.principal.nickName} + ' 님' "></div>
                     </div>
-                    <div class="nickname-box">
-                        <div class="subtitle">닉네임 :</div>
+                    <div class="nickname-box my-[30px] flex justify-between">
+                        <div>닉네임 : </div>
                         <div class="nickname" th:text="${#authentication.principal.nickName}"></div>
                     </div>
-                    <div class="birth-box">
-                        <div class="subtitle">생년월일 :</div>
+                    <div class="birth-box flex justify-between">
+                        <div>생년월일 : </div>
                         <div class="birth" th:text="${#authentication.principal.birthDate}"></div>
                     </div>
                 </div>
@@ -43,34 +43,38 @@
     <div class="toggle-menu flex">
         <div class="flex w-full items-start">
             <!-- 좌측 메뉴 -->
-            <div class="w-3/12 bg-white p-4 h-auto">
+            <div class="w-2/12 bg-white p-4 h-auto">
                 <ul class="space-y-4">
-                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200"
+                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 flex justify-between"
                         th:onclick="|toggleSection('profileContent');|">
-                        내 정보
+                        <span>내 정보</span>
+                        <span><i class="fas fa-chevron-right"></i></span>
                     </li>
-                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200"
+                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 flex justify-between"
                         th:onclick="|toggleSection('likesContent');|">
-                        내 좋아요
+                        <span>내 좋아요</span>
+                        <span><i class="fas fa-chevron-right"></i></span>
                     </li>
-                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200"
+                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 flex justify-between"
                         th:onclick="|toggleSection('cartContent');|">
-                        장바구니
+                        <span>장바구니</span>
+                        <span><i class="fas fa-chevron-right"></i></span>
                     </li>
-                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200"
+                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 flex justify-between"
                         th:onclick="|toggleSection('purchaseHistoryContent');|">
-                        구매내역
+                        <span>구매내역</span>
+                        <span><i class="fas fa-chevron-right"></i></span>
                     </li>
                 </ul>
             </div>
             <!-- 메뉴 컨텐츠 -->
-            <div class="w-9/12 bg-white p-4 min-h-[100%]">
+            <div class="w-10/12 bg-white p-4 min-h-[100%] text-center">
                 <!-- 내 정보 컨텐츠 -->
-                <div class="menu-content block h-auto" id="profileContent">
+                <div class="menu-content h-auto flex flex-col items-center" id="profileContent">
                     <!-- 내 정보 내용을 여기에 표시 -->
-                    <h1 class="text-lg font-bold mb-4">프로파일</h1>
-                    <div class="max-w-md w-full px-2 pt-4">
-                        <h1 class="font-bold text-lg">
+                    <h1 class="text-[50px] font-bold mb-4">프로파일</h1>
+                    <div class="max-w-xl w-full px-2 pt-4">
+                        <h1 class="font-bold text-lg text-start">
                             <i class="fa-solid fa-user-plus"></i>
                             프로파일
                         </h1>
@@ -201,48 +205,79 @@
                 <!-- 내 좋아요 컨텐츠 -->
                 <div class="menu-content hidden h-auto" id="likesContent">
                     <!-- 내 좋아요 내용을 여기에 표시 -->
-                    <h1 class="text-lg font-bold mb-4">좋아요한 제품</h1>
+                    <h1 class="text-[50px] font-bold mb-4">좋아요한 도서</h1>
                     <!-- 좋아요한 제품 -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text">좋아요한 제품</span>
+                            <span class="text-[20px]">좋아요한 도서</span>
                         </label>
-                        <div class="badge badge-primary">
-                            <!-- 여기에 좋아요한 제품 내용을 표시 -->
-                            <!-- 예시: -->
-                            <p>좋아요한 제품 내용을 여기에 표시</p>
+                        <div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>제목</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>제목</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
                 <!-- 장바구니 컨텐츠 -->
                 <div class="menu-content hidden h-auto" id="cartContent">
                     <!-- 장바구니 내용을 여기에 표시 -->
-                    <h1 class="text-lg font-bold mb-4">장바구니</h1>
+                    <h1 class="text-[50px] font-bold mb-4">장바구니</h1>
                     <!-- 장바구니 -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text">장바구니</span>
+                            <span class="text-[20px]">장바구니</span>
                         </label>
-                        <div class="badge badge-primary">
-                            <!-- 여기에 장바구니 내용을 표시 -->
-                            <!-- 예시: -->
-                            <p>장바구니 내용을 여기에 표시</p>
+                        <div>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>표지</th>
+                                    <th>제목</th>
+                                    <th>가격</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>표지</td>
+                                    <td>제목</td>
+                                    <td>가격</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
                 <!-- 구매내역 컨텐츠 -->
                 <div class="menu-content hidden h-auto" id="purchaseHistoryContent">
                     <!-- 구매내역 내용을 여기에 표시 -->
-                    <h1 class="text-lg font-bold mb-4">구매내역</h1>
+                    <h1 class="text-[50px] font-bold mb-4">구매내역</h1>
                     <!-- 구매내역 -->
                     <div class="form-control">
                         <label class="label">
-                            <span class="label-text">구매내역</span>
+                            <span class="text-[20px]">구매내역</span>
                         </label>
-                        <div class="badge badge-primary">
-                            <!-- 여기에 구매내역 내용을 표시 -->
-                            <!-- 예시: -->
-                            <p>구매내역 내용을 여기에 표시</p>
+                        <div>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>제목</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>제목</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -284,10 +319,14 @@
                             formattedUserName = userName.substring(userName.indexOf("_") + 1);
                             labelText = "아이디(소셜계정)";
                         }
+
                         $("#label-text").text(labelText);
                         $("#formatted-username").text(formattedUserName);
                     });
                 });
+
+
+
 </script>
 </body>
 </html>

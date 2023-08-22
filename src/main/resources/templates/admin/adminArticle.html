@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+        name="viewport">
+  <meta content="ie=edge" http-equiv="X-UA-Compatible">
+  <title>관리자 페이지</title>
+  <!-- 테일윈드 스타일시트 링크 추가 -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+
+<main layout:fragment="content">
+
+
+  <header class="p-4 text-left border-b">
+    <div class="flex justify-between items-center">
+      <h1 class="text-2xl">관리자 페이지</h1>
+      <div class="menu">
+        <div class="admin_menu flex space-x-4">
+          <ul class="flex space-x-4">
+            <li>
+              <a href="@{/admin/adminUser}" class="menu-link">회원관리</a>
+            </li>
+            <li>
+              <a href="@{/admin/adminAuthor}" class="menu-link">작가관리</a>
+            </li>
+            <li>
+              <a href="@{/admin/adminNotice}" class="menu-link">공지사항 관리</a>
+            </li>
+            <li>
+              <a href="@{/admin/adminAriticle}" class="menu-link">판매 글 관리</a>
+            </li>
+            <li>
+              <a href="@{/admin/adminProduct}" class="menu-link">도서관리</a>
+            </li>
+            <li>
+              <a href="@{/admin/adminCalculate}" class="menu-link">정산관리</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- ... -->
+  </header>
+  <!-- 회원 관리 테이블 -->
+  <h1 class="text-3xl font-semibold mt-8 mb-4">판매글 관리</h1>
+  <div class="overflow-x-auto">
+    <table class="min-w-full">
+      <thead>
+      <tr>
+        <th class="py-2 px-4 border">NO.</th>
+        <th class="py-2 px-4 border">제목</th>
+        <th class="py-2 px-4 border">작성자</th>
+        <th class="py-2 px-4 border">작성일자</th>
+        <th class="py-2 px-4 border">수정일자</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="article : ${articleList}">
+        <th class="py-2 px-4 border" th:text="${article.id}">NO.</th>
+        <th class="py-2 px-4 border" th:text="${article.subject}"></th>
+        <th class="py-2 px-4 border" th:text="${article.register}"></th>
+        <th class="py-2 px-4 border" th:text="${article.createDate}"></th>
+        <th class="py-2 px-4 border" th:text="${article.modifyDate}"></th>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+</body>
+</html>
