@@ -95,6 +95,6 @@ public class ADMController {
         model.addAttribute("noticeList", noticeList);
         model.addAttribute("articleList", articleList);
         model.addAttribute("productList", productList);
-        return "/admin/list";
+        return "admin/list";
     }
 }
