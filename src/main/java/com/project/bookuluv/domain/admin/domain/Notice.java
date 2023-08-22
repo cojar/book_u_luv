@@ -1,4 +1,4 @@
-package com.project.bookuluv.domain.article.domain;
+package com.project.bookuluv.domain.admin.domain;
 
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.domain.member.domain.Member;
@@ -25,8 +25,8 @@ public class Notice extends BaseEntity {
     @Column(name = "content")
     private String content;
 
-   // @Column(name = "hit")
-  //  private int hit;
+    // @Column(name = "hit")
+    //  private int hit;
 
     @ManyToOne
     private Member register;

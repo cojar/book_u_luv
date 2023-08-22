@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>국내도서</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th>표지</th>
+        <th>NO.</th>
+        <th>제목</th>
+        <th>출판사</th>
+        <th>정가</th>
+        <th>할인가</th>
+    </tr>
+    <tr th:each="article : ${articleList}">
+        <img th:scr="${article.coverImg}">
+        <td th:text="${article.id}"></td>
+        <td th:text="${article.title}"></td>
+        <td th:text="${article.publisher}"></td>
+        <td th:text="${article.priceStandard}"></td>
+        <td th:text="${article.priceSales}"></td>
+    </tr>
+</table>
+</body>
+</html>

@@ -1,10 +1,10 @@
 package com.project.bookuluv.domain.admin.controller;
 
+import com.project.bookuluv.domain.admin.domain.Notice;
 import com.project.bookuluv.domain.admin.service.ProductService;
 import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.service.NoticeService;
 import com.project.bookuluv.domain.article.domain.Article;
-import com.project.bookuluv.domain.article.domain.Notice;
 import com.project.bookuluv.domain.article.dto.ArticleDto;
 import com.project.bookuluv.domain.article.service.ArticleService;
 import com.project.bookuluv.domain.member.domain.Member;

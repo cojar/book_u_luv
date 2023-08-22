@@ -5,6 +5,8 @@ import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,15 @@ public class ProductService {
         return getBooksFromApi(url);
     }
 
+    public Page<Product> getDomestic(Pageable pageable) {
+        return productRepository.findByMallType("BOOK", pageable);
+    }
+
+    public Page<Product> getForeign(Pageable pageable) {
+        return productRepository.findByMallType("FOREIGN", pageable);
+    }
+
+
     private String buildSearchUrl(String queryType, String query) {
         return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Book&Foreign" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
     }
@@ -52,11 +63,13 @@ public class ProductService {
     private String buildListUrl(String queryType) {
         return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
     }
+
     private String domesticBuildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=10" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
     }
+
     private String foreignBuildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Foreign" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=10" + "&start=1" + "&SearchTarget=Foreign" + "&output=js" + "&Version=20131101";
     }
 
     private List<ProductDto> getBooksFromApi(String url) {
@@ -84,7 +97,9 @@ public class ProductService {
                             .categoryName(item.optString("categoryName"))
                             .publisher(item.optString("publisher"))
                             .priceStandard(item.optLong("priceStandard"))
-                            .priceSales(item.optLong("priceSales")).build();
+                            .priceSales(item.optLong("priceSales"))
+                            .mallType(item.optString("mallType"))
+                            .build();
 
                     Product product = Product.builder()
                             .coverImg(result.getCoverImg())
@@ -98,13 +113,12 @@ public class ProductService {
                             .categoryName(result.getCategoryName())
                             .priceStandard(result.getPriceStandard())
                             .priceSales(result.getPriceSales())
+                            .mallType(result.getMallType())
                             .build();
 
                     if (productRepository.countByIsbn(product.getIsbn()) == 0L) {//productRepository에 isbn이 0개라면 저장해라(0L의 L은 Long 타입이라 사용)
                         productRepository.save(product);
                     }
-
-
                     results.add(result);
                 }
             } else {
@@ -113,10 +127,18 @@ public class ProductService {
         } else {
             System.out.println("응답 본문이 null입니다.");
         }
-
         return results;
     }
+
     public List<Product> getAll() {
         return this.productRepository.findAll();
+    }
+
+    public Product getById(Integer id) {
+        return this.productRepository.getById(id);
+    }
+
+    public Product getById(Long productsId) {
+        return this.productRepository.getById(productsId);
     }
 }

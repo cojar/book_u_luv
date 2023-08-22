@@ -34,6 +34,7 @@
                 }
             }
         };
+
     </script>
 </head>
 
@@ -53,13 +54,13 @@
                 <span class="ml-[2px] hidden lg:block">U_LUV</span>
             </a>
             <div class="xl:flex gap-3 ml-[50px] font-bold">
-                <a href="#" class="inline-flex hover:text-red-500 flex-shrink-0">
+                <a th:href="@{/product/domestic/list}" class="inline-flex hover:text-red-500 flex-shrink-0">
                     <span class="ml-[2px] hidden lg:block ">
                         국내도서
                     </span>
                 </a>
 
-                <a href="#" class="inline-flex hover:text-red-500 flex-shrink-0">
+                <a th:href="@{/product/foreign/list}" class="inline-flex hover:text-red-500 flex-shrink-0">
                     <span class="ml-[2px] hidden lg:block">
                         외국도서
                     </span>
@@ -100,8 +101,11 @@
             </a>
 
             <a href="/member/profile" class="inline-flex items-center" sec:authorize="isAuthenticated()">
-                <img class="fa-solid fa-user w-12 h-12 rounded-full" alt="" th:if="${#authentication.principal.imgFilePath}" th:src="${#authentication.principal.imgFilePath}"/>
-                <img class="fa-solid fa-user w-12 h-12 rounded-full" alt="" src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
+                <img class="fa-solid fa-user w-12 h-12 rounded-full" alt=""
+                     th:if="${#authentication.principal.imgFilePath}"
+                     th:src="${#authentication.principal.imgFilePath}"/>
+                <img class="fa-solid fa-user w-12 h-12 rounded-full" alt=""
+                     src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
                      th:unless="${#authentication.principal.imgFilePath}"/>
                 <span class="ml-[2px]">
                 </span>
@@ -146,12 +150,16 @@
                 <div>
                     <img class="w-[100px]" src="https://i.imgur.com/9qCFLjc.png"  alt="">
                 </div>
+
                 <div class="ml-[20px] text-white">
+
                     <div class="mb-[10px]">
                         <span>고우영</span>
                     </div>
                     <div class="mb-[10px]">
-                        <span>wooyoung0407@naver.com</span>
+                      
+                        <span>이메일 : wooyoung0407@naver.com</span>
+
                     </div>
                     <div class="mb-[10px]">
                         <span>Front/React</span>
@@ -161,16 +169,20 @@
                     </div>
                 </div>
             </div>
+
             <div class="flex md:flex-row gap-x-36 md:gap-x-0 justify-around mx-[10px]">
                 <div>
                     <img class="w-[100px]" src="https://i.imgur.com/EgByDhq.jpg"  alt="">
                 </div>
                 <div class="ml-[20px] text-white">
+
                     <div class="mb-[10px]">
                         <span>박창규</span>
                     </div>
                     <div class="mb-[10px]">
-                        <span>wooyoung0407@naver.com</span>
+
+                        <span>이메일 : wooyoung0407@naver.com</span>
+                      
                     </div>
                     <div class="mb-[10px]">
                         <span>박창규</span>
@@ -185,12 +197,14 @@
                 <div>
                     <img class="w-[100px]" src="https://i.imgur.com/Q42WfBv.png"  alt="">
                 </div>
+              
                 <div class="ml-[20px] text-white">
+
                     <div class="mb-[10px]">
                         <span>황인성</span>
                     </div>
                     <div class="mb-[10px]">
-                        <span>wooyoung0407@naver.com</span>
+                        <span>이메일 : wooyoung0407@naver.com</span>
                     </div>
                     <div class="mb-[10px]">
                         <span>황인성</span>
@@ -219,6 +233,7 @@
         }
         return true;
     }
+
 </script>
 </body>
 </html>

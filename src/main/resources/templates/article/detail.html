@@ -1,155 +1,103 @@
+<!DOCTYPE html>
 <html layout:decorate="~{layout/layout.html}">
-<meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-<link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.1/dist/full.css" rel="stylesheet" type="text/css"/>
+<head>
+    <title>BOOKU_LUV 도서 정보</title>
+</head>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<body>
+<main layout:fragment="main">
+    <section class="section section-write container mx-auto">
 
-<!-- toastr -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
-<link rel="stylesheet" href="https://jhs512.github.io/toastr/toastr.css">
+        <div class="px-2 pt-4">
+            <h1 class="font-bold text-lg">
+                <i class="fa-solid fa-book-open"></i>
+                도서 정보
+            </h1>
 
-<!-- 폰트어썸 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
-<!-- 테일윈드 -->
-<script src="https://cdn.tailwindcss.com"></script>
-
-<div layout:fragment="content" class="mx-auto mt-10 max-w-screen-xl">
-    <div class="mx-auto w-full sm:w-96">
-        <div class="flex justify-center">
-            <img class="w-60 h-80" src="https://i.postimg.cc/9MnXmgL2/image.jpg" alt="">
-        </div>
-        <div class="flex justify-between mt-5 sm:mt-8">
-            <span class="text-2xl sm:text-4xl font-bold">푸바오</span>
-            <span>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-        <i class="fas fa-star"></i>
-      </span>
-        </div>
-        <div class="my-2 sm:my-3">
-            <span>작가 : 작가</span>
-            <span class="ml-2">출판사 : 출판사</span>
-        </div>
-        <div class="mb-2 mx-auto">
-            <span>가격 : 30,000원</span>
-        </div>
-
-        <div class="border-t mt-4 pt-4">
-            <div>상품정보 및 내용</div>
-        </div>
-        <div class="mt-4">
-            <div>내용물</div>
-        </div>
-        <div class="border-solid mt-4 pt-4">
-            <div>
+            <div class="flex flex-col mt-2 gap-3">
                 <div>
-          <span>
-            <!-- 리뷰글쓸때 선택한 별점색칠 -->
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-            <i class="fas fa-star"></i>
-          </span>
+                    <h2 class="font-bold" th:text="${product.subject}"></h2>
                 </div>
-            </div>
-            <div class="mt-4">
-                <div>쓴 리뷰글</div>
-            </div>
-            <div class="border-t mt-4 pt-4">
-                <div class="my-4">
-                    <span class="font-bold text-[20px]">리뷰 작성</span>
+
+                <div class="flex">
+                    <svg width="20" height="20" th:data-jdenticon-value="${product.author.jdenticon}"></svg>
+                    <div th:text="${product.author.name}"></div>
                 </div>
-                <div>
-          <span id="starRating">
-            <!-- 리뷰글쓸때 선택한 별점색칠 -->
-            <i class="star fas fa-star"></i>
-            <i class="star fas fa-star"></i>
-            <i class="star fas fa-star"></i>
-            <i class="star fas fa-star"></i>
-            <i class="star fas fa-star"></i>
-          </span>
-                </div>
-                <div class="mt-4">
-                    <textarea class="w-full h-auto resize-none p-2 border rounded"
-                              placeholder="리뷰를 작성해주세요..."></textarea>
-                    <div class="flex justify-end">
-                        <button class="mt-2 px-4 py-2 bg-blue-500 text-white rounded">작성</button>
+
+                <div th:text="|￦ ${@ut.nf(product.salePrice)}|"></div>
+
+                <div class="flex flex-wrap gap-3">
+                    <div class="flex flex-wrap gap-3">
+                        <div>
+                            <div class="badge">
+                                <i class="fa-solid fa-pen"></i>
+                                <span class="ml-1">작성</span>
+                                <span class="ml-1"
+                                      th:text="${#temporals.format(product.createDate, 'yy-MM-dd HH:mm')}"></span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="badge badge-outline">
+                                <i class="fa-solid fa-eraser"></i>
+                                <span class="ml-1">수정</span>
+                                <span class="ml-1"
+                                      th:text="${#temporals.format(product.modifyDate, 'yy-MM-dd HH:mm')}"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="flex items-center mt-4 border-t pt-4">
-                    <i id="likeIcon" class="far fa-heart text-2xl cursor-pointer"></i>
-                    <div class="flex justify-end w-full">
-                        <input id="quantityInput" type="number" min="1" value="1"
-                               class="ml-2 w-16 px-2 py-1 border rounded text-center">
-                        <button class="ml-2 px-4 py-2 bg-blue-500 w-24 text-white rounded text-center">미리보기</button>
-                        <button class="ml-2 px-4 py-2 bg-blue-500 w-24 text-white rounded text-center">장바구니</button>
-                        <button id="buyButton" class="ml-2 px-4 py-2 bg-green-500 w-24 text-white rounded text-center">
-                            구매
-                        </button>
-                    </div>
+
+                <div th:utext="${product.extra_productTagLinks}"></div>
+
+                <div>
+                    <a th:if="${@productService.actorCanModify(@rq.member, product)}"
+                       th:href="@{|/product/${product.id}/modify|}"
+                       class="btn btn-secondary btn-sm btn-outline">
+                        <i class="fa-solid fa-eraser"></i>
+                        <span class="ml-1">수정</span>
+                    </a>
+
+                    <a th:if="${@productService.actorCanRemove(@rq.member, product)}" href="javascript:;"
+                       onclick="if ( confirm('정말로 삭제하시겠습니까?') ) $(this).next().submit();"
+                       class="btn btn-secondary btn-sm btn-outline">
+                        <i class="fa-solid fa-trash"></i>
+                        <span class="ml-1">삭제</span>
+                    </a>
+                    <form th:action="@{|/product/${product.id}/remove|}" method="POST" hidden></form>
+
+                    <button type="button" onclick="history.back();" class="btn btn-secondary btn-sm  btn-outline">
+                        <i class="fa-solid fa-angle-left"></i>
+                        <span class="ml-1">이전</span>
+                    </button>
+                </div>
+
+                <div class="flex justify-center">
+                    <svg width="200" height="200" th:data-jdenticon-value="${product.jdenticon}"></svg>
+                </div>
+
+                <div>
+                    <h2 class="font-bold"><i class="fa-solid fa-indent"></i> 목차</h2>
+
+                    <ol class="pl-6 mt-2">
+                        <li style="list-style: decimal" class="mt-1"
+                            th:each="i : ${#numbers.sequence(posts.size() - 1, 0, -1)}"
+                            th:with="post=${posts[i]}">
+                            <a th:if="${@postService.actorCanSee(@rq.member, post)}" class="text-link" target="_blank" th:href="@{|/post/${post.id}|}"
+                               th:text="|${post.subject}|"></a>
+                            <span th:unless="${@postService.actorCanSee(@rq.member, post)}" th:text="|${post.subject}|"></span>
+                        </li>
+                    </ol>
                 </div>
             </div>
+
+
         </div>
-    </div>
-</div>
+    </section>
 
-<script>
-  // 찜 스크립트
-  const likeIcon = document.getElementById('likeIcon');
-  let isLiked = false; // 좋아요 상태 여부
-  // 좋아요 아이콘 상태 변경 함수
-  likeIcon.classList.add('text-red-500');
+    <th:block th:replace="fragment/toastEditor :: toastEditor"></th:block>
 
-  function toggleLike() {
-    if (isLiked) {
-      likeIcon.classList.remove('fas', 'text-red-500');
-      likeIcon.classList.add('far', 'text-red-500');
-    } else {
-      likeIcon.classList.remove('far', 'text-red-500');
-      likeIcon.classList.add('fas', 'text-red-500');
-    }
-    isLiked = !isLiked;
-  }
-  likeIcon.addEventListener('click', toggleLike);
-  // 별점 스크립트
-  const stars = document.querySelectorAll('.star');
-  let selectedStars = 0;
-
-  function toggleStar(index) {
-    if (stars[index].classList.contains('text-yellow-500')) {
-      selectedStars = index; // 이전에 선택한 별점을 취소하므로 index만큼 별점을 선택한 것으로 갱신
-    } else {
-      selectedStars = index + 1; // 클릭한 별점까지 선택한 상태로 변경
-    }
-    for (let i = 0; i < stars.length; i++) {
-      if (i < selectedStars) {
-        stars[i].classList.add('text-yellow-500');
-      } else {
-        stars[i].classList.remove('text-yellow-500');
-      }
-    }
-  }
-  stars.forEach((star, index) => {
-    star.addEventListener('click', () => {
-      toggleStar(index);
-    });
-  });
-  //수량 구매
-  const quantityInput = document.getElementById('quantityInput');
-  const buyButton = document.getElementById('buyButton');
-  buyButton.addEventListener('click', function() {
-    const selectedQuantity = quantityInput.value;
-    alert(`선택한 수량: ${selectedQuantity}개`);
-    // 여기에 실제로 구매 로직을 추가할 수 있습니다.
-  });
-</script>
+</main>
+</body>
 </html>
