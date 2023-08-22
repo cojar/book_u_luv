@@ -16,7 +16,7 @@
         <!-- 도서 목록 -->
         <div class="flex flex-wrap justify-center mt-8">
             <!-- 각 도서 -->
-            <div th:each="newBook : ${newBooks}" class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4 p-4">
+            <div th:each="newBook : ${newBooks}" class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/5 p-4">
                 <div class="text-center">
                     <a th:href="${newBook.link}">
                         <img class="mx-auto w-48 h-72" th:src="${newBook.coverImg}" alt="Book Cover">
@@ -43,7 +43,7 @@
         <!-- 도서 목록 -->
         <div class="flex flex-wrap justify-center mt-8">
             <!-- 각 도서 -->
-            <div th:each="bestseller : ${bestsellers}" class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4 p-4">
+            <div th:each="bestseller : ${bestsellers}" class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/5 p-4">
                 <div class="text-center">
                     <a th:href="${bestseller.link}">
                         <img class="mx-auto w-48 h-72" th:src="${bestseller.coverImg}" alt="Book Cover">
