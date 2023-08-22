@@ -46,7 +46,7 @@ public class ProductService {
     }
 
     private String buildSearchUrl(String queryType, String query) {
-        return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=12" + "&start=1" + "&SearchTarget=Book&Foreign" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
+        return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Book&Foreign" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
     }
 
     private String buildListUrl(String queryType) {

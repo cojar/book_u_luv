@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="">
+    <title>main</title>
+</head>
+<body layout:fragment="content">
+<section class="section section-profile flex-grow flex flex-col items-center justify-center">
+
+    <div class="max-w-md w-full px-2 pt-4">
+        <h1 class="font-bold text-lg">
+            <i class="fa-solid fa-user-plus"></i>
+            작가
+        </h1>
+        <div class="mt-[20px] inline-flex">
+            <!--회원프로필사진-->
+            <div class="form-control">
+                <img class="preview-image h-40 w-40 rounded-full border-solid border-black border"
+                     th:if="${#authentication.principal.imgFilePath}"
+                     th:src="${#authentication.principal.imgFilePath}"/>
+                <img class="preview-image h-40 w-40 rounded-full border-solid border-black border"
+                     src=""
+                     th:unless="${#authentication.principal.imgFilePath}"/>
+            </div>
+            <!--작가아이디-->
+            <div class="flex flex-col gap-3 ml-[30px]">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-bold" id="label-text">작가아이디</span>
+                    </label>
+                    <div class="badge badge-primary" id="formatted-username">sdsd</div>
+                </div>
+
+                <script>
+                // AJAX 요청을 통해 사용자 아이디 가져오기
+                fetch('/api/getUserName')
+                    .then(response => response.json())
+                    .then(data => {
+                        var userName = data.userName; // 백엔드에서 전달한 사용자 아이디 값
+                        var formattedUserName = userName;
+                        var labelText = "아이디";
+
+                        /*조건에 맞게 userName을 가져옴*/
+
+                        if (userName.startsWith("KAKAO_")) {
+                            formattedUserName = userName.substring(userName.indexOf("_") + 1);
+                            labelText = "아이디(카카오 소셜계정)";
+                        } else if (userName.startsWith("NAVER_")) {
+                            formattedUserName = userName.substring(userName.indexOf("_") + 1);
+                            labelText = "아이디(네이버 소셜계정)";
+                        } else if (userName.startsWith("GOOGLE_")) {
+                            formattedUserName = userName.substring(userName.indexOf("_") + 1);
+                            labelText = "아이디(구글 소셜계정)";
+                        } else if (userName.includes("@")) { // userName에 "@" 포함하면 이메일 형태
+                            formattedUserName = userName;
+                            labelText = "아이디(이메일 계정)";
+                        } else {
+                            formattedUserName = userName.substring(userName.indexOf("_") + 1);
+                            labelText = "아이디(소셜계정)";
+                        }
+                        document.getElementById("label-text").textContent = labelText;
+                        document.getElementById("formatted-username").textContent = formattedUserName;
+                    });
+
+                </script>
+
+                <!--작가등록일-->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text font-bold">가입날짜</span>
+                    </label>
+                    <div class="badge badge-primary"
+                         th:text="${#temporals.format(#authentication.principal.createDate, 'yy-MM-dd HH:mm')}">sdsd
+                    </div>
+                    <!--                    <div class="badge badge-primary"-->
+                    <!--                         th:text="${#temporals.format(@rq.member.createDate, 'yy-MM-dd HH:mm')}"></div>-->
+                </div>
+
+                <!--작가이메일-->
+                <div class="form-control" th:if="${#authentication.principal.email}">
+                    <label class="label">
+                        <span class="label-text font-bold">이메일</span>
+                    </label>
+                    <div class="badge badge-primary" th:if="${#authentication.principal.email}"
+                         th:text="${#authentication.principal.email}">sdsd
+                    </div>
+                </div>
+                <div class="mt-[20px]">
+                    <button class="btn btn-primary btn-outline font-bold">
+                        e북 등록하기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="mt-[50px] w-[1080px] mx-auto">
+    <div>
+        <span class="text-[30px] font-bold">내가 등록한 e북</span>
+    </div>
+    <div class="max-w-screen-md mx-auto">
+        <table class="border table-auto w-full border mt-[10px]">
+            <thead>
+            <tr>
+                <th class="border border-black p-2">번호</th>
+                <th class="border border-black p-2">등록한 책 제목</th>
+                <th class="border border-black p-2"></th>
+                <th class="border border-black p-2">검토</th>
+                <th class="border border-black p-2">수정/삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="border border-black p-2">1</td>
+                <td class="border border-black p-2">1</td>
+                <td class="border border-black p-2">1</td>
+                <td class="border border-black p-2">1</td>
+                <td class="border border-black p-2">1</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

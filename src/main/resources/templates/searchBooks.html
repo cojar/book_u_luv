@@ -11,7 +11,7 @@
 </div>
 <div th:if="${results}" class="flex justify-center items-center">
     <div class="my-10">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-6 mt-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-8">
             <div th:each="result : ${results}" class="flex flex-col mx-auto w-80 p-4">
                 <div class="text-center">
                     <a th:href="${result.link}">
@@ -23,9 +23,10 @@
                     <span th:text="${result.publisher}" class="block text-gray-600 mb-2"></span>
                     <div class="mt-2">
                         <span class="text-gray-500">정가 : </span>
-                        <span th:text="${result.priceStandard}" class="line-through text-gray-500"></span>
+                        <span th:text="${result.priceStandard} + '원'" class="line-through text-gray-500"></span>
+                        <span>/</span>
                         <span class="text-gray-500">할인가 : </span>
-                        <span th:text="${result.priceSales}" class="text-green-600"></span>
+                        <span th:text="${result.priceSales} + '원'" class="text-green-600"></span>
                     </div>
                 </div>
             </div>

@@ -27,9 +27,10 @@
                     <span th:text="${newBook.publisher}" class="block text-gray-600 mb-[20px]"></span>
                     <div class="mt-2">
                         <span class="text-gray-500">정가 : </span>
-                        <span class="line-through text-gray-500" th:text="${newBook.priceStandard}"></span>
+                        <span class="line-through text-gray-500" th:text="${newBook.priceStandard} + '원'"></span>
+                        <span>/</span>
                         <span class="text-gray-500">할인가 : </span>
-                        <span th:text="${newBook.priceSales}" class="text-green-600"></span>
+                        <span th:text="${newBook.priceSales} + '원'" class="text-green-600"></span>
                     </div>
                 </div>
             </div>
@@ -54,9 +55,10 @@
                     <span th:text="${bestseller.publisher}" class="block text-gray-600 mb-[20px]"></span>
                     <div class="mt-2">
                         <span class="text-gray-500">정가 : </span>
-                        <span th:text="${bestseller.priceStandard}" class="line-through text-gray-500"></span>
+                        <span th:text="${bestseller.priceStandard} + '원'" class="line-through text-gray-500"></span>
+                        <span>/</span>
                         <span class="text-gray-500">할인가 : </span>
-                        <span th:text="${bestseller.priceSales}" class="text-green-600"></span>
+                        <span th:text="${bestseller.priceSales}  + '원'" class="text-green-600"></span>
                     </div>
                 </div>
             </div>
