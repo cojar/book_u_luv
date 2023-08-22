@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>BOOKU_LUV 회원정보 수정</title>
+</head>
+
+<body>
+<main layout:fragment="content">
+    <section class="section section-join flex-grow flex flex-col items-center justify-center">
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg pb-4">
+                <i class="fa-solid fa-user-plus "></i>
+                회원정보 수정
+            </h1>
+
+            <!-- 프로필 이미지 업로드 폼 -->
+            <form id="profileImgForm" enctype="multipart/form-data" method="POST" th:action="@{/member/updateProfileImg}">
+                <div class="user-profile-register">
+                    <div class="user-img-box flex items-center gap-4 justify-between">
+                        <label class="text-gray-600 cursor-pointer flex items-center space-x-2" for="avatar1">
+                            <!-- 실시간 이미지 미리보기 -->
+                            <img class="preview-image h-20 w-20 rounded-full border-solid border-black border"
+                                 th:if="${#authentication.principal.imgFilePath}"
+                                 th:src="${#authentication.principal.imgFilePath}"/>
+                            <img class="preview-image h-20 w-20 rounded-full border-solid border-black border"
+                                 src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
+                                 th:unless="${#authentication.principal.imgFilePath}"/>
+                            <input accept="image/png, image/jpeg, image/jpg" class="hidden" id="avatar1" name="file"
+                                   onchange="previewImage(event)" type="file">
+                            <svg class="h-6 w-6 inline-block" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2"/>
+                                <span class="text-sm">프로필 사진 등록</span>
+                            </svg>
+                        </label>
+                        <div>
+                            <button id="saveBtn" class="btn btn-primary btn-action img-btn" type="button">저장하기</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <script>
+                // 이미지 미리보기
+                function previewImage(event) {
+                    const preview = document.querySelector('.preview-image');
+                    const file = event.target.files[0];
+                    const reader = new FileReader();
+
+                    reader.onload = function () {
+                        preview.src = reader.result;
+                    };
+
+                    if (file) {
+                        reader.readAsDataURL(file);
+                    }
+                }
+
+                // 이미지 업로드 및 저장하기 버튼 클릭 이벤트
+                $('#saveBtn').click(function () {
+                    const formData = new FormData($('#profileImgForm')[0]);
+
+                    $.ajax({
+                        url: '/member/updateProfileImg',
+                        type: 'POST',
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            // 이미지 업로드 성공 처리 및 메시지 표시
+                            console.log(response); // 서버에서 반환한 응답 확인
+                            alert('프로필 이미지가 업데이트되었습니다.\n재접속 하시면 이미지가 반영됩니다.');
+                        },
+                        error: function (xhr, status, error) {
+                            // 이미지 업로드 실패 처리
+                            console.error(error);
+                            alert('프로필 이미지 업데이트에 실패했습니다.');
+                        }
+                    });
+                });
+            </script>
+
+            <form class="flex flex-col gap-3 pt-4" method="POST"
+                  th:action="@{/member/updateprofile}" th:object="${memberUpdateRequest}">
+                <div th:replace="~{form_errors :: formErrorsFragment}"></div>
+                <!-- 사용자 아이디 (이메일) -->
+                <div class="form-control">
+                    <label class="label" for="userName" id="label-text">
+                        <span class="label-text">아이디:</span>
+                    </label>
+                    <input autofocus class="input input-bordered" disabled id="userName" name="username"
+                           th:field="*{userName}"
+                           type="email">
+                </div>
+                <script>
+                // AJAX 요청을 통해 사용자 아이디 가져오기
+                fetch('/api/getUserName')
+                    .then(response => response.json())
+                    .then(data => {
+                        var userName = data.userName; // 백엔드에서 전달한 사용자 아이디 값
+                        var labelText = "아이디";
+
+                        /*조건에 맞게 userName을 가져옴*/
+
+                        if (userName.startsWith("KAKAO_")) {
+                            labelText = "사용자 아이디 (카카오) :";
+                        } else if (userName.startsWith("NAVER_")) {
+                            labelText = "사용자 아이디 (네이버) :";
+                        } else if (userName.startsWith("GOOGLE_")) {
+                            labelText = "사용자 아이디 (구글) :";
+                        } else if (userName.includes("@")) { // userName에 "@" 포함하면 이메일 형태
+                            labelText = "사용자 아이디 (이메일) :";
+                        } else {
+                            labelText = "사용자 아이디";
+                        }
+                        document.getElementById("label-text").textContent = labelText;
+                    });
+                </script>
+
+                <!-- 닉네임 -->
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">닉네임:</span>
+                    </label>
+                    <input autofocus class="input input-bordered" th:field="*{nickName}" type="text" placeholder="닉네임을 입력해주세요">
+                </div>
+
+                <!-- 연락처 -->
+                <div class="form-control">
+                    <label class="label" for="phone">
+                        <span class="label-text">연락처:</span>
+                    </label>
+                    <input autofocus class="input input-bordered" id="phone" name="phone" th:field="*{phone}" type="number" placeholder="연락처를 입력해주세요">
+                </div>
+
+                <!-- 성 -->
+                <div class="form-control">
+                    <label class="label" for="lastName">
+                        <span class="label-text">성:</span>
+                    </label>
+                    <input autofocus class="input input-bordered" id="lastName" name="lastName" th:field="*{lastName}" type="text" placeholder="성을 입력해주세요">
+                </div>
+
+                <!-- 이름 -->
+                <div class="form-control">
+                    <label class="label" for="firstName">
+                        <span class="label-text">이름:</span>
+                    </label>
+                    <input autofocus class="input input-bordered" id="firstName" name="firstName" th:field="*{firstName}" type="text" placeholder="이름을 입력해주세요">
+                </div>
+
+                <!-- 성별 -->
+                <div class="form-control">
+                    <label class="label" for="gender">
+                        <span class="label-text">성별:</span>
+                    </label>
+                    <select autofocus id="gender" th:field="*{gender}">
+                        <option value="">성별을 선택해주세요</option>
+                        <option value="true">남성</option>
+                        <option value="false">여성</option>
+                    </select>
+                </div>
+
+                <!-- 생년월일 -->
+                <div class="form-control">
+                    <label class="label" for="birthDate">
+                        <span class="label-text">생년월일:</span>
+                    </label>
+                    <input autofocus class="input input-bordered" id="birthDate" name="birthDate"
+                           pattern="\d{4}-\d{2}-\d{2}" th:field="*{birthDate}"
+                           th:value="${#dates.format(birthDate, 'yyyy-MM-dd')}"
+                           type="date">
+                    <span class="hid-ast" id="birthDateError"
+                          style='color: #E50122; visibility: hidden; font-size:12px'>올바른 날짜 형식을 입력해주세요. (예: 1993-11-03)</span>
+                </div>
+
+                <script>
+                    document.getElementById("birthDate").addEventListener("input", function() {
+                      const inputDate = document.getElementById("birthDate");
+                      const inputDateError = document.getElementById("birthDateError");
+                      const datePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+                      if (!datePattern.test(inputDate.value)) {
+                        inputDateError.style.visibility = "visible";
+                      } else {
+                        inputDateError.style.visibility = "hidden";
+                      }
+                    });
+                </script>
+
+                <!--카카오 주소검색 API-->
+                <!-- 우편번호 찾기 버튼 -->
+                <input onclick="sample4_execDaumPostcode()" type="button" value="우편번호 찾기"><br>
+                <!-- 우편번호 -->
+                <div class="form-control">
+                    <label class="label" for="sample4_postcode">
+                        <span class="label-text">우편번호:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_postcode" name="postalNum"
+                           required
+                           th:field="*{postalNum}" type="text" placeholder="(우편번호)">
+                </div>
+
+                <!-- 도로명주소 -->
+                <div class="form-control">
+                    <label class="label" for="sample4_roadAddress">
+                        <span class="label-text">도로명주소:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_roadAddress" name="roadAddress"
+                           required
+                           th:field="*{roadAddress}" type="text" placeholder="(도로명주소)">
+                </div>
+                <!-- 지번주소 -->
+                <div class="form-control">
+                    <label class="label" for="sample4_jibunAddress">
+                        <span class="label-text">지번주소:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_jibunAddress" name="jibunAddress"
+                           required
+                           th:field="*{jibunAddress}" type="text" placeholder="(지번주소)">
+                </div>
+                <span id="guide" style="color:#999;display:none"></span>
+
+                <!-- 참고주소 -->
+                <div class="form-control">
+                    <label class="label" for="sample4_extraAddress">
+                        <span class="label-text">참고주소:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_extraAddress" name="extraAddress"
+                           required
+                           th:field="*{extraAddress}" type="text" placeholder="(참고주소)">
+                </div>
+                <!-- 상세주소 -->
+                <div class="form-control">
+                    <label class="label" for="sample4_detailAddress">
+                        <span class="label-text">상세주소:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_detailAddress" name="detailAddress" required
+                           th:field="*{detailAddress}"
+                           type="text" placeholder="상세주소를 입력해주세요 ex) 101동 101호">
+                </div>
+                <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+                <script>
+                //본 예제에서는 도로명 주소 표기 방식에 대한 법령에 따라, 내려오는 데이터를 조합하여 올바른 주소를 구성하는 방법을 설명합니다.
+                function sample4_execDaumPostcode() {
+                  new daum.Postcode({
+                    oncomplete: function(data) {
+                      // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+                      // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                      // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                      var roadAddr = data.roadAddress; // 도로명 주소 변수
+                      var extraRoadAddr = ''; // 참고 항목 변수
+                      // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                      // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                      if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraRoadAddr += data.bname;
+                      }
+                      // 건물명이 있고, 공동주택일 경우 추가한다.
+                      if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                      }
+                      // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                      if (extraRoadAddr !== '') {
+                        extraRoadAddr = ' (' + extraRoadAddr + ')';
+                      }
+                      // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                      document.getElementById('sample4_postcode').value = data.zonecode;
+                      document.getElementById("sample4_roadAddress").value = roadAddr;
+                      document.getElementById("sample4_jibunAddress").value = data.jibunAddress;
+                      // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                      if (roadAddr !== '') {
+                        document.getElementById("sample4_extraAddress").value = extraRoadAddr;
+                      } else {
+                        document.getElementById("sample4_extraAddress").value = '';
+                      }
+                      // 이 부분에서 상세주소를 제외한 나머지 필드를 readOnly로 변경한다.
+                      // 상세주소 필드는 사용자가 직접 입력해야 하므로 readOnly 해제
+                      document.getElementById("sample4_roadAddress").readOnly = true;
+                      document.getElementById("sample4_jibunAddress").readOnly = true;
+                      document.getElementById("sample4_extraAddress").readOnly = true;
+                      var guideTextBox = document.getElementById("guide");
+                      // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                      if (data.autoRoadAddress) {
+                        var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                        guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                        guideTextBox.style.display = 'block';
+                      } else if (data.autoJibunAddress) {
+                        var expJibunAddr = data.autoJibunAddress;
+                        guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                        guideTextBox.style.display = 'block';
+                      } else {
+                        guideTextBox.innerHTML = '';
+                        guideTextBox.style.display = 'none';
+                      }
+                    }
+                  }).open();
+                }
+                </script>
+
+                <!-- 수정 완료 버튼 -->
+                <div class="grid grid-cols-2 mt-2 gap-2">
+                    <a class="btn btn-secondary btn-outline" href="/member/profile">취소하기</a>
+                    <input class="btn btn-primary" type="submit" value="회원정보 수정 완료">
+                </div>
+            </form>
+<!--            &lt;!&ndash; 회원탈퇴 &ndash;&gt;-->
+<!--            <section class="section section-profile flex-grow flex flex-col items-center justify-center">-->
+<!--                <div class="max-w-md w-full px-2 pt-4">-->
+<!--                    <h1 class="font-bold text-lg">-->
+<!--                        <i class="fa-solid fa-trash-can"></i>-->
+<!--                        회원탈퇴-->
+<!--                    </h1>-->
+<!--                    <form th:action="@{/member/delete}" method="post">-->
+<!--                        <button type="submit" class="btn btn-danger">회원탈퇴</button>-->
+<!--                    </form>-->
+<!--                </div>-->
+<!--            </section>-->
+            <!-- 회원탈퇴 -->
+            <section class="section section-profile flex-grow flex flex-col items-center justify-center">
+                <div class="max-w-md w-full px-2 pt-4">
+                    <h1 class="font-bold text-lg">
+                        <i class="fa-solid fa-trash-can"></i>
+                        회원탈퇴
+                    </h1>
+                    <button id="deactivateButton" class="btn btn-danger">회원탈퇴</button>
+                </div>
+            </section>
+
+            <!-- 모달 -->
+            <div id="confirmationModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <div class="bg-white p-4 rounded shadow-md">
+                    <p class="mb-4">정말 탈퇴하시겠어요?<br>탈퇴 시 계정은 삭제되며 복구되지 않습니다.</p>
+                    <button id="confirmDeactivate" class="btn btn-danger mr-2">확인</button>
+                    <button id="cancelDeactivate" class="btn btn-secondary">취소</button>
+                </div>
+            </div>
+            <script>
+    $(document).ready(function() {
+        const deactivateButton = $('#deactivateButton');
+        const confirmationModal = $('#confirmationModal');
+        const confirmDeactivate = $('#confirmDeactivate');
+        const cancelDeactivate = $('#cancelDeactivate');
+
+        deactivateButton.click(function() {
+            confirmationModal.removeClass('hidden');
+        });
+
+        confirmDeactivate.click(function() {
+            $.ajax({
+                url: '/member/delete', // 회원탈퇴 맵핑 주소
+                type: 'POST',
+                success: function() {
+                window.location.href = '/member/logout';
+                    // 탈퇴가 성공한 경우에 할 작업
+                    // 예를 들어, 회원탈퇴 후 어떤 처리를 할 수 있습니다.
+                    // 예시: location.reload(); // 페이지 새로고침
+                },
+                error: function() {
+                    // 탈퇴가 실패한 경우에 할 작업
+                    // 예를 들어, 오류 메시지를 사용자에게 보여줄 수 있습니다.
+                }
+            });
+        });
+
+        cancelDeactivate.click(function() {
+            confirmationModal.addClass('hidden');
+        });
+    });
+</script>
+        </div>
+        <!-- 메시지 표시 부분 -->
+        <div th:if="${successUpdateProfile}">
+            <script>
+                // 메시지 표시
+                alert('회원정보가 변경되었습니다.\n다시 접속해주세요.');
+                    window.location.href = '/member/logout';
+                // 1초 뒤에 로그아웃 페이지로 리다이렉트
+<!--                setTimeout(function() {-->
+<!--                    window.location.href = '/member/logout';-->
+<!--                }, 1000); // 1000밀리초 = 1초-->
+            </script>
+        </div>
+    </section>
+</main>
+</body>
+</html>

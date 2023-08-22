@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>회원가입</title>
+    <title>BOOKU_LUV 회원가입</title>
 </head>
 
 <body>
@@ -107,36 +107,36 @@
                         <span class="label-text">우편번호:</span>
                     </label>
                     <input class="input input-bordered" id="sample4_postcode" required th:field="*{postalNum}"
-                           type="text">
+                           type="text" disabled>
                 </div>
                 <div class="form-control">
                     <label class="label" for="sample4_roadAddress">
                         <span class="label-text">도로명주소:</span>
                     </label>
                     <input class="input input-bordered" id="sample4_roadAddress" required th:field="*{roadAddress}"
-                           type="text">
+                           type="text" disabled>
                 </div>
                 <div class="form-control">
                     <label class="label" for="sample4_jibunAddress">
                         <span class="label-text">지번주소:</span>
                     </label>
                     <input class="input input-bordered" id="sample4_jibunAddress" required th:field="*{jibunAddress}"
-                           type="text">
+                           type="text" disabled>
                 </div>
                 <span id="guide" style="color:#999;display:none"></span>
-                <div class="form-control">
-                    <label class="label" for="sample4_detailAddress">
-                        <span class="label-text">상세주소:</span>
-                    </label>
-                    <input class="input input-bordered" id="sample4_detailAddress" required th:field="*{detailAddress}"
-                           type="text">
-                </div>
                 <div class="form-control">
                     <label class="label" for="sample4_extraAddress">
                         <span class="label-text">참고항목:</span>
                     </label>
                     <input class="input input-bordered" id="sample4_extraAddress" required th:field="*{extraAddress}"
-                           type="text">
+                           type="text" disabled>
+                </div>
+                <div class="form-control">
+                    <label class="label" for="sample4_detailAddress">
+                        <span class="label-text">상세주소:</span>
+                    </label>
+                    <input class="input input-bordered" id="sample4_detailAddress" required th:field="*{detailAddress}"
+                           type="text" placeholder="상세주소를 입력해주세요 ex) 101동 101호">
                 </div>
 
                 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -220,7 +220,7 @@
                     <label class="label" for="phone">
                         <span class="label-text">연락처:</span>
                     </label>
-                    <input class="input input-bordered" id="phone" placeholder="연락처" required th:field="*{phone}"
+                    <input class="input input-bordered" id="phone" placeholder="연락처를 입력해주세요 ex)01077778888" required th:field="*{phone}"
                            type="number">
                 </div>
 
@@ -229,7 +229,7 @@
                     <label class="label" for="firstName">
                         <span class="label-text">이름:</span>
                     </label>
-                    <input class="input input-bordered" id="firstName" placeholder="이름" required th:field="*{firstName}"
+                    <input class="input input-bordered" id="firstName" placeholder="이름을 입력해주세요 ex) 길동" required th:field="*{firstName}"
                            type="text">
                 </div>
 
@@ -238,7 +238,7 @@
                     <label class="label" for="lastName">
                         <span class="label-text">성:</span>
                     </label>
-                    <input class="input input-bordered" id="lastName" placeholder="성" required th:field="*{lastName}"
+                    <input class="input input-bordered" id="lastName" placeholder="성을 입력해주세요 ex) 홍" required th:field="*{lastName}"
                            type="text">
                 </div>
 
@@ -248,6 +248,7 @@
                         <span class="label-text">성별:</span>
                     </label>
                     <select id="gender" th:field="*{gender}">
+                        <option value="">성별을 선택해주세요</option>
                         <option value="true">남성</option>
                         <option value="false">여성</option>
                     </select>

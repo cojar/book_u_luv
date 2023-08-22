@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="3;url=/"> <!-- 3초 후에 루트 페이지로 리다이렉트 -->
+    <title>Alert Page</title>
+</head>
+<body>
+<!-- 에러메시지에 대한 알림창을 띄움 -->
+<script>
+        var alertMessage = "<%= request.getAttribute('alertMessage') %>";
+        alert(alertMessage);
+    </script>
+</body>
+</html>
