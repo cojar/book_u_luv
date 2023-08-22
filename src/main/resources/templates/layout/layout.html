@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -52,28 +52,29 @@
                 <span class="text-[#1E9EFE]">BOOK</span>
                 <span class="ml-[2px] hidden lg:block">U_LUV</span>
             </a>
-            <div class="flex gap-4 ml-[50px] font-bold">
-                <a href="#" class="inline-flex hover:text-red-500">
-                    <span class="ml-[2px] hidden lg:block">
+            <div class="xl:flex gap-3 ml-[50px] font-bold">
+                <a href="#" class="inline-flex hover:text-red-500 flex-shrink-0">
+                    <span class="ml-[2px] hidden lg:block ">
                         국내도서
                     </span>
                 </a>
 
-                <a href="#" class="inline-flex hover:text-red-500">
+                <a href="#" class="inline-flex hover:text-red-500 flex-shrink-0">
                     <span class="ml-[2px] hidden lg:block">
                         외국도서
                     </span>
                 </a>
 
-                <a href="#" class="inline-flex hover:text-red-500">
+                <a href="#" class="inline-flex hover:text-red-500 flex-shrink-0">
                     <span class="ml-[2px] hidden lg:block">
                         중고도서
                     </span>
                 </a>
             </div>
+
         </div>
 
-        <div class="search-box flex items-center space-x-2 mr-[20px]">
+        <div class="search-box items-center space-x-2 mr-4 md:mr-20 hidden xl:flex">
             <form class="flex items-center" action="#" th:action="@{/api/search}" th:method="get"
                   onsubmit="return validateSearchForm();">
                 <div class="relative flex items-center">
@@ -85,22 +86,22 @@
             </form>
         </div>
 
-        <div class="flex gap-4 items-center">
-            <a href="/member/login" class="inline-flex" sec:authorize="isAnonymous()">
-                <span class="ml-[2px] hidden lg:block items-center">
+        <div class="flex gap-3 hidden xl:flex">
+            <a href="/member/login" class="inline-flex flex-shrink-0" sec:authorize="isAnonymous()">
+                <span class="ml-[2px]">
                     로그인
                 </span>
             </a>
 
-            <a href="/member/join" class="inline-flex" sec:authorize="isAnonymous()">
-                <span class="ml-[2px] hidden lg:block items-center">
+            <a href="/member/join" class="inline-flex flex-shrink-0" sec:authorize="isAnonymous()">
+                <span class="ml-[2px]">
                     회원가입
                 </span>
             </a>
 
-            <a href="/member/logout" class="inline-flex items-center" sec:authorize="isAuthenticated()">
-                <i class="fa-solid fa-arrow-right-from-bracket items-center"></i>
-                <span class="ml-[2px] hidden lg:inline-flex items-center">
+            <a href="/member/logout" class="inline-flex flex-shrink-0" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span class="ml-[2px]">
                     로그아웃
                 </span>
             </a>
@@ -109,27 +110,29 @@
                 <img class="fa-solid fa-user w-12 h-12 rounded-full" alt="" th:if="${#authentication.principal.imgFilePath}" th:src="${#authentication.principal.imgFilePath}"/>
                 <img class="fa-solid fa-user w-12 h-12 rounded-full" alt="" src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
                      th:unless="${#authentication.principal.imgFilePath}"/>
+
                 <span class="ml-[2px]">
                 </span>
-                <span class="ml-[2px] hidden lg:block items-center" th:if="${#authentication.principal.nickName}" th:text="${#authentication.principal.nickName + ' 님'}">
+                <span class="ml-[2px]">
+                   00회원
                 </span>
             </a>
 
-            <a href="#" class="inline-flex items-center">
-                <span class="ml-[2px] hidden lg:block items-center">
-                    메뉴 1
+            <a href="/notice/list" class="inline-flex flex-shrink-0">
+                <span class="ml-[2px]">
+                    공지사항
                 </span>
             </a>
 
-            <a href="#" class="inline-flex items-center">
-                <span class="ml-[2px] hidden lg:block">
+            <a href="#" class="inline-flex flex-shrink-0">
+                <span class="ml-[2px]">
                     메뉴 2
                 </span>
             </a>
 
-            <a href="#" class="inline-flex items-center">
-                <span class="ml-[2px] hidden lg:block">
-                    메뉴 3
+            <a href="#" class="inline-flex flex-shrink-0">
+                <span class="ml-[2px]">
+                    장바구니
                 </span>
             </a>
 
@@ -139,8 +142,6 @@
 
 <div class="flex-grow flex flex-col py-5">
     <main layout:fragment="content" class="flex-grow flex flex-col"></main>
-    <div></div>
-    <div></div>
 </div>
 
 <footer class="border-t-[1px] border-t-[color:#efefef] py-3 text-[color:#777] text-[14px] mt-5">
@@ -175,8 +176,8 @@
         }
         return true;
     }
+
+
 </script>
 </body>
 </html>
-
-

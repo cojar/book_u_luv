@@ -38,3 +38,14 @@ out/
 
 ### application-secret
 /src/main/resources/application-secret.yml
+/src/main/generated/com/project/bookuluv/app/article/domain/QArticle.java
+/src/main/generated/com/project/bookuluv/base/entity/QBaseEntity.java
+/src/main/generated/com/project/bookuluv/cart/QCart.java
+/src/main/generated/com/project/bookuluv/app/comment/domain/QComment.java
+/src/main/generated/com/project/bookuluv/app/article/domain/QHashTag.java
+/src/main/generated/com/project/bookuluv/app/article/domain/QKeyword.java
+/src/main/generated/com/project/bookuluv/like/QLikeIt.java
+/src/main/generated/com/project/bookuluv/member/domain/QMember.java
+/src/main/generated/com/project/bookuluv/app/article/domain/QNotice.java
+/src/main/generated/com/project/bookuluv/app/admin/domain/QProduct.java
+/src/main/generated/com/project/bookuluv/api/domain/QProductE.java

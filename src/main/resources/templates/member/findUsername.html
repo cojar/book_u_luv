@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -7,32 +8,40 @@
     <title>BOOKU_LUV 아이디 찾기</title>
 </head>
 <body>
-<h1 class="find">Find ID</h1>
-<h3 class="findment">가입하신 정보를 입력해주세요</h3>
-
-<form onsubmit="sendInfoForId(); return false;">
-    <div th:if="${param.error}">
-        <div class="alert alert-danger">이름과 전화번호를 다시 확인해 주세요.</div>
-    </div>
-    <div class="mb-3">
-        <input type="text" name="firstName" id="firstName" class="form-control" placeholder="이름"/>
-    </div>
-    <div class="mb-3">
-        <input type="text" name="lastName" id="lastName" class="form-control" placeholder="성"/>
-    </div>
-    <div class="mb-3">
-        <input type="text" name="phone" id="phone" class="form-control" placeholder="전화번호"/>
-    </div>
-    <button type="submit" class="btn btn-primary">FIND-ID</button>
-</form>
-
-<!-- 아이디 찾기 결과 출력 -->
-<div th:if="${result}">
-    <p th:text="${result}"></p>
-</div>
+<main layout:fragment="content">
+    <section class="section section-login flex-grow flex flex-col items-center justify-center">
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg mb-[10px] text-center">
+                아이디 찾기
+            </h1>
+            <form class="flex flex-col gap-3 my-[20px]" onsubmit="sendInfoForId(); return false;">
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">이름과 전화번호를 다시 확인해 주세요.</div>
+                </div>
+                <div class="form-control">
+                    <input type="text" name="firstName" id="firstName" autofocus class="input input-bordered" maxlength="100%" placeholder="이름"/>
+                </div>
+                <div class="form-control">
+                    <input type="text" name="lastName" id="lastName" autofocus class="input input-bordered" maxlength="50" placeholder="성"/>
+                </div>
+                <div class="form-control">
+                    <input type="text" name="phone" id="phone" autofocus class="input input-bordered" maxlength="50" placeholder="전화번호"/>
+                </div>
+                <div class="flex justify-center">
+                    <button type="submit" class="btn btn-primary btn-outline">아이디찾기</button>
+                    <button type="submit" class="btn btn-primary btn-outline ml-[20px]">뒤로가기</button>
+                </div>
+            </form>
+            <!-- 아이디 찾기 결과 출력 -->
+            <div th:if="${result}">
+                <p th:text="${result}"></p>
+            </div>
+        </div>
+    </section>
+</main>
 </body>
-<script>
 
+<script>
     function sendInfoForId() {
         var firstName = $("#firstName").val();
         var lastName = $("#lastName").val();
@@ -54,7 +63,6 @@
             }
         });
     }
-
 
 
 </script>

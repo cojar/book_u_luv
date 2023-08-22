@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>관리자 페이지</title>
 </head>
-<body>
+<body layout:fragment="content">
 <h1>회원 관리</h1>
 <table>
     <tr>
@@ -18,7 +19,7 @@
         <th>전화번호</th>
         <th>활성 여부</th>
     </tr>
-    <tr th:each="member : ${members}">
+    <tr th:each="member : ${memberList}">
         <td th:text="${member.id}">NO.</td>
         <td th:text="${member.userName}"></td>
         <td th:text="${member.lastName}"></td>
@@ -65,6 +66,24 @@
     </tr>
 </table>
 <h1>판매글 관리</h1>
+<table>
+    <tr>
+        <th>NO.</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>작성일자</th>
+        <th>수정일자</th>
+    </tr>
+    <tr th:each="article : ${articleList}">
+        <th th:text="${article.id}"></th>
+        <th th:text="${article.subject}"></th>
+        <th th:text="${article.register}"></th>
+        <th th:text="${article.createDate}"></th>
+        <th th:text="${article.modifyDate}"></th>
+        <th th:text="${article.modifyDate}"></th>
+    </tr>
+</table>
+<h1>정산 관리</h1>
 <table>
     <tr>
         <th>NO.</th>
