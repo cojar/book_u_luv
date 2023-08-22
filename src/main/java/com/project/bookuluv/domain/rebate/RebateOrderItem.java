@@ -24,10 +24,8 @@ public class RebateOrderItem extends BaseEntity {
 
     @ManyToOne(fetch = LAZY)
     private OrderItem orderItem;
-
     @ManyToOne(fetch = LAZY)
     private Order order;
-
     @ManyToOne(fetch = LAZY)
     private Product product;
 

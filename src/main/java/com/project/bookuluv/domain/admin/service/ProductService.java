@@ -50,7 +50,7 @@ public class ProductService {
     }
 
     private String buildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book"+ "&output=js" + "&Version=20131101";
     }
     private String domesticBuildListUrl(String queryType) {
         return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
@@ -122,5 +122,9 @@ public class ProductService {
 
     public Product getById(Integer id) {
         return this.productRepository.getById(id);
+    }
+
+    public Product getById(Long productsId) {
+        return this.productRepository.getById(productsId);
     }
 }

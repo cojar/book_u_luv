@@ -1,5 +1,8 @@
 package com.project.bookuluv.domain.order.controller;
 
+import com.project.bookuluv.domain.admin.domain.Product;
+import com.project.bookuluv.domain.admin.service.ProductService;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,17 +20,25 @@ import java.util.Base64;
 
 @Controller
 @RequestMapping("/order")
+@RequiredArgsConstructor
 public class OrderController {
 
     @Value("${custom.paymentSecretKey}")
     private String paymentSecretKey;
 
+    private final ProductService productService;
+
+    @GetMapping("/detail")
+    public String detail(Model model, @RequestParam Long productsId) {
+        Product product = this.productService.getById(productsId);
+
+        model.addAttribute("product", product);
+
+        return "order/detail";
+    }
+
     @GetMapping("/success")
-    public String paymentResult(
-            Model model,
-            @RequestParam(value = "orderId") String orderId,
-            @RequestParam(value = "amount") Integer amount,
-            @RequestParam(value = "paymentKey") String paymentKey) throws Exception {
+    public String paymentResult(Model model, @RequestParam(value = "orderId") String orderId, @RequestParam(value = "amount") Integer amount, @RequestParam(value = "paymentKey") String paymentKey) throws Exception {
 
         String secretKey = paymentSecretKey;
 
@@ -79,21 +90,16 @@ public class OrderController {
             model.addAttribute("code", (String) jsonObject.get("code"));
             model.addAttribute("message", (String) jsonObject.get("message"));
         }
-
-        return "success";
+        return "order/success";
     }
 
     @GetMapping("/fail")
-    public String paymentResult(
-            Model model,
-            @RequestParam(value = "message") String message,
-            @RequestParam(value = "code") Integer code
-    ) throws Exception {
+    public String paymentResult(Model model, @RequestParam(value = "message") String message, @RequestParam(value = "code") Integer code) throws Exception {
 
         model.addAttribute("code", code);
         model.addAttribute("message", message);
 
-        return "fail";
+        return "order/fail";
     }
 
 }

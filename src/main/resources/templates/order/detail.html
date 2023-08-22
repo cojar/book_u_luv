@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="">
+    <title>결제 페이지</title>
+</head>
+<body layout:fragment="content">
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            주문 상세정보
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <img class="t-w-full t-max-w-[300px] t-rounded" th:src="${product.coverImg}" alt="상품이미지">
+            </li>
+            <li class="list-group-item">
+                <span class="t-w-16 t-inline-block">번호</span>
+                <span th:text="${product.id}" class="badge bg-primary"></span>
+            </li>
+            <li class="list-group-item">
+                <span class="t-w-16 t-inline-block">상품명</span>
+                <span th:text="${product.title}" class="t-font-bold"></span>
+            </li>
+            <li class="list-group-item">
+                <span class="t-w-16 t-inline-block">가격</span>
+                <span th:text="${product.priceSales}" class="t-font-bold"></span>원
+            </li>
+        </ul>
+    </div>
+</div>
+<button onclick="pay();" class="btn btn-outline-primary">결제</button>
+<script src="https://js.tosspayments.com/v1"></script>
+<script th:inline="javascript">
+    let amount = /*[[${product.priceSales}]]*/;
+    let orderName = /*[[${product.title}]]*/
+
+    let tossPayments = TossPayments("test_ck_ZLKGPx4M3M41oaJJ5zo8BaWypv1o");
+
+    function pay() {
+        const method = "카드";
+
+        const requestJson = {
+            "amount": amount,
+            "orderId": "sample-" + orderId,
+            "orderName": "토스 티셔츠 외 2건",
+            "successUrl": successUrl,
+            "failUrl": failUrl,
+            "cardCompany": null,
+            "cardInstallmentPlan": null,
+            "maxCardInstallmentPlan": null,
+            "useCardPoint": false,
+            "customerName": "박토스",
+            "customerEmail": null,
+            "customerMobilePhone": null,
+            "taxFreeAmount": null,
+            "useInternationalCardOnly": false,
+            "flowMode": "DEFAULT",
+            "discountCode": null,
+            "appScheme": null
+        }
+        tossPayments.requestPayment(method, requestJson)
+            .catch(function (error) {
+
+                if (error.code === "USER_CANCEL") {
+                    alert('유저가 취소했습니다.');
+                } else {
+                    alert(error.message);
+                }
+
+            });
+    }
+
+    let path = "/order/";
+    let successUrl = window.location.origin + path + "success";
+    let failUrl = window.location.origin + path + "fail";
+    let callbackUrl = window.location.origin + path + "va_callback";
+    let orderId = new Date().getTime();
+</script>
+</body>
+</html>
