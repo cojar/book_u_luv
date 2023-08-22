@@ -37,6 +37,6 @@ springdoc:
     display-request-duration: true
 custom:
   genFileDirPath: /docker_projects/bookuluv/img_upload
-  resourcePath: file:///docker_projects/bookuluv/img_upload/
+  resourcePath: classpath:/img_upload/
   requestPath: /img_upload/**
   originPath: /img_upload/
