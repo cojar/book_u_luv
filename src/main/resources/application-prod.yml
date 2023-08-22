@@ -2,8 +2,6 @@
 server:
   port: 7070
 spring:
-  profiles:
-    active: secret
   thymeleaf:
     cache: false
     prefix: file:src/main/resources/templates/
