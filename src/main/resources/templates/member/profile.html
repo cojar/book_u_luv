@@ -171,17 +171,6 @@
                     </div>
                 </div>
 
-                <!-- 좋아요한 댓글 -->
-                <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">좋아요한 댓글</span>
-                    </label>
-                    <div class="badge badge-primary">
-                        <!-- 여기에 좋아요한 댓글 내용을 표시 -->
-                        <!-- 예시: -->
-                        <p>좋아요한 댓글 내용을 여기에 표시</p>
-                    </div>
-                </div>
 
                 <!-- 구매내역 -->
                 <div class="form-control">
@@ -194,7 +183,6 @@
                         <p>구매내역 내용을 여기에 표시</p>
                     </div>
                 </div>
-
                 <!-- 내용 수정/추가 -->
                 <div class="form-control">
                     <label class="label">
@@ -202,32 +190,11 @@
                     </label>
                     <a href="/member/updateprofile" class="btn btn-secondary btn-outline">내용 수정/추가</a>
                 </div>
-
-                <!-- 회원탈퇴 -->
-                <section class="section section-profile flex-grow flex flex-col items-center justify-center">
-
-                    <div class="max-w-md w-full px-2 pt-4">
-                        <h1 class="font-bold text-lg">
-                            <i class="fa-solid fa-user-plus"></i>
-                            회원탈퇴
-                        </h1>
-
-                        <p>정말로 회원탈퇴하시겠습니까?</p>
-                        <form th:action="@{/member/delete}" method="post">
-                            <button type="submit" class="btn btn-danger">회원탈퇴</button>
-                        </form>
-                    </div>
-                </section>
-
-
-
-
-
-
                 <div class="grid grid-cols-2 mt-2 gap-2">
                     <a th:unless="${#authentication.principal.userName.startsWith('KAKAO_') || #authentication.principal.userName.startsWith('NAVER_') || #authentication.principal.userName.startsWith('GOOGLE_')}" href="/mypage/changePassword" class="btn btn-secondary btn-outline">비밀번호 변경</a>
-                    <!--                    <a th:unless="${@rq.hasAuthority('AUTHOR')}" href="/member/beAuthor" class="btn btn-primary">작가활동 시작</a>-->
-                    <!--                    <a th:if="${@rq.hasAuthority('AUTHOR')}" class="btn btn-primary btn-disabled">이미 작가회원입니다.</a>-->
+<!--                    <a th:unless="${@rq.hasAuthority('AUTHOR')}" href="/member/beAuthor" class="btn btn-primary">작가활동 시작</a>-->
+<!--                    <a th:if="${@rq.hasAuthority('AUTHOR')}" class="btn btn-primary btn-disabled">이미 작가회원입니다.</a>-->
+                    <a class="btn btn-primary" href="/member/useage">이용 내역</a>
                 </div>
             </div>
         </div>

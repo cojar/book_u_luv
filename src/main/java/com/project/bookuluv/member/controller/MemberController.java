@@ -133,6 +133,20 @@ public class MemberController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/member/profile")
+    public String myPage(Model model, Principal principal) {
+        Member member = memberService.getUser(principal.getName());
+        return "member/useageHistory";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/member/useage")
+    public String myUseage(Model model, Principal principal) {
+        Member member = memberService.getUser(principal.getName());
+        return "member/useageHistory";
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/member/updateprofile")
     public String profileModify(@ModelAttribute("memberUpdateRequest") MemberUpdateRequest memberUpdateRequest,
                                 Principal principal,
@@ -282,14 +296,6 @@ public class MemberController {
             resultMap.put("success", true);
         }
         return resultMap;
-    }
-
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/member/profile")
-    public String myPage(Model model, Principal principal) {
-        Member member = memberService.getUser(principal.getName());
-        return "member/profile";
     }
 
     @GetMapping("/api/getUserName")
