@@ -34,6 +34,6 @@ public class MainController {
             model.addAttribute("userImg", member.getImgFilePath());
             return "main";
         }
-        return "main";
+        return "home/main";
     }
 }
