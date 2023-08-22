@@ -27,13 +27,6 @@ public class MainController {
         model.addAttribute("newBooks", newBooks); // 'books' 대신 'newBooks'로 변경
         model.addAttribute("bestsellers", bestsellers); // 'books' 대신 'bestsellers'로 변경
 
-        if (principal != null) {
-            Member member = this.memberService.getUser(principal.getName());
-
-            model.addAttribute("member", member);
-            model.addAttribute("userImg", member.getImgFilePath());
-            return "main";
-        }
         return "main";
     }
 }

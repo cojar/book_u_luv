@@ -1,12 +1,14 @@
 package com.project.bookuluv.domain.admin.controller;
 
+import com.project.bookuluv.domain.admin.domain.Notice;
 import com.project.bookuluv.domain.admin.dto.NoticeDto;
 import com.project.bookuluv.domain.admin.service.NoticeService;
-import com.project.bookuluv.domain.article.domain.Notice;
 import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,13 +42,16 @@ public class NoticeController {
     @PostMapping("/create")
     // @PreAuthorize("isAuthenticated()")
     public String noticeCreate(@Valid NoticeDto noticeDto, BindingResult bindingResult, Principal principal) {
+
         if (bindingResult.hasErrors()) {
             return "notice/notice_form";
         }
 
-        Member member = this.memberService.getMember(principal.getName());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+        Member member = this.memberService.getMember(userName);
         this.noticeService.create(noticeDto.getSubject(), noticeDto.getContent(), member);
-        return "redirect:/";
+        return "redirect:/notice/list";
     }
 
 

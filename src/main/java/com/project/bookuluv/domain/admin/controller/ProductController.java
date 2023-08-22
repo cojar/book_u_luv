@@ -4,6 +4,8 @@ import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,21 +27,28 @@ public class ProductController {
     }
 
     @GetMapping("/domestic/list")
-    public String domesticList(Model model) {
-        List<ProductDto> domestic = productService.getDomestic();
+    public String domesticList(Model model, Pageable pageable) {
+        Page<Product> domestic = productService.getDomestic(pageable);
         model.addAttribute("domestic", domestic);
         return "product/domestic_list";
     }
 
     @GetMapping("/foreign/list")
-    public String foreignList(Model model) {
-        List<ProductDto> foreign = productService.getForeign();
-        model.addAttribute("foreign", foreign);
+    public String foreignList(Model model, Pageable pageable) {
+        Page<Product> foreigner = productService.getForeign(pageable);
+        model.addAttribute("foreigner", foreigner);
         return "product/foreign_list";
     }
 
-    @GetMapping(value = "/detail/{id}")
-    private String detail(Model model, @PathVariable("id") Integer id) {
+    @GetMapping(value = "/domestic/detail/{id}")
+    private String domesticDetail(Model model, @PathVariable("id") Integer id) {
+        Product products = this.productService.getById(id);
+        model.addAttribute("products", products);
+        return "product/detail";
+    }
+
+    @GetMapping(value = "/foreign/detail/{id}")
+    private String foreignDetail(Model model, @PathVariable("id") Integer id) {
         Product products = this.productService.getById(id);
         model.addAttribute("products", products);
         return "product/detail";

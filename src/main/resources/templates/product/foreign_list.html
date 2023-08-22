@@ -9,14 +9,15 @@
 <div class="text-center mt-[50px]">
     <span class="text-[50px] font-bold">외국 도서</span>
 </div>
-<div th:if="${foreign}" class="flex justify-center items-center">
+<div th:if="${foreigner}" class="flex justify-center items-center">
     <div class="my-10">
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-8">
-            <div th:each="product : ${foreign}" class="flex flex-col mx-auto w-80 p-4">
+            <div th:each="product : ${foreigner}" class="flex flex-col mx-auto w-80 p-4">
                 <div class="text-center">
-                    <img class="mx-auto w-48 h-72" th:src="${product.coverImg}" alt="Book Cover">
-                    <span class="block text-lg font-semibold my-4"
-                          th:text="${product.title}"></span>
+                    <a th:href="@{|/product/foreign/detail/${product.id}|}" class="block text-lg font-semibold my-4">
+                        <img class="mx-auto w-48 h-72" th:src="${product.coverImg}" alt="Book Cover">
+                        <span class="block text-lg font-semibold my-4"
+                              th:text="${product.title}"></span></a>
                     <span th:text="${product.author}" class="block text-gray-600 mb-2"></span>
                     <span th:text="${product.publisher}" class="block text-gray-600 mb-2"></span>
                     <div class="mt-2">
@@ -27,6 +28,29 @@
                     </div>
                 </div>
             </div>
+            <nav aria-label="Page navigation example">
+                <ul class="flex items-center -space-x-px h-8 text-sm">
+                    <li>
+                        <a href="#"
+                           class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Previous</span>
+                            <i class="fas fa-chevron-left"></i> <!-- Font Awesome 아이콘 추가 -->
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+                    </li>
+                    <!-- 나머지 페이지 링크들도 위와 같은 방식으로 조정합니다. -->
+                    <li>
+                        <a href="#"
+                           class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Next</span>
+                            <i class="fas fa-chevron-right"></i> <!-- Font Awesome 아이콘 추가 -->
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

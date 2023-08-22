@@ -14,9 +14,10 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-8">
             <div th:each="product : ${domestic}" class="flex flex-col mx-auto w-80 p-4">
                 <div class="text-center">
-                    <img class="mx-auto w-48 h-72" th:src="${product.coverImg}" alt="Book Cover">
-                    <span class="block text-lg font-semibold my-4"
-                          th:text="${product.title}"></span>
+                    <a th:href="@{|/product/domestic/detail/${product.id}|}" class="block text-lg font-semibold my-4">
+                        <img class="mx-auto w-48 h-72" th:src="${product.coverImg}" alt="Book Cover">
+                        <span class="block text-lg font-semibold my-4"
+                              th:text="${product.title}"></span></a>
                     <span th:text="${product.author}" class="block text-gray-600 mb-2"></span>
                     <span th:text="${product.publisher}" class="block text-gray-600 mb-2"></span>
                     <div class="mt-2">
@@ -30,5 +31,30 @@
         </div>
     </div>
 </div>
+<!--<div class="mt-8 flex justify-center">-->
+<!--    <ul class="pagination">-->
+<!--        <li class="{{ #paging.hasPrevious ? '' : 'disabled' }}">-->
+<!--            <a th:if="${paging.hasPrevious}" th:href="@{|/domestic/list?page=${paging.number - 1}&kw=${kw}|}"-->
+<!--               class="px-3 py-2 rounded-lg border">이전</a>-->
+<!--        </li>-->
+<!--        <li class="{{ #paging.hasPrevious ? '' : 'disabled' }}">-->
+<!--            <a th:if="${paging.hasPrevious}" th:href="@{|/domestic/list?page=${paging.number - 1}&kw=${kw}|}"-->
+<!--               class="px-3 py-2 rounded-lg border">&lt;</a>-->
+<!--        </li>-->
+<!--        <li th:each="pageNumber : ${#numbers.sequence(0, paging.totalPages - 1)}"-->
+<!--            class="{{ paging.number == pageNumber ? 'active' : '' }}">-->
+<!--            <a th:href="@{|/domestic/list?page=${pageNumber}&kw=${kw}|}" th:text="${pageNumber + 1}"-->
+<!--               class="px-3 py-2 rounded-lg border"></a>-->
+<!--        </li>-->
+<!--        <li class="{{ #paging.hasNext ? '' : 'disabled' }}">-->
+<!--            <a th:if="${paging.hasNext}" th:href="@{|/domestic/list?page=${paging.number + 1}&kw=${kw}|}"-->
+<!--               class="px-3 py-2 rounded-lg border">&gt;</a>-->
+<!--        </li>-->
+<!--        <li class="{{ #paging.hasNext ? '' : 'disabled' }}">-->
+<!--            <a th:if="${paging.hasNext}" th:href="@{|/domestic/list?page=${paging.totalPages - 1}&kw=${kw}|}"-->
+<!--               class="px-3 py-2 rounded-lg border">다음</a>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</div>-->
 </body>
 </html>

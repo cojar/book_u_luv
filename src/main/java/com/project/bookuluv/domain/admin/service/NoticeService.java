@@ -1,8 +1,7 @@
 package com.project.bookuluv.domain.admin.service;
 
-import com.project.bookuluv.domain.admin.dto.NoticeDto;
+import com.project.bookuluv.domain.admin.domain.Notice;
 import com.project.bookuluv.domain.admin.repository.NoticeRepository;
-import com.project.bookuluv.domain.article.domain.Notice;
 import com.project.bookuluv.domain.member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,11 +24,12 @@ public class NoticeService {
     }
 
     public void create(String subject, String content, Member member) {
-        NoticeDto noticeDto = NoticeDto.builder()
+        Notice notice = Notice.builder()
                 .subject(subject)
                 .content(content)
                 .register(member)
                 .build();
+        this.noticeRepository.save(notice);
     }
 
     public void modify(String subject, String content, Notice notice) {

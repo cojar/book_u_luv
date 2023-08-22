@@ -1,16 +1,15 @@
 package com.project.bookuluv.domain.member.domain;
 
 import com.project.bookuluv.base.entity.BaseEntity;
+import com.project.bookuluv.domain.admin.domain.Notice;
 import com.project.bookuluv.domain.member.dto.MemberRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -100,6 +99,9 @@ public class Member extends BaseEntity {
     public void deactivate() {
         this.isActive = false;
     }
+
+    @OneToMany(mappedBy = "register", cascade = CascadeType.REMOVE)
+    private List<Notice> noticeList;
 
 
 }
