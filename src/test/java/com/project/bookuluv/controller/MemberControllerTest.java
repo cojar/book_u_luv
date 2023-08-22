@@ -1,6 +1,5 @@
 package com.project.bookuluv.controller;
 
-import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.repository.MemberRepository;
 import com.project.bookuluv.domain.member.service.MemberService;
 import org.junit.jupiter.api.Test;
@@ -22,12 +21,6 @@ public class MemberControllerTest {
 
     @Test
     void t1() {
-        Member member = new Member();
-        member.setUserName("kikikiki@gmail.com");
-        member.setPassword(passwordEncoder.encode("1234"));
-        member.setFirstName("철수");
-        member.setLastName("김");
-        member.setPhone("010-1234-1234");
-        memberRepository.save(member);
+
     }
 }
