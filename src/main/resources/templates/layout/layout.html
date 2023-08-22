@@ -108,7 +108,11 @@
                 <span class="ml-[2px] hidden lg:block items-center" th:if="${#authentication.principal.nickName}" th:text="${#authentication.principal.nickName + ' 님'}">
                 </span>
             </a>
-
+            <a href="/admin/list" class="inline-flex items-center">
+                <span class="ml-[2px] hidden lg:block items-center">
+                    관리자페이지
+                  </span>
+              </a>
             <a href="/notice/list" class="inline-flex flex-shrink-0">
                 <span class="ml-[2px]">
                     공지사항
