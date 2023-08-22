@@ -32,7 +32,7 @@ public class MainController {
 
             model.addAttribute("member", member);
             model.addAttribute("userImg", member.getImgFilePath());
-            return "main";
+            return "home/main";
         }
         return "home/main";
     }
