@@ -2,7 +2,7 @@ server:
   port: 7070
 spring:
   profiles:
-    active: secret
+    active: dev, secret # 에디터에서 작업할 때는 dev로 설정
   thymeleaf:
     cache: false
     prefix: file:src/main/resources/templates/
