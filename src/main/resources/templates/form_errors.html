@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>BOOKU_LUV error</title>
+    <!-- 테일윈드 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+<div th:fragment="formErrorsFragment" class="bg-red-100 text-red-600 p-4 rounded-md mb-4 font-semibold text-center" role="alert" th:if="${#fields.hasAnyErrors()}">
+    <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
+</div>
+</body>
+</html>

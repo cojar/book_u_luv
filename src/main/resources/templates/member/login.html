@@ -1,85 +1,72 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{layout/layout.html}" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
 
 <head>
-    <title>로그인</title>
+    <title>BOOKU_LUV 로그인</title>
 </head>
 
 <body>
-<main>
+<main layout:fragment="content">
     <section class="section section-login flex-grow flex flex-col items-center justify-center">
 
         <div class="max-w-md w-full px-2 pt-4">
-            <h1 class="font-bold text-lg">
+            <h1 class="font-bold text-lg mb-[10px]">
                 <i class="fa-solid fa-arrow-right-to-bracket"></i>
-
                 로그인
             </h1>
-
-            <script>
-                let MemberLogin__submitDone = false;
-
-                function MemberLogin__submit(form) {
-                    if (MemberLogin__submitDone) {
-                        return;
-                    }
-
-                    form.username.value = form.username.value.trim();
-
-                    if (form.username.value.length == 0) {
-                        warningModal("아이디를 입력해주세요.");
-                        form.username.focus();
-
-                        return;
-                    }
-
-                    form.content.value = form.content.value.trim();
-
-                    if (form.content.value.length == 0) {
-                        warningModal("비밀번호를 입력해주세요.");
-                        form.content.focus();
-
-                        return;
-                    }
-
-                    form.submit();
-                    MemberLogin__submitDone = true;
-                }
-            </script>
-
-
-            <form th:action="@{/member/login}" method="POST" class="flex flex-col gap-3"
-                  onsubmit="MemberLogin__submit(this); return false;">
+            <form class="flex flex-col gap-3" method="POST" th:action="@{/member/login}">
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">
+                        사용자ID 또는 비밀번호를 확인해 주세요.
+                    </div>
+                </div>
                 <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">아이디</span>
-                    </label>
-                    <input autofocus type="text" name="userName" placeholder="아이디" class="input input-bordered"
-                           maxlength="50">
+                    <input autofocus class="input input-bordered" maxlength="50" name="username" id="username"
+                           placeholder="아이디" type="text">
                 </div>
 
                 <div class="form-control">
-                    <label class="label">
-                        <span class="label-text">비밀번호</span>
-                    </label>
-                    <input type="password" name="password"
-                           placeholder="비밀번호" class="input input-bordered" maxlength="50">
+                    <input class="input input-bordered" maxlength="50" name="password" id="password" placeholder="비밀번호"
+                           type="password">
                 </div>
 
                 <div class="grid grid-cols-2 mt-2 gap-2">
-                    <a th:href="@{/member/join}" class="btn btn-secondary btn-outline">가입하기</a>
-                    <input class="btn btn-primary" type="submit" value="로그인">
+                    <a class="btn btn-secondary btn-outline" th:href="@{/member/join}">회원가입</a>
+                    <input class="btn btn-primary btn-outline" type="submit" value="로그인">
                 </div>
 
                 <div class="flex justify-center">
-                    <a href="/member/findUsername" class="btn btn-link">아이디찾기</a>
-                    <a href="/member/findPassword" class="btn btn-link">비밀번호 찾기</a>
+                    <a class="btn btn-link" href="/member/findUsername">아이디찾기</a>
+                    <a class="btn btn-link" href="/member/findPassword">비밀번호 찾기</a>
                 </div>
             </form>
+        </div>
+        <div class="login-logo flex mt-[20px] justify-between">
+            <div class="w-1/3">
+                <div class="logo" id="login-kakao">
+                    <a href="http://localhost:7070/oauth2/authorization/kakao">
+                        <img class="w-[80px] h-[80px]" th:src="@{/image/login_kakao.png}" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="w-1/3 mx-[60px]">
+                <div class="logo" id="login-naver">
+                    <a href="http://localhost:7070/oauth2/authorization/naver">
+                        <img class="w-[80px] h-[80px]" th:src="@{/image/login_naver.png}" alt="">
+                    </a>
+                </div>
+            </div>
+            <div class="w-1/3" id="login_google">
+                <a class="flex justify-center" href="http://localhost:7070/oauth2/authorization/google">
+                    <img class="w-[80px] h-[80px]" th:src="@{/image/login_google.png}" alt="">
+                </a>
+            </div>
         </div>
 
     </section>
 
 </main>
 </body>
+
 </html>

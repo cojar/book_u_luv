@@ -1,9 +1,9 @@
 package com.project.bookuluv;
 
-import com.project.bookuluv.app.article.dto.ProductDto;
-import com.project.bookuluv.app.article.service.ProductService;
-import com.project.bookuluv.member.domain.Member;
-import com.project.bookuluv.member.service.MemberService;
+import com.project.bookuluv.domain.admin.dto.ProductDto;
+import com.project.bookuluv.domain.admin.service.ProductService;
+import com.project.bookuluv.domain.member.domain.Member;
+import com.project.bookuluv.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,19 +36,4 @@ public class MainController {
         }
         return "main";
     }
-
-//    @GetMapping("/newBooks")
-//    public String newBooks(Model model) {
-//        List<ProductDto> newBooks = productService.getNewBooks();
-//        model.addAttribute("books", newBooks);
-//        return "bookList";
-//    }
-//
-//    @GetMapping("/bestsellers")
-//    public String bestsellers(Model model) {
-//        List<ProductDto> bestsellers = productService.getBestsellers();
-//        model.addAttribute("books", bestsellers);
-//        return "bookList";
-//    }
-
 }

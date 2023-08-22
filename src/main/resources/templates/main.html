@@ -1,160 +1,71 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="">
     <title>main</title>
 </head>
-<body>
-<div>메인페이지입니다</div>
-<div class="right-box">
-    <div class="user-box">
-        <div class="login">
-            <a class="log-in-btn" sec:authorize="isAnonymous()" th:href="@{/member/login}">로그인</a>
-
-            <a class="admin-page-btn" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/page}">관리자페이지 </a>
-            <a th:href="@{/member/mypage}">
-                <div class="profile-img">
-                    <img alt="" sec:authorize="isAuthenticated()" th:if="${userImg}" th:src="${userImg}"/>
-                    <img alt="" sec:authorize="isAuthenticated()"
-                         src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
-                         th:unless="${userImg}"/>
+<body layout:fragment="content">
+<div class="container mx-auto py-4">
+    <!-- 신간도서 섹션 -->
+    <div class="my-10">
+        <div class="w-full mx-auto">
+            <span class="font-bold text-2xl sm:text-4xl">신간도서</span>
+        </div>
+        <!-- 도서 목록 -->
+        <div class="flex flex-wrap justify-center mt-8">
+            <!-- 각 도서 -->
+            <div th:each="newBook : ${newBooks}" class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/5 p-4">
+                <div class="text-center">
+                    <a th:href="${newBook.link}">
+                        <img class="mx-auto w-48 h-72" th:src="${newBook.coverImg}" alt="Book Cover">
+                    </a>
+                    <a th:href="${newBook.link}" class="block text-lg font-semibold my-[30px]"
+                       th:text="${newBook.title}">Title</a>
+                    <span th:text="${newBook.author}" class="block text-gray-600 mb-[20px]"></span>
+                    <span th:text="${newBook.publisher}" class="block text-gray-600 mb-[20px]"></span>
+                    <div class="mt-2">
+                        <span class="text-gray-500">정가 : </span>
+                        <span class="line-through text-gray-500" th:text="${newBook.priceStandard}"></span>
+                        <span class="text-gray-500">할인가 : </span>
+                        <span th:text="${newBook.priceSales}" class="text-green-600"></span>
+                    </div>
                 </div>
-            </a>
-            <a sec:authorize="isAuthenticated()" th:href="@{/member/mypage}"
-               th:text="${#authentication.principal.nickName + ' 님'}"></a>
-            <a class="log-out-btn" sec:authorize="isAuthenticated()" th:href="@{/member/logout}">로그아웃</a>
-
-            <a class="sign-up-btn" sec:authorize="isAnonymous()" th:href="@{|/member/join|}">회원가입</a>
+            </div>
         </div>
     </div>
-</div>
 
-<form enctype="multipart/form-data" method="POST"
-      th:action="@{/member/updateprofile}" th:object="${memberJoinRequest}">
-    <div class="user-profile-register">
-        <div class="user-img-box">
-            <label for="avatar1">프로필 사진 등록</label>
-            <input accept="image/png, image/jpeg, image/jpg" id="avatar1" name="file"
-                   type="file">
-            <input class="btn btn-primary btn-action img-btn" type="submit" value="저장하기">
+    <div class="my-10">
+        <div class="w-full mx-auto">
+            <span class="font-bold text-2xl sm:text-4xl">베스트셀러</span>
+        </div>
+        <!-- 도서 목록 -->
+        <div class="flex flex-wrap justify-center mt-8">
+            <!-- 각 도서 -->
+            <div th:each="bestseller : ${bestsellers}" class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/5 p-4">
+                <div class="text-center">
+                    <a th:href="${bestseller.link}">
+                        <img class="mx-auto w-48 h-72" th:src="${bestseller.coverImg}" alt="Book Cover">
+                    </a>
+                    <a th:href="${bestseller.link}" class="block text-lg font-semibold my-[30px]"
+                       th:text="${bestseller.title}">Title</a>
+                    <span th:text="${bestseller.author}" class="block text-gray-600 mb-[20px]"></span>
+                    <span th:text="${bestseller.publisher}" class="block text-gray-600 mb-[20px]"></span>
+                    <div class="mt-2">
+                        <span class="text-gray-500">정가 : </span>
+                        <span th:text="${bestseller.priceStandard}" class="line-through text-gray-500"></span>
+                        <span class="text-gray-500">할인가 : </span>
+                        <span th:text="${bestseller.priceSales}" class="text-green-600"></span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</form>
-
-<div>
-    <form action="#" th:action="@{/api/search}" th:method="get" onsubmit="return validateSearchForm();">
-        <input type="text" name="query" placeholder="Search for a book">
-        <button type="submit">Search</button>
-    </form>
-</div>
-
-<div>
-    <h2>New Books</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>표지</th>
-            <th>제목</th>
-            <th>작가</th>
-            <th>출판사</th>
-            <th>출판일</th>
-            <th>고유번호</th>
-            <th>카테고리</th>
-            <th>정가</th>
-            <th>할인가</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="newBook : ${newBooks}">
-            <td><a th:href="${newBook.link}"><img th:src="${newBook.coverImg}"></a></img>
-            </td>
-            <td><a th:href="${newBook.link}"><span th:text="${newBook.title}">Title</span></a>
-            </td>
-            <td><span th:text="${newBook.author}">Author</span>
-            </td>
-            <td><span th:text="${newBook.publisher}">Publisher</span>
-            </td>
-            <td><span th:text="${newBook.pubDate}">PubDate</span>
-            </td>
-            <td><span th:text="${newBook.isbn}">Isbn</span>
-            </td>
-            <td><span th:text="${newBook.categoryName}">CategoryName</span>
-            </td>
-            <td><span th:text="${newBook.priceStandard}">PriceStandard</span>
-            </td>
-            <td><span th:text="${newBook.priceSales}">priceSales</span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-</div>
-
-<div>
-    <h2>Bestsellers</h2>
-    <table>
-        <thead>
-        <tr>
-            <th>표지</th>
-            <th>제목</th>
-            <th>작가</th>
-            <th>출판사</th>
-            <th>출판일</th>
-            <th>고유번호</th>
-            <th>카테고리</th>
-            <th>정가</th>
-            <th>할인가</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="bestseller : ${bestsellers}">
-            <td><a th:href="${bestseller.link}"><img th:src="${bestseller.coverImg}"></a></img>
-            </td>
-            <td><a th:href="${bestseller.link}"><span th:text="${bestseller.title}">Title</span></a>
-            </td>
-            <td><span th:text="${bestseller.author}">Author</span>
-            </td>
-            <td><span th:text="${bestseller.publisher}">Publisher</span>
-            </td>
-            <td><span th:text="${bestseller.pubDate}">PubDate</span>
-            </td>
-            <td><span th:text="${bestseller.isbn}">Isbn</span>
-            </td>
-            <td><span th:text="${bestseller.categoryName}">CategoryName</span>
-            </td>
-            <td><span th:text="${bestseller.priceStandard}">PriceStandard</span>
-            </td>
-            <td><span th:text="${bestseller.priceSales}">priceSales</span>
-            </td>
-        </tr>
-        </tbody>
-    </table>
 </div>
 </body>
-
-<script th:inline="javascript">
-    /* 검색창이 제출될 때 검색어가 비어있는지 확인 */
-    function validateSearchForm() {
-        var queryInput = document.querySelector('input[name="query"]');
-        if (queryInput.value.trim() === "") {
-            alert("검색어를 입력해주세요.");
-            return false; // 검색어가 비어있으면 검색 요청을 보내지 않도록 반환
-        }
-        return true;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</script>
 </html>
+
+
+
+
