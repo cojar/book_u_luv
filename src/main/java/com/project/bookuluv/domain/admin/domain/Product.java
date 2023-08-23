@@ -15,8 +15,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Product extends BaseEntity {
 
     @Column(name = "title")
