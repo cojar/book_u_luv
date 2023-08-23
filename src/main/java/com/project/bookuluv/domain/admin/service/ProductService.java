@@ -1,18 +1,20 @@
 package com.project.bookuluv.domain.admin.service;
 
-import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
+import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.*;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,9 +49,20 @@ public class ProductService {
         return getBooksFromApi(url);
     }
 
-    public Page<Product> getDomestic(Pageable pageable) {
-        return productRepository.findByMallType("BOOK", pageable);
+    // 기존 국내도서 리스팅하여 불러오는 서비스 메서드
+//    public Page<Product> getDomestic(Pageable pageable) {
+//        return productRepository.findByMallType("BOOK", pageable);
+//    }
+
+    // SBB에서 개조한 국내도서 리스팅하여 불러오는 서비스 메서드
+    public Page<Product> getDomestic(int page, String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts)); // 애초에 불러온 페이지넘버의 -1한 페이지를 불러오고 HTML에서 미루어 처리
+        return this.productRepository.findAllByKeyword(kw, "BOOK", pageable);
     }
+
+
 
     public Page<Product> getForeign(Pageable pageable) {
         return productRepository.findByMallType("FOREIGN", pageable);
