@@ -85,16 +85,44 @@ public class ADMController {
         return "redirect:/";
     }
 
-    @GetMapping("/admin/list")
-    public String List(Model model) {
-        List<Member> memberList = this.memberService.getAll();
-        List<Notice> noticeList = this.noticeService.getAll();
+//    @GetMapping("/admin/list")
+//    public String List(Model model) {
+//        List<Member> memberList = this.memberService.getAll();
+//        List<Notice> noticeList = this.noticeService.getAll();
+//        List<Article> articleList = this.articleService.getAll();
+//        List<Product> productList = this.productService.getAll();
+//        model.addAttribute("memberList", memberList);
+//        model.addAttribute("noticeList", noticeList);
+//        model.addAttribute("articleList", articleList);
+//        model.addAttribute("productList", productList);
+//        return "/admin/list";
+//    }
+
+    @GetMapping("/admin/article")
+    public String adminArticle(Model model) {
         List<Article> articleList = this.articleService.getAll();
-        List<Product> productList = this.productService.getAll();
-        model.addAttribute("memberList", memberList);
-        model.addAttribute("noticeList", noticeList);
         model.addAttribute("articleList", articleList);
+        return "/admin/article";
+    }
+
+    @GetMapping("/admin/member")
+    public String adminMember(Model model) {
+        List<Member> memberList = this.memberService.getAll();
+        model.addAttribute("memberList", memberList);
+        return "/admin/member";
+    }
+
+    @GetMapping("/admin/product")
+    public String adminProduct(Model model) {
+        List<Product> productList = this.productService.getAll();
         model.addAttribute("productList", productList);
-        return "/admin/list";
+        return "/admin/product";
+    }
+
+    @GetMapping("/admin/notice")
+    public String adminNotice(Model model) {
+        List<Notice> noticeList = this.noticeService.getAll();
+        model.addAttribute("noticeList", noticeList);
+        return "/admin/notice";
     }
 }

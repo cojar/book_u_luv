@@ -17,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
 
 @Controller
 @RequestMapping("/order")
@@ -31,7 +32,6 @@ public class OrderController {
     @GetMapping("/detail")
     public String detail(Model model, @RequestParam Long productsId) {
         Product product = this.productService.getById(productsId);
-
         model.addAttribute("product", product);
 
         return "order/detail";

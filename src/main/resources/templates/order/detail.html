@@ -7,31 +7,44 @@
     <title>결제 페이지</title>
 </head>
 <body layout:fragment="content">
-<div class="container">
-    <div class="card">
-        <div class="card-header">
-            주문 상세정보
+<div class="container mx-auto">
+    <div class="card w-full flex">
+        <div class="card-header flex items-center justify-center mb-[40px]">
+            <span class="text-5xl">주문 상세정보</span>
         </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">
-                <img class="t-w-full t-max-w-[300px] t-rounded" th:src="${product.coverImg}" alt="상품이미지">
-            </li>
-            <li class="list-group-item">
-                <span class="t-w-16 t-inline-block">번호</span>
-                <span th:text="${product.id}" class="badge bg-primary"></span>
-            </li>
-            <li class="list-group-item">
-                <span class="t-w-16 t-inline-block">상품명</span>
-                <span th:text="${product.title}" class="t-font-bold"></span>
-            </li>
-            <li class="list-group-item">
-                <span class="t-w-16 t-inline-block">가격</span>
-                <span th:text="${product.priceSales}" class="t-font-bold"></span>원
-            </li>
-        </ul>
+        <table class="w-full mb-[20px]">
+            <thead>
+            <tr class="text-[30px]">
+                <th>책표지</th>
+                <th>책번호</th>
+                <th>상품명</th>
+                <th>가격</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="text-center text-[20px] ">
+                <td class="flex justify-center">
+                    <img class="w-36" th:src="${product.coverImg}" alt="상품이미지">
+                </td>
+                <td class="">
+                    <span th:text="${product.id}"></span>
+                </td>
+                <td class="">
+                    <span th:text="${product.title}" class="font-bold"></span>
+                </td>
+                <td class="">
+                    <span th:text="${product.priceSales} + '원'" class="font-bold"></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="border border-solid border-gray-400"></div>
+    <div class="mt-[20px] text-end">
+        <button onclick="pay();" class="btn btn-primary">결제</button>
+        <a href="#" class="btn btn-danger ml-2">취소</a>
     </div>
 </div>
-<button onclick="pay();" class="btn btn-outline-primary">결제</button>
 <script src="https://js.tosspayments.com/v1"></script>
 <script th:inline="javascript">
     let amount = /*[[${product.priceSales}]]*/;
@@ -78,6 +91,8 @@
     let failUrl = window.location.origin + path + "fail";
     let callbackUrl = window.location.origin + path + "va_callback";
     let orderId = new Date().getTime();
+
+
 </script>
 </body>
 </html>
