@@ -22,7 +22,7 @@
 
     <style>
         /* 휴대폰 화면 크기에 따라 스타일 조정 */
-        @media (max-width: 767px) {
+        @media (max-width: 300px) {
             /* 네비게이션 바 스타일 변경 */
             .container {
                 padding: 0 10px;
@@ -186,7 +186,10 @@
     </div>
     <!--반응형 레이아웃 임시 추가 xl:hidden  = 숨겨놓았다가 사이즈가 767px 이하로 줄어들면 나타남-->
     <div class="mobile-menu xl:hidden">
-        <ul>
+        <button id="menu-toggle" class="block text-gray-600 hover:text-red-500">
+            <i class="fas fa-bars"></i> 메뉴
+        </button>
+        <ul id="mobile-menu-list" class="hidden">
             <li>
                 <a th:href="@{|/product/list?type=book|}" class="block hover:text-red-500">
                     국내도서
@@ -202,6 +205,7 @@
                     Book U Luv Reader
                 </a>
             </li>
+            <!-- 나머지 메뉴 항목들 추가 -->
             <li>
                 <a href="/member/login" class="block hover:text-red-500" sec:authorize="isAnonymous()">
                     로그인
@@ -335,6 +339,13 @@
         }
         return true;
     }
+</script>
+<script>
+    const menuToggle = document.getElementById("menu-toggle");
+    const mobileMenuList = document.getElementById("mobile-menu-list");
+    menuToggle.addEventListener("click", () => {
+        mobileMenuList.classList.toggle("hidden");
+    });
 </script>
 </body>
 </html>
