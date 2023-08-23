@@ -5,7 +5,6 @@ import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,34 +25,27 @@ public class ProductController {
         return "searchBooks";
     }
 
-    // 기존 국내도서 리스팅하여 불러오는 컨트롤러 메서드
-//    @GetMapping("/domestic/list")
-//    public String domesticList(Model model, Pageable pageable) {
-//        Page<Product> domestic = productService.getDomestic(pageable);
-//        model.addAttribute("domestic", domestic);
-//        return "product/domestic_list";
-//    }
-
-    // SBB에서 개조한 국내도서 리스팅하여 불러오는 컨트롤러 메서드
-    @GetMapping("/domestic/list")
-    public String domesticList(Model model,
-                       @RequestParam(value = "page", defaultValue = "1") int page,
-                       @RequestParam(value = "kw", defaultValue = "") String kw) { // url에 page내용이 없을땐 0값을 기본값으로 설정해라.
-        if (page == 0) { // 페이지넘버가 0일때 page=1로 리디렉션 하라는 if문
-            return "redirect:/product/domestic/list?page=1";
+    @GetMapping("/list")
+    public String productList(Model model,
+                              @RequestParam(value = "page", defaultValue = "1") int page,
+                              @RequestParam(value = "kw", defaultValue = "") String kw,
+                              @RequestParam(value = "type") String type) {
+        if (page <= 0) {
+            return "redirect:/product/list?type=" + type + "&page=1";
         }
-        Page<Product> domestic = this.productService.getDomestic(page, kw);
-        model.addAttribute("domestic", domestic);
+
+        Page<Product> products = this.productService.getProducts(type, page, kw);
+        model.addAttribute("products", products);
+        model.addAttribute("type", type);
         model.addAttribute("kw", kw);
-        return "product/domestic_list";
-    }
 
-
-    @GetMapping("/foreign/list")
-    public String foreignList(Model model, Pageable pageable) {
-        Page<Product> foreigner = productService.getForeign(pageable);
-        model.addAttribute("foreigner", foreigner);
-        return "product/foreign_list";
+        // 접근한 파라미터가 book 혹은 foreign일 경우에만 제품 리스트페이지를 반환
+        if ("book".equals(type) || "foreign".equals(type)) {
+            return "product/product_list";
+        } else {
+            // 다른 타입의 경우 에러페이지 반환
+            return "error_page";
+        }
     }
 
     @GetMapping(value = "/domestic/detail/{id}")

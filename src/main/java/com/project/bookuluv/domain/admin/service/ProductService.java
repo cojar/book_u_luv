@@ -49,25 +49,13 @@ public class ProductService {
         return getBooksFromApi(url);
     }
 
-    // 기존 국내도서 리스팅하여 불러오는 서비스 메서드
-//    public Page<Product> getDomestic(Pageable pageable) {
-//        return productRepository.findByMallType("BOOK", pageable);
-//    }
-
-    // SBB에서 개조한 국내도서 리스팅하여 불러오는 서비스 메서드
-    public Page<Product> getDomestic(int page, String kw) {
+    // 국내, 외국 도서 목록 페이징에 담아서 불러오는 service
+    public Page<Product> getProducts(String type, int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts)); // 애초에 불러온 페이지넘버의 -1한 페이지를 불러오고 HTML에서 미루어 처리
-        return this.productRepository.findAllByKeyword(kw, "BOOK", pageable);
+        Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(sorts));
+        return this.productRepository.findAllByKeyword(kw, type.toUpperCase(), pageable);
     }
-
-
-
-    public Page<Product> getForeign(Pageable pageable) {
-        return productRepository.findByMallType("FOREIGN", pageable);
-    }
-
 
     private String buildSearchUrl(String queryType, String query) {
         return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Book&Foreign" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
