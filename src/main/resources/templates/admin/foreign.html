@@ -14,7 +14,6 @@
 <body>
 
 <main layout:fragment="content">
-
   <header class="w-[1580px] mx-auto p-4 text-left border-b">
     <div class="flex justify-between items-center">
       <h1 class="text-[50px]">관리자 페이지</h1>
@@ -22,7 +21,6 @@
         <div class="admin_menu flex space-x-4">
           <ul class="flex space-x-4">
             <li>
-
               <a th:href="@{/admin/member}" class="menu-link">회원관리</a>
             </li>
             <li>
@@ -49,42 +47,34 @@
     </div>
     <!-- ... -->
   </header>
-  <!-- 회원 관리 테이블 -->
+
+  <!-- 판매글 관리 테이블 -->
   <div class="w-[1580px] mx-auto mt-[100px]">
-    <h1 class="text-3xl font-semibold my-6">작가 관리</h1>
+    <h1 class="text-3xl font-semibold mt-8 mb-4">도서 관리</h1>
     <div class="overflow-x-auto">
       <table class="min-w-full">
         <thead>
         <tr>
-          <th class="py-2 px-4 border">NO.</th>
-          <th class="py-2 px-4 border">ID</th>
-          <th class="py-2 px-4 border">성</th>
-          <th class="py-2 px-4 border">이름</th>
-          <th class="py-2 px-4 border">닉네임</th>
-          <th class="py-2 px-4 border">성별</th>
-          <th class="py-2 px-4 border">생년월일</th>
-          <th class="py-2 px-4 border">전화번호</th>
-          <th class="py-2 px-4 border">활성 여부</th>
-          <th class="py-2 px-4 border">권한부여</th>
+          <th class="py-2 px-4 w-auto border">NO.</th>
+          <th class="py-2 px-4 w-auto border">제목</th>
+          <th class="py-2 px-4 w-auto border">작가</th>
+          <th class="py-2 px-4 w-auto border">출판일</th>
+          <th class="py-2 px-4 w-auto border">출판사</th>
         </tr>
         </thead>
         <tbody>
-        <tr class="bg-white" th:each="member : ${memberList}">
-          <td class="py-2 px-4 border" th:text="${member.id}"></td>
-          <td class="py-2 px-4 border" th:text="${member.userName}"></td>
-          <td class="py-2 px-4 border" th:text="${member.lastName}"></td>
-          <td class="py-2 px-4 border" th:text="${member.firstName}"></td>
-          <td class="py-2 px-4 border" th:text="${member.nickName}"></td>
-          <td class="py-2 px-4 border" th:text="${member.gender}"></td>
-          <td class="py-2 px-4 border" th:text="${member.birthDate}"></td>
-          <td class="py-2 px-4 border" th:text="${member.phone}"></td>
-          <td class="py-2 px-4 border" th:text="${member.isActive}"></td>
-          <td class="py-2 px-4 border" ></td>
+        <tr class="bg-white" th:each="product : ${productList}">
+          <th class="py-2 px-4 border" th:text="${product.id}"></th>
+          <th class="py-2 px-4 border" th:text="${product.title}"></th>
+          <th class="py-2 px-4 border" th:text="${product.author}"></th>
+          <th class="py-2 px-4 border" th:text="${product.pubDate}"></th>
+          <th class="py-2 px-4 border" th:text="${product.publisher}"></th>
         </tr>
         </tbody>
       </table>
     </div>
   </div>
+
 </main>
 </body>
 </html>

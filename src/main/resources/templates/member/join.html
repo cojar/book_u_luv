@@ -152,6 +152,12 @@
                       } else {
                         document.getElementById("sample4_extraAddress").value = '';
                       }
+                      // 이 부분에서 상세주소를 제외한 나머지 필드를 readOnly로 변경한다.
+                      // 상세주소 필드는 사용자가 직접 입력해야 하므로 readOnly 해제
+                      document.getElementById("sample4_roadAddress").readOnly = true;
+                      document.getElementById("sample4_jibunAddress").readOnly = true;
+                      document.getElementById("sample4_extraAddress").readOnly = true;
+                      document.getElementById("sample4_postcode").readOnly = true;
                       var guideTextBox = document.getElementById("guide");
                       // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
                       if (data.autoRoadAddress) {
@@ -169,7 +175,6 @@
                     }
                   }).open();
                 }
-
                 </script>
                 <div class="form-control">
                     <input class="input input-bordered" id="phone" placeholder="연락처" required th:field="*{phone}"

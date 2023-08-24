@@ -122,7 +122,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                             .imgFilePath(profileImgUrl)             // 사용자 프로필 사진 추가
                             .createDate(LocalDateTime.now())        // 계정 생성일 추가
                             .birthDate(birthDate)                   // 사용자 생년월일 추가
-                            .role(MemberRole.valueOf("USER")) // 사용자 권한 추가
+                            .role(MemberRole.valueOf("MEMBER")) // 사용자 권한 추가
                             .mailAuth(mailAuth)                     // 사용자 메일 인증여부 추가(일반 가입시 true)
                             .gender(gender)                         // 사용자 성별 추가
                             .firstName(firstname)               // 사용자 이름 추가
@@ -223,7 +223,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                             .gender(gender)                     // 사용자 성별 추가
                             .provider(provider)
                             .providerId(providerId)
-                            .role(MemberRole.valueOf("USER")) // 사용자 권한 추가
+                            .role(MemberRole.valueOf("MEMBER")) // 사용자 권한 추가
                             .isActive(isActive)                     // 계정 활성 여부 추가
                             .build(); // 빌드완료
                     memberRepository.save(member);
@@ -256,7 +256,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                             .gender(gender)                     // 사용자 성별 추가
                             .provider(provider)
                             .providerId(providerId)
-                            .role(MemberRole.valueOf("USER")) // 사용자 권한 추가
+                            .role(MemberRole.valueOf("MEMBER")) // 사용자 권한 추가
                             .isActive(isActive)                     // 계정 활성 여부 추가
                             .build(); // 빌드완료
                     memberRepository.save(member);

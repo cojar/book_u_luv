@@ -1,16 +1,15 @@
 package com.project.bookuluv.domain.member.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import com.project.bookuluv.domain.member.dto.MemberUpdateRequest;
 import com.project.bookuluv.domain.mail.MailController;
 import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.dto.MemberJoinRequest;
 import com.project.bookuluv.domain.member.dto.MemberLoginRequest;
 import com.project.bookuluv.domain.member.dto.MemberRole;
+import com.project.bookuluv.domain.member.dto.MemberUpdateRequest;
 import com.project.bookuluv.domain.member.exception.DataNotFoundException;
 import com.project.bookuluv.domain.member.service.MemberSecurityService;
 import com.project.bookuluv.domain.member.service.MemberService;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -28,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +42,8 @@ public class MemberController {
 
     @PostMapping("/api/v1/members/join")
     public ResponseEntity<String> join(@RequestBody MemberJoinRequest dto) {
-        MemberRole role = dto.getUserName().startsWith("admin") ? MemberRole.ADMIN : MemberRole.USER;
+        LocalDateTime currentDate = LocalDateTime.now();
+        MemberRole role = dto.getUserName().startsWith("admin") ? MemberRole.ADMIN : MemberRole.MEMBER;
         this.memberService.join(
                 dto.getUserName(),
                 dto.getPassword1(),
@@ -60,7 +60,9 @@ public class MemberController {
                 dto.getBirthDate(),
                 dto.getMailKey(),
                 role,
-                true);
+                currentDate,
+                true
+        );
         return ResponseEntity.ok().body("회원가입이 완료되었습니다.");
     }
 
@@ -73,6 +75,11 @@ public class MemberController {
     // public ResponseEntity<String> me(@RequestBody MemberLoginRequest dto) {
     //       return ResponseEntity.ok().body(memberService.me(dto.getUserName()));
     //  }
+
+    @GetMapping("/member/join-type")
+    public String memberType() {
+        return "member/member_type";
+    }
 
     @GetMapping("/member/join")
     public String showSignup(MemberJoinRequest memberJoinRequest) {
@@ -92,11 +99,10 @@ public class MemberController {
         try {
             // 인증 코드 검증
             if (dto.getMailKey().equals(dto.getGenMailKey())) {
-                LocalDate currentDate = LocalDate.now();
-                LocalDate birthDate = dto.getBirthDate();
+                LocalDateTime currentDate = LocalDateTime.now();
 
                 // 회원가입 처리
-                MemberRole role = dto.getUserName().startsWith("admin") ? MemberRole.ADMIN : MemberRole.USER;
+                MemberRole role = dto.getUserName().startsWith("admin") ? MemberRole.ADMIN : MemberRole.MEMBER;
                 this.memberService.join(
                         dto.getUserName(),
                         dto.getPassword1(),
@@ -113,6 +119,7 @@ public class MemberController {
                         dto.getBirthDate(),
                         dto.getMailKey(),
                         role,
+                        currentDate,
                         true
                 );
             } else {
@@ -308,7 +315,6 @@ public class MemberController {
         response.put("userName", userName);
         return ResponseEntity.ok(response);
     }
-
 
     @GetMapping("/member/login")
     public String login() {
