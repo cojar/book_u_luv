@@ -26,7 +26,7 @@
                             <th class=" py-2">작성자</th>
                             <th class=" py-2">작성일</th>
                             <th class=" py-2">수정일</th>
-                            <!--                            <th class="py-2">조회수</th>-->
+                            <th class=" py-2">조회수</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -35,7 +35,7 @@
                             <td>
                                 <a th:href="@{|/notice/detail/${notice.id}|}" th:text="${notice.subject}"></a>
                             </td>
-                            <td th:text="${notice.register}" class="py-2"></td>
+                            <td th:text="${notice.register.nickName}" class="py-2"></td>
                             <td th:text="${notice.createDate}" class="py-2"></td>
                             <td th:text="${notice.modifyDate}" class="py-2"></td>
                         </tr>

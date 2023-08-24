@@ -7,12 +7,16 @@ import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.util.List;
@@ -40,7 +44,7 @@ public class NoticeController {
     }
 
     @PostMapping("/create")
-    // @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     public String noticeCreate(@Valid NoticeDto noticeDto, BindingResult bindingResult, Principal principal) {
 
         if (bindingResult.hasErrors()) {
@@ -51,7 +55,7 @@ public class NoticeController {
         String userName = authentication.getName();
         Member member = this.memberService.getMember(userName);
         this.noticeService.create(noticeDto.getSubject(), noticeDto.getContent(), member);
-        return "redirect:/notice/list";
+        return "redirect:/admin/notice";
     }
 
 
@@ -74,7 +78,7 @@ public class NoticeController {
     }
 
     @PostMapping("/delete/{id}")
-    // @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable("id") Integer id, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "notice/list";

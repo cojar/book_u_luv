@@ -25,8 +25,8 @@ public class Notice extends BaseEntity {
     @Column(name = "content")
     private String content;
 
-    // @Column(name = "hit")
-    //  private int hit;
+    @Column(name = "hit")
+    private int hit;
 
     @ManyToOne
     private Member register;

@@ -28,6 +28,7 @@ public class NoticeService {
                 .subject(subject)
                 .content(content)
                 .register(member)
+                .createDate(LocalDateTime.now())
                 .build();
         this.noticeRepository.save(notice);
     }
