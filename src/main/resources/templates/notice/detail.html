@@ -2,7 +2,7 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>공지사항 상세 페이지</title>
 </head>
 <body layout:fragment="content">
@@ -10,6 +10,7 @@
     <span class="text-2xl font-bold text-black">공지사항 상세 페이지</span>
     <div class="notice mt-8">
         <div class="notice-subject">
+
             <table class="w-full border-collapse border-separate">
                 <tr class="border-b-2 border-black">
                     <th class="w-1/4 text-left text-base pr-4">제 목</th>
@@ -17,7 +18,15 @@
                 </tr>
                 <tr class="border-b-2 border-black">
                     <th class="w-1/4 text-left text-base pr-4">작 성 일</th>
-                    <td class="text-base" th:text="${notice.createDate}"></td>
+                    <td class="text-base" th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                </tr>
+                <tr class="border-b-2 border-black" th:if="${notice.modifyDate != null}">
+                    <th class="w-1/4 text-left text-base pr-4">수 정 일</th>
+                    <td class="text-base" th:text="${#temporals.format(notice.modifyDate, 'yyyy-MM-dd HH:mm')}"></td>
+                </tr>
+                <tr class="border-b-2 border-black" th:unless="${notice.modifyDate != null}">
+                    <th class="w-1/4 text-left text-base pr-4">수 정 일</th>
+                    <td class="text-base">-</td>
                 </tr>
             </table>
         </div>
@@ -26,14 +35,60 @@
             <span class="text-base" th:text="${notice.content}"></span>
         </div>
         <div class="underline-2 border-b-2 border-black w-full mt-8"></div>
-        <div class="button flex mt-5">
-            <div class="button_3 ml-auto">
-                <button type="button" class="py-2 px-4 rounded text-white bg-black">
+        <!-- 버튼 컨테이너 -->
+        <div class="button flex mt-5 justify-between">
+            <div>
+            <!-- 수정 버튼 -->
+                <a class="py-2 px-4 rounded text-white bg-blue-500 btn btn-primer btn-outline"
+                   href="javascript:void(0);"
+                   onclick="confirmEdit(event)"
+                   th:data-uri="@{/notice/modify/{id}(id=${notice.id})}"
+                   th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">수정</a>
+
+            <!-- 삭제 버튼 -->
+                <a class="py-2 px-4 ml-3 rounded text-white bg-red-500 btn btn-primer btn-outline"
+                   href="javascript:void(0);"
+                   onclick="confirmDelete(event)"
+                   th:data-uri="@{/notice/delete/{id}(id=${notice.id})}"
+                   th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">삭제</a>
+            </div>
+            <!-- 목록 버튼 -->
+            <div class="button_3 ml-2">
+                <button class="px-4 py-2 bg-blue-500 text-white rounded-md transition duration-300 hover:bg-blue-600 btn btn-primer btn-outline"
+                        type="button">
                     <a href="/notice/list">목록</a>
                 </button>
             </div>
         </div>
+
+
     </div>
 </div>
+<script>
+    /* 페이지 로딩 시 등록/수정 성공 여부 파라미터 확인 및 알림 메시지 띄우기 */
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const successType = urlParams.get('success');
+
+        if (successType === 'create') {
+            alert('등록이 완료되었습니다.');
+        } else if (successType === 'modify') {
+            alert('수정이 완료되었습니다.');
+        }
+    });
+        function confirmDelete(event) {
+        event.preventDefault();
+        if (confirm("정말로 삭제하시겠습니까?\n삭제된 공지사항은 되돌릴 수 없습니다.")) {
+            location.href = event.target.getAttribute("data-uri");
+            alert('삭제가 완료되었습니다.');
+        }
+    }
+    function confirmEdit(event) {
+        event.preventDefault();
+        if (confirm("정말로 수정하시겠습니까?")) {
+            location.href = event.target.getAttribute("data-uri");
+        }
+    }
+</script>
 </body>
 </html>

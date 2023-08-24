@@ -62,7 +62,7 @@ public class ADMController {
             // 인증 코드 검증
             if (dto.getMailKey().equals(dto.getGenMailKey())) {
                 LocalDateTime currentDate = LocalDateTime.now();
-                MemberRole role = MemberRole.SUPERADMIN;
+                MemberRole role = MemberRole.SUPERADMIN; // TODO : 추후 MemberRole.ADMIN; 으로 할당값 변경
                 this.adminService.createAdminMember(
                         dto.getUserName(),
                         dto.getPassword1(),
@@ -164,9 +164,16 @@ public class ADMController {
         return "/admin/article";
     }
 
+    @GetMapping("/admin/author")
+    public String adminAuthor(Model model) {
+        List<Article> articleList = this.articleService.getAll();
+        model.addAttribute("articleList", articleList);
+        return "/admin/article";
+    }
+
     @GetMapping("/admin/member")
     public String adminMember(Model model) {
-        if (!userIsSuperAdminOrAdmin()) { // 모든 관리자권한 가능
+        if (!userIsAdmin()) { // 모든 관리자권한 가능
             throw new AccessDeniedException("Access is denied");
         }
         List<Member> memberList = this.memberService.getAll();
@@ -178,7 +185,7 @@ public class ADMController {
 
     @PostMapping("/admin/member/update-role")
     public String updateMemberRole(@RequestParam Long memberId, @RequestParam MemberRole newRole) {
-        if (!userIsSuperAdminOrAdmin()) { // 슈퍼 관리자만 가능
+        if (!userIsAdmin()) { // 슈퍼 관리자만 가능
             throw new AccessDeniedException("Access is denied");
         }
         // userId와 newRole을 사용하여 해당 유저의 권한을 업데이트하는 로직 작성
@@ -189,7 +196,7 @@ public class ADMController {
     // 회원 활성화 / 비활성화 PostMapping
     @PostMapping("/admin/member/toggle-active")
     public String toggleMemberActive(@RequestParam Long memberId) {
-        if (!userIsSuperAdmin()) { // 슈퍼 관리자만 가능
+        if (!userIsSuperAdmin()) { // 모든 관리자권한 가능 TODO : 추후 슈퍼관리자만 가능으로 변경
             throw new AccessDeniedException("Access is denied");
         }
         memberService.toggleMemberActive(memberId);
@@ -199,7 +206,7 @@ public class ADMController {
     // 회원 삭제(HARD DELETE) PostMapping
     @PostMapping("/admin/member/delete")
     public String deleteMember(@RequestParam Long memberId) {
-        if (!userIsSuperAdminOrAdmin()) { // 모든 관리자권한 가능
+        if (!userIsAdmin()) { // 모든 관리자권한 가능
             throw new AccessDeniedException("Access is denied");
         }
         memberService.deleteMember(memberId);
@@ -208,7 +215,7 @@ public class ADMController {
 
     @GetMapping("/admin/domestic")
     public String adminDomestic(Model model) {
-        if (!userIsSuperAdminOrAdmin()) { // 모든 관리자권한 가능
+        if (!userIsAdmin()) { // 모든 관리자권한 가능
             throw new AccessDeniedException("Access is denied");
         }
         List<Product> productList = this.productService.getAll();
@@ -218,7 +225,7 @@ public class ADMController {
 
     @GetMapping("/admin/foreign")
     public String adminForeign(Model model) {
-        if (!userIsSuperAdminOrAdmin()) { // 모든 관리자권한 가능
+        if (!userIsAdmin()) { // 모든 관리자권한 가능
             throw new AccessDeniedException("Access is denied");
         }
         List<Product> productList = this.productService.getAll();
@@ -228,7 +235,7 @@ public class ADMController {
 
     @GetMapping("/admin/notice")
     public String adminNotice(Model model) {
-        if (!userIsSuperAdminOrAdmin()) { // 모든 관리자권한 가능
+        if (!userIsAdmin()) { // 모든 관리자권한 가능
             throw new AccessDeniedException("Access is denied");
         }
         List<Notice> noticeList = this.noticeService.getAll();
@@ -253,15 +260,15 @@ public class ADMController {
         return hasAuthority("SUPERADMIN");
     }
 
-    private boolean userIsSuperAdminOrAdmin() {
+    boolean userIsAdmin() {
         return hasAuthority("SUPERADMIN", "ADMIN");
     }
 
-    private boolean userIsAuthor() {
+    boolean userIsAuthor() {
         return hasAuthority("SUPERADMIN", "ADMIN", "AUTHOR");
     }
 
-    private boolean userHasAnyRole() {
+    boolean userHasAnyRole() {
         return hasAuthority("SUPERADMIN", "ADMIN", "AUTHOR", "MEMBER");
     }
 

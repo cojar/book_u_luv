@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 public class Notice extends BaseEntity {
 
     @Column(name = "subject")

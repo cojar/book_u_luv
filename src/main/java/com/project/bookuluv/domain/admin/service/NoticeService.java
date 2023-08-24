@@ -1,13 +1,16 @@
 package com.project.bookuluv.domain.admin.service;
 
 import com.project.bookuluv.domain.admin.domain.Notice;
+import com.project.bookuluv.domain.admin.dto.NoticeDto;
 import com.project.bookuluv.domain.admin.repository.NoticeRepository;
 import com.project.bookuluv.domain.member.domain.Member;
+import com.project.bookuluv.domain.member.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +22,13 @@ public class NoticeService {
         return this.noticeRepository.findAll();
     }
 
-    public Notice getById(Integer id) {
-        return this.noticeRepository.findById(id);
+    public Notice getById(Long id) {
+        Optional<Notice> notice = this.noticeRepository.findById(id);
+        if (notice.isPresent()) {
+            return notice.get();
+        } else {
+            throw new DataNotFoundException("notice not found");
+        }
     }
 
     public void create(String subject, String content, Member member) {
@@ -33,11 +41,16 @@ public class NoticeService {
         this.noticeRepository.save(notice);
     }
 
-    public void modify(String subject, String content, Notice notice) {
-        notice.setSubject(subject);
-        notice.setContent(content);
-        notice.setModifyDate(LocalDateTime.now());
-        this.noticeRepository.save(notice);
+    public void modify(NoticeDto noticeDto, Long id) {
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물을 찾을 수 없습니다."));
+
+        Notice modifiedNotice = notice.toBuilder()
+                .subject(noticeDto.getSubject())
+                .content(noticeDto.getContent())
+                .modifyDate(LocalDateTime.now())
+                .build();
+        this.noticeRepository.save(modifiedNotice);
     }
 
     public void delete(Notice notice) {

@@ -7,7 +7,6 @@
     <title>NoticeList</title>
 </head>
 
-
 <body>
 <main layout:fragment="content">
     <div id="wrapper" class="w-[1440px] min-w-1220 max-w-1440 mx-auto mt-[50px]">
@@ -18,30 +17,55 @@
                     <div class="text-start">
                         <h1 class="text-[50px] mb-4">공지사항</h1>
                     </div>
-                    <a th:href="@{/notice/create}">글쓰기</a>
+                    <!-- 글쓰기 버튼 -->
+                    <div class="flex justify-end mb-4">
+                        <a th:href="@{/notice/create}" th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}"
+                           class="px-4 py-2 bg-blue-500 text-white rounded-md transition duration-300 hover:bg-blue-600 btn btn-primer btn-outline">글쓰기</a>
+                    </div>
                     <table class="w-full border-collapse">
                         <thead>
                         <tr class="border-y">
-                            <th class="py-2">번호</th>
+                            <th class="py-2 px-8">번호</th>
                             <th class=" py-2">제목</th>
                             <th class=" py-2">작성자</th>
                             <th class=" py-2">작성일</th>
                             <th class=" py-2">수정일</th>
                             <th class=" py-2">조회수</th>
+                            <th class=" py-2" th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">수정 / 삭제</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="notice : ${noticeList}" class="border-b">
                             <td th:text="${notice.id}" class="py-2"></td>
-                            <td>
+                            <td class="text-left">
                                 <a th:href="@{|/notice/detail/${notice.id}|}" th:text="${notice.subject}"></a>
                             </td>
                             <td th:text="${notice.register.nickName}" class="py-2"></td>
-                            <td th:text="${notice.createDate}" class="py-2"></td>
-                            <td th:text="${notice.modifyDate}" class="py-2"></td>
+                            <td th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}"
+                                class="py-2"></td>
+                            <td th:if="${notice.modifyDate != null}"
+                                th:text="${#temporals.format(notice.modifyDate, 'yyyy-MM-dd HH:mm')}"
+                                class="py-2"></td>
+                            <td th:unless="${notice.modifyDate != null}" class="py-2">-</td>
+                            <td th:text="${notice.hit}" class="py-2"></td>
+                            <td class="py-2">
+                                <!-- 수정/삭제 버튼 -->
+                                <a th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}"
+                                   href="javascript:void(0);"
+                                   th:data-uri="@{/notice/modify/{id}(id=${notice.id})}"
+                                   class="text-blue-500 hover:text-blue-600 transition duration-300 mr-2"
+                                   onclick="confirmEdit(event)">수정</a>
+
+                                <a th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}"
+                                   href="javascript:void(0);"
+                                   th:data-uri="@{/notice/delete/{id}(id=${notice.id})}"
+                                   class="text-red-500 hover:text-red-600 transition duration-300"
+                                   onclick="confirmDelete(event)">삭제</a>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>
@@ -51,9 +75,35 @@
                 <option value="content">내용</option>
             </select>
             <input type="text" id="search_input" class="p-2 border rounded mx-2">
-            <button type="button" class="p-2 border">검색</button>
+            <button type="button" class="p-2 border transition duration-300 hover:bg-gray-200">검색</button>
         </div>
     </div>
+    <script>
+        function confirmDelete(event) {
+        event.preventDefault();
+        if (confirm("정말로 삭제하시겠습니까?\n삭제된 공지사항은 되돌릴 수 없습니다.")) {
+            location.href = event.target.getAttribute("data-uri");
+            alert('삭제가 완료되었습니다.');
+        }
+    }
+    function confirmEdit(event) {
+        event.preventDefault();
+        if (confirm("정말로 수정하시겠습니까?")) {
+            location.href = event.target.getAttribute("data-uri");
+        }
+    }
+    /* 페이지 로딩 시 등록/수정 성공 여부 파라미터 확인 및 알림 메시지 띄우기 */
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const successType = urlParams.get('success');
+
+        if (successType === 'create') {
+            alert('등록이 완료되었습니다.');
+        } else if (successType === 'modify') {
+            alert('수정이 완료되었습니다.');
+        }
+    });
+    </script>
 </main>
 </body>
 </html>
