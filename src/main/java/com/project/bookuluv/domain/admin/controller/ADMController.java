@@ -88,7 +88,7 @@ public class ADMController {
                 bindingResult.rejectValue("mailKey", "mailKeyNotMatched", "유효하지 않은 이메일 또는 메일 키입니다.");
                 return "member/admin_signup";
             }
-            return "redirect:/admin/member"; // 관리자 대시보드 페이지로 리다이렉트
+            return "redirect:/"; // 관리자 대시보드 페이지로 리다이렉트
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", "잘못된 암호 키입니다.");
             return "redirect:/admin/signup"; // 잘못된 암호 키 경우, 다시 회원가입 페이지로 리다이렉트

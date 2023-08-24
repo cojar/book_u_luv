@@ -49,15 +49,15 @@ public class ProductController {
     }
 
     @GetMapping(value = "/domestic/detail/{id}")
-    private String domesticDetail(Model model, @PathVariable("id") Integer id) {
-        Product products = this.productService.getById(id);
+    private String domesticDetail(Model model, @PathVariable("id") Long id) {
+        Product products = this.productService.findById(id);
         model.addAttribute("products", products);
         return "product/detail";
     }
 
     @GetMapping(value = "/foreign/detail/{id}")
-    private String foreignDetail(Model model, @PathVariable("id") Integer id) {
-        Product products = this.productService.getById(id);
+    private String foreignDetail(Model model, @PathVariable("id") Long id) {
+        Product products = this.productService.findById(id);
         model.addAttribute("products", products);
         return "product/detail";
     }

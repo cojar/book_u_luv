@@ -12,7 +12,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     long countByIsbn(String isbn);
 
-    Product getById(Integer id);
+
 
     Page<Product> findByMallType(String book, Pageable pageable);
 
