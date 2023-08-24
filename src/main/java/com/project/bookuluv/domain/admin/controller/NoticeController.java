@@ -87,4 +87,10 @@ public class NoticeController {
         this.noticeService.delete(notice);
         return "redirect:/";
     }
+    @GetMapping("/detail/{id}")
+    public String noticeDetail(@PathVariable("id") Integer id, Model model) {
+        Notice notice = noticeService.getById(id);
+        model.addAttribute("notice", notice);
+        return "notice/detail";  // 상세 페이지의 Thymeleaf 템플릿 이름
+    }
 }
