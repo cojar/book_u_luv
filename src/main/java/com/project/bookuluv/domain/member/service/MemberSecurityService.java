@@ -1,9 +1,8 @@
 package com.project.bookuluv.domain.member.service;
 
-import com.project.bookuluv.domain.member.repository.MemberRepository;
 import com.project.bookuluv.domain.member.domain.CustomMember;
 import com.project.bookuluv.domain.member.domain.Member;
-import com.project.bookuluv.domain.member.dto.MemberRole;
+import com.project.bookuluv.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.GrantedAuthority;
@@ -49,11 +48,7 @@ public class MemberSecurityService implements UserDetailsService {
         }
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        if (isAdmin()) {
-            authorities.add(new SimpleGrantedAuthority(MemberRole.ADMIN.getValue()));
-        } else {
-            authorities.add(new SimpleGrantedAuthority(MemberRole.USER.getValue()));
-        }
+        authorities.add(new SimpleGrantedAuthority(member.getRole().getValue()));
 
         return new CustomMember(member, authorities);
     }

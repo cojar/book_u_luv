@@ -8,6 +8,7 @@ import com.project.bookuluv.domain.member.exception.DataNotFoundException;
 import com.project.bookuluv.domain.member.exception.ErrorCode;
 import com.project.bookuluv.domain.member.repository.MemberRepository;
 import com.project.bookuluv.standard.utils.JwtUtil;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -63,6 +64,7 @@ public class MemberService {
                        LocalDate birthDate,
                        Integer mailKey,
                        MemberRole role,
+                       LocalDateTime currentDate,
                        boolean mailAuth) { // 프로필 사진 파일 이름
 
         // userName 중복체크
@@ -89,7 +91,7 @@ public class MemberService {
                 .mailKey(mailKey)                   // 사용자 이메일 인증당시 인증 키 추가
                 .role(role)                         // 사용자 권한 추가
                 .mailAuth(mailAuth)                 // 사용자 메일 인증여부 추가(일반 가입시 true)
-                .createDate(LocalDateTime.now()) // 계정 생성일 추가
+                .createDate(currentDate) // 계정 생성일 추가
                 .isActive(true)
                 .build(); // 빌드완료
 
@@ -225,6 +227,31 @@ public class MemberService {
     public void deactivateMember(Member member) {
         member.deactivate();
         this.memberRepository.save(member);
+    }
+
+    public void updateMemberRole(Long memberId, MemberRole newRole) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
+
+        member.setRole(newRole);
+        memberRepository.save(member);
+    }
+
+    public void toggleMemberActive(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
+
+        member.setActive(!member.isActive());
+        memberRepository.save(member);
+    }
+
+    public void deleteMember(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new EntityNotFoundException("회원을 찾을 수 없습니다."));
+
+        // 실제로 삭제하지 않고 비활성화 처리
+        member.deactivate(); // isActive를 false로 설정
+        memberRepository.save(member);
     }
 
     public List<Member> getAll() {
