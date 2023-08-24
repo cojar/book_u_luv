@@ -2,7 +2,7 @@ package com.project.bookuluv.domain.admin.service;
 
 import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
-
+import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
