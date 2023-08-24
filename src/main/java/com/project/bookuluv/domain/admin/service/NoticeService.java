@@ -25,10 +25,19 @@ public class NoticeService {
     public Notice getById(Long id) {
         Optional<Notice> notice = this.noticeRepository.findById(id);
         if (notice.isPresent()) {
+//            Notice notice1 = notice.get();
+//            notice1.setHit(notice1.getHit()+1);
+//            this.noticeRepository.save(notice1);
             return notice.get();
         } else {
             throw new DataNotFoundException("notice not found");
         }
+    }
+    public void incrementHitCount(Long id) {
+        Notice notice = noticeRepository.getById(id);
+        int currentHit = notice.getHit();
+        notice.setHit(currentHit + 1);
+        noticeRepository.save(notice);
     }
 
     public void create(String subject, String content, Member member) {

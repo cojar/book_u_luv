@@ -127,4 +127,10 @@ public class NoticeController {
         model.addAttribute("notice", notice);
         return "notice/detail";  // 상세 페이지의 Thymeleaf 템플릿 이름
     }
+    @PostMapping("/increase-hit")
+    @ResponseBody
+    public String increaseHitCount(@RequestParam Long id) {
+        noticeService.incrementHitCount(id);
+        return "success";
+    }
 }

@@ -38,7 +38,7 @@
                         <tr th:each="notice : ${noticeList}" class="border-b">
                             <td th:text="${notice.id}" class="py-2"></td>
                             <td class="text-left">
-                                <a th:href="@{|/notice/detail/${notice.id}|}" th:text="${notice.subject}"></a>
+                                <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}" th:text="${notice.subject}" th:attr="data-id=${notice.id}"></a>
                             </td>
                             <td th:text="${notice.register.nickName}" class="py-2"></td>
                             <td th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}"
@@ -102,6 +102,22 @@
         } else if (successType === 'modify') {
             alert('수정이 완료되었습니다.');
         }
+    });
+
+    $(document).ready(function() {
+        $(".notice-link").click(function() {
+            var noticeId = $(this).data("id");
+            $.ajax({
+                type: "POST",
+                url: "/notice/increase-hit",
+                data: { id: noticeId }, // Send the retrieved notice ID
+                success: function(response) {
+                    if (response === "success") {
+                        window.location.href = "/notice/detail/" + noticeId;
+                    }
+                }
+            });
+        });
     });
     </script>
 </main>
