@@ -3,6 +3,8 @@ package com.project.bookuluv.domain.admin.service;
 import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
+import com.project.bookuluv.domain.member.domain.Member;
+import com.project.bookuluv.domain.member.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -16,6 +18,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,19 +60,19 @@ public class ProductService {
 
 
     private String buildSearchUrl(String queryType, String query) {
-        return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Book&Foreign" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
+        return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
     }
 
     private String buildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book&Foreign" + "&output=js" + "&Version=20131101";
     }
 
     private String domesticBuildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=10" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
     }
 
     private String foreignBuildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=10" + "&start=1" + "&SearchTarget=Foreign" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Foreign" + "&output=js" + "&Version=20131101";
     }
 
     private List<ProductDto> getBooksFromApi(String url) {
@@ -121,11 +124,7 @@ public class ProductService {
                     }
                     results.add(result);
                 }
-            } else {
-                System.out.println("JSON에서 'item' 키를 찾을 수 없음.");
             }
-        } else {
-            System.out.println("응답 본문이 null입니다.");
         }
         return results;
     }
@@ -134,11 +133,11 @@ public class ProductService {
         return this.productRepository.findAll();
     }
 
-    public Product getById(Integer id) {
+    public Product findById(Long id) {
         return this.productRepository.getById(id);
     }
 
-    public Product getById(Long productsId) {
-        return this.productRepository.getById(productsId);
+    public Optional<Product> getById(Long id) {
+        return this.productRepository.findById(id);
     }
 }

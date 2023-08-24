@@ -1,11 +1,13 @@
-package com.project.bookuluv.domain.order;
+package com.project.bookuluv.domain.order.domain;
 
 import com.project.bookuluv.base.entity.BaseEntity;
+import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.member.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
+@Setter
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,6 +28,9 @@ public class Order extends BaseEntity {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE)
     private List<OrderItem> orderItemList;
+
+    @ManyToOne
+    private Product product;
 
     private String name;
 

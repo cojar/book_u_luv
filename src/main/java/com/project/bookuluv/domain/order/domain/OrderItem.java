@@ -1,4 +1,4 @@
-package com.project.bookuluv.domain.order;
+package com.project.bookuluv.domain.order.domain;
 
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.domain.admin.domain.Product;
@@ -28,7 +28,7 @@ public class OrderItem extends BaseEntity {
     @ManyToOne
     private Product product;
 
-    private int payPrice;
+    private Long payPrice;
 
     private boolean isPaid;
 }

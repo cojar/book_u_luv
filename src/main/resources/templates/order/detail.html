@@ -17,6 +17,7 @@
             <tr class="text-[30px]">
                 <th>책표지</th>
                 <th>책번호</th>
+                <th>구매자</th>
                 <th>상품명</th>
                 <th>가격</th>
             </tr>
@@ -30,6 +31,9 @@
                     <span th:text="${product.id}"></span>
                 </td>
                 <td class="">
+                    <span th:text="${member.lastName}+${member.firstName}"></span>
+                </td>
+                <td class="">
                     <span th:text="${product.title}" class="font-bold"></span>
                 </td>
                 <td class="">
@@ -41,18 +45,32 @@
     </div>
     <div class="border border-solid border-gray-400"></div>
     <div class="mt-[20px] text-end">
-        <button onclick="pay();" class="btn btn-primary">결제</button>
-        <a href="#" class="btn btn-danger ml-2">취소</a>
+        <form method="get" th:action="@{|{/order/{id}/success}}">
+            <input required type="hidden" name="productId" id="productId" th:value="${product.id}">
+            <button type="button" onclick="pay();" class="btn btn-primary">결제</button>
+            <a href="#" class="btn btn-danger ml-2">취소</a>
+        </form>
     </div>
 </div>
 <script src="https://js.tosspayments.com/v1"></script>
 <script th:inline="javascript">
+
     let amount = /*[[${product.priceSales}]]*/;
-    let orderName = /*[[${product.title}]]*/
+    let orderName = /*[[${product.title}]]*/;
+    let productId = /*[[${product.id}]]*/;
 
     let tossPayments = TossPayments("test_ck_ZLKGPx4M3M41oaJJ5zo8BaWypv1o");
 
+    let path = "/order/" + productId + "/";
+    let successUrl = window.location.origin + path + "success";
+    let failUrl = window.location.origin + path + "fail";
+    let callbackUrl = window.location.origin + path + "va_callback";
+    let orderId = new Date().getTime();
+
     function pay() {
+
+<!--        const productId = document.getElementById("productId").value;-->
+
         const method = "카드";
 
         const requestJson = {
@@ -85,12 +103,6 @@
 
             });
     }
-
-    let path = "/order/";
-    let successUrl = window.location.origin + path + "success";
-    let failUrl = window.location.origin + path + "fail";
-    let callbackUrl = window.location.origin + path + "va_callback";
-    let orderId = new Date().getTime();
 
 
 </script>
