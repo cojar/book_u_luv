@@ -13,31 +13,34 @@
 </div>
 
 <!-- 검색 창과 검색 버튼 -->
-<div class="flex justify-center">
-    <div class="flex justify-end mt-4 w-[83%]">
-        <input class="border p-2 rounded" id="search_kw" placeholder="검색어를 입력하세요" type="text">
-        <button class="bg-blue-500 text-white px-4 py-2 ml-2 rounded" id="btn_search">검색</button>
+<div class="w-[1580px] mx-auto">
+    <div class="flex justify-center">
+        <div class="flex justify-end mt-4 w-full">
+            <input class="border p-2 rounded" id="search_kw" placeholder="검색어를 입력하세요" type="text">
+            <button class="bg-blue-500 text-white px-4 py-2 ml-2 rounded" id="btn_search">검색</button>
+        </div>
     </div>
-</div>
 
-<!-- 검색과 제품갯수 출력결과 information-box -->
-<div class="flex justify-center">
-    <div class="w-[83%] px-4 py-3 bg-blue-100 rounded-md mt-4 grid grid-cols-2 gap-4">
-        <!-- 검색어가 있을 때 -->
-        <div class="px-2 col-span-2 sm:col-span-1" th:if="${kw != null && kw != ''}">
-            <h2 class="text-xl font-semibold mb-2">검색 결과</h2>
-            <p class="text-gray-600">"<span style="display:inline-block;" th:text="${kw}"></span>" 검색어가 포함된 모든 결과입니다.
-            </p>
-        </div>
-        <!-- 검색어가 없을 때 -->
-        <div class="col-span-2 sm:col-span-1" th:unless="${kw != null && kw != ''}">
-            <h2 class="text-xl font-semibold mb-2"></h2>
-            <p class="text-gray-600"></p>
-        </div>
-        <div class="col-span-2 sm:col-span-1 flex justify-end items-center">
-            <div class="search-result inline-block mr-1 text-xl font-semibold"
-                 th:text="${products.totalElements}"></div>
-            건의 결과가 있어요
+    <!-- 검색과 제품갯수 출력결과 information-box -->
+    <div class="flex justify-center">
+        <div class="w-full px-4 py-3 bg-blue-100 rounded-md mt-4 grid grid-cols-2 gap-4">
+            <!-- 검색어가 있을 때 -->
+            <div class="px-2 col-span-2 sm:col-span-1" th:if="${kw != null && kw != ''}">
+                <h2 class="text-xl font-semibold mb-2">검색 결과</h2>
+                <p class="text-gray-600">"<span style="display:inline-block;" th:text="${kw}"></span>" 검색어가 포함된 모든
+                    결과입니다.
+                </p>
+            </div>
+            <!-- 검색어가 없을 때 -->
+            <div class="col-span-2 sm:col-span-1" th:unless="${kw != null && kw != ''}">
+                <h2 class="text-xl font-semibold mb-2"></h2>
+                <p class="text-gray-600"></p>
+            </div>
+            <div class="col-span-2 sm:col-span-1 flex justify-end items-center">
+                <div class="search-result inline-block mr-1 text-xl font-semibold"
+                     th:text="${products.totalElements}"></div>
+                건의 결과가 있어요
+            </div>
         </div>
     </div>
 </div>
@@ -121,6 +124,7 @@
         document.getElementById('page').value = 1;
         document.getElementById('searchForm').submit();
     });
+
 
 </script>
 </body>

@@ -66,11 +66,11 @@ public class ProductService {
     }
 
     private String domesticBuildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=10" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101";
     }
 
     private String foreignBuildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=10" + "&start=1" + "&SearchTarget=Foreign" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Foreign" + "&output=js" + "&Version=20131101";
     }
 
     private List<ProductDto> getBooksFromApi(String url) {

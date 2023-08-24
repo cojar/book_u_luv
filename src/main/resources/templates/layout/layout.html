@@ -89,18 +89,6 @@
         </div>
 
         <div class="flex gap-3 hidden xl:flex items-center">
-            <a href="/member/login" class="inline-flex flex-shrink-0" sec:authorize="isAnonymous()">
-                <span class="ml-[2px]">
-                    로그인
-                </span>
-            </a>
-
-            <a href="/member/join" class="inline-flex flex-shrink-0" sec:authorize="isAnonymous()">
-                <span class="ml-[2px]">
-                    회원가입
-                </span>
-            </a>
-
             <a href="/member/profile" class="inline-flex items-center" sec:authorize="isAuthenticated()">
                 <img class="fa-solid fa-user w-12 h-12 rounded-full" alt=""
                      th:if="${#authentication.principal.imgFilePath}"
@@ -114,11 +102,19 @@
                       th:text="${#authentication.principal.nickName + ' 님'}">
                 </span>
             </a>
-            <a href="/admin/list" class="inline-flex items-center">
-                <span class="ml-[2px] hidden lg:block items-center">
-                    관리자페이지
-                  </span>
+
+            <a href="/member/login" class="inline-flex flex-shrink-0" sec:authorize="isAnonymous()">
+                <span class="ml-[2px]">
+                    로그인
+                </span>
             </a>
+
+            <a href="/member/join" class="inline-flex flex-shrink-0" sec:authorize="isAnonymous()">
+                <span class="ml-[2px]">
+                    회원가입
+                </span>
+            </a>
+
             <a href="/notice/list" class="inline-flex flex-shrink-0">
                 <span class="ml-[2px]">
                     공지사항
@@ -130,9 +126,13 @@
                     장바구니
                 </span>
             </a>
+            <a href="/admin/member" class="inline-flex items-center">
+                <span class="ml-[2px] hidden lg:block items-center">
+                    관리자페이지
+                  </span>
+            </a>
 
             <a href="/member/logout" class="inline-flex flex-shrink-0" sec:authorize="isAuthenticated()">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span class="ml-[2px]">
                     로그아웃
                 </span>

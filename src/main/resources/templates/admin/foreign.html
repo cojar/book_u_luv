@@ -47,32 +47,34 @@
     </div>
     <!-- ... -->
   </header>
+
+  <!-- 판매글 관리 테이블 -->
   <div class="w-[1580px] mx-auto mt-[100px]">
-    <!-- 회원 관리 테이블 -->
-    <h1 class="text-3xl font-semibold mt-8 mb-4">판매글 관리</h1>
+    <h1 class="text-3xl font-semibold mt-8 mb-4">도서 관리</h1>
     <div class="overflow-x-auto">
-      <table class="w-full">
+      <table class="min-w-full">
         <thead>
         <tr>
           <th class="py-2 px-4 w-auto border">NO.</th>
           <th class="py-2 px-4 w-auto border">제목</th>
-          <th class="py-2 px-4 w-auto border">작성자</th>
-          <th class="py-2 px-4 w-auto border">작성일자</th>
-          <th class="py-2 px-4 w-auto border">수정일자</th>
+          <th class="py-2 px-4 w-auto border">작가</th>
+          <th class="py-2 px-4 w-auto border">출판일</th>
+          <th class="py-2 px-4 w-auto border">출판사</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="article : ${articleList}">
-          <td class="py-2 px-4 border" th:text="${article.id}">asdasd</td>
-          <td class="py-2 px-4 border" th:text="${article.subject}">asdasd</td>
-          <td class="py-2 px-4 border" th:text="${article.register}">asdasd</td>
-          <td class="py-2 px-4 border" th:text="${article.createDate}">asdasd</td>
-          <td class="py-2 px-4 border" th:text="${article.modifyDate}">asdasd</td>
+        <tr class="bg-white" th:each="product : ${productList}">
+          <th class="py-2 px-4 border" th:text="${product.id}"></th>
+          <th class="py-2 px-4 border" th:text="${product.title}"></th>
+          <th class="py-2 px-4 border" th:text="${product.author}"></th>
+          <th class="py-2 px-4 border" th:text="${product.pubDate}"></th>
+          <th class="py-2 px-4 border" th:text="${product.publisher}"></th>
         </tr>
         </tbody>
       </table>
     </div>
   </div>
+
 </main>
 </body>
 </html>
