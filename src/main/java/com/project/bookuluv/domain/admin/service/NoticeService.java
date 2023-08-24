@@ -6,9 +6,14 @@ import com.project.bookuluv.domain.admin.repository.NoticeRepository;
 import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +44,18 @@ public class NoticeService {
         notice.setHit(currentHit + 1);
         noticeRepository.save(notice);
     }
+    public Page<Notice> getNotices(int page, String kw, String field) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts));
+
+        if ("all".equals(field)) {
+            return this.noticeRepository.findAllByKeyword(kw, pageable);
+        } else {
+            return this.noticeRepository.findAllByKeywordAndField(kw, field, pageable);
+        }
+    }
+
 
     public void create(String subject, String content, Member member) {
         Notice notice = Notice.builder()

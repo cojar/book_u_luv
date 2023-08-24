@@ -7,6 +7,7 @@ import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,10 +33,30 @@ public class NoticeController {
     private final ADMController admController;
 
     @GetMapping("/list")
-    public String noticeList(Model model) {
-        List<Notice> noticeList = this.noticeService.getAll();
-        model.addAttribute("noticeList", noticeList);
+    public String noticeList(Model model,
+                             @RequestParam(value = "page", defaultValue = "1") int page,
+                             @RequestParam(value = "kw", defaultValue = "") String kw,
+                             @RequestParam(value = "field", defaultValue = "title") String field) {
+        if (page <= 0) {
+            return "redirect:/product/list?page=1";
+        }
+        Page<Notice> notices = this.noticeService.getNotices(page, kw, field);
+        model.addAttribute("notices", notices);
+        model.addAttribute("field", field);
+        model.addAttribute("kw", kw);
         return "notice/list";
+    }
+    @ModelAttribute("searchResultLabel")
+    public String getSearchResultLabel(@RequestParam(value = "field", defaultValue = "") String field) {
+        if ("title".equals(field)) {
+            return "제목검색결과";
+        } else if ("content".equals(field)) {
+            return "내용검색결과";
+        } else if ("all".equals(field)) {
+            return "통합검색결과";
+        } else {
+            return "";
+        }
     }
 
     @GetMapping("/create")
