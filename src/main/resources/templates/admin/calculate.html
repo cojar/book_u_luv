@@ -47,27 +47,37 @@
     </div>
     <!-- ... -->
   </header>
+  <!-- 회원 관리 테이블 -->
   <div class="w-[1580px] mx-auto mt-[100px]">
-    <!-- 회원 관리 테이블 -->
-    <h1 class="text-3xl font-semibold mt-8 mb-4">판매글 관리</h1>
+    <h1 class="text-3xl font-semibold my-6">정산 관리</h1>
     <div class="overflow-x-auto">
-      <table class="w-full">
+      <table class="min-w-full">
         <thead>
         <tr>
           <th class="py-2 px-4 w-auto border">NO.</th>
-          <th class="py-2 px-4 w-auto border">제목</th>
-          <th class="py-2 px-4 w-auto border">작성자</th>
-          <th class="py-2 px-4 w-auto border">작성일자</th>
-          <th class="py-2 px-4 w-auto border">수정일자</th>
+          <th class="py-2 px-4 w-auto border">ID</th>
+          <th class="py-2 px-4 w-auto border">성</th>
+          <th class="py-2 px-4 w-auto border">이름</th>
+          <th class="py-2 px-4 w-auto border">닉네임</th>
+          <th class="py-2 px-4 w-auto border">성별</th>
+          <th class="py-2 px-4 w-auto border">생년월일</th>
+          <th class="py-2 px-4 w-auto border">전화번호</th>
+          <th class="py-2 px-4 w-auto border">활성 여부</th>
+          <th class="py-2 px-4 w-auto border">작가부여 여부</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="article : ${articleList}">
-          <td class="py-2 px-4 border" th:text="${article.id}">asdasd</td>
-          <td class="py-2 px-4 border" th:text="${article.subject}">asdasd</td>
-          <td class="py-2 px-4 border" th:text="${article.register}">asdasd</td>
-          <td class="py-2 px-4 border" th:text="${article.createDate}">asdasd</td>
-          <td class="py-2 px-4 border" th:text="${article.modifyDate}">asdasd</td>
+        <tr class="bg-white" th:each="member : ${memberList}">
+          <td class="py-2 px-4 border" th:text="${member.id}"></td>
+          <td class="py-2 px-4 border" th:text="${member.userName}"></td>
+          <td class="py-2 px-4 border" th:text="${member.lastName}"></td>
+          <td class="py-2 px-4 border" th:text="${member.firstName}"></td>
+          <td class="py-2 px-4 border" th:text="${member.nickName}"></td>
+          <td class="py-2 px-4 border" th:text="${member.gender}"></td>
+          <td class="py-2 px-4 border" th:text="${member.birthDate}"></td>
+          <td class="py-2 px-4 border" th:text="${member.phone}"></td>
+          <td class="py-2 px-4 border" th:text="${member.isActive}"></td>
+          <td class="py-2 px-4 border" th:text=""></td>
         </tr>
         </tbody>
       </table>

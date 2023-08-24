@@ -112,11 +112,17 @@ public class ADMController {
         return "/admin/member";
     }
 
-    @GetMapping("/admin/product")
-    public String adminProduct(Model model) {
+    @GetMapping("/admin/domestic")
+    public String adminDomestic(Model model) {
         List<Product> productList = this.productService.getAll();
         model.addAttribute("productList", productList);
-        return "/admin/product";
+        return "/admin/domestic";
+    }
+    @GetMapping("/admin/foreign")
+    public String adminForeign(Model model) {
+        List<Product> productList = this.productService.getAll();
+        model.addAttribute("productList", productList);
+        return "/admin/foreign";
     }
 
     @GetMapping("/admin/notice")
