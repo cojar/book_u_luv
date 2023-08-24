@@ -38,7 +38,7 @@
                             </svg>
                         </label>
                         <div>
-                            <button id="saveBtn" class="btn btn-primary btn-action img-btn" type="button">저장하기</button>
+                            <button id="saveBtn" class="btn btn-primary btn-action img-btn btn-outline" type="button">저장하기</button>
                         </div>
                     </div>
                 </div>
@@ -195,16 +195,15 @@
 
                 <!--카카오 주소검색 API-->
                 <!-- 우편번호 찾기 버튼 -->
-                <input onclick="sample4_execDaumPostcode()" type="button" value="우편번호 찾기"><br>
-                <!-- 우편번호 -->
                 <div class="form-control">
-                    <label class="label" for="sample4_postcode">
-                        <span class="label-text">우편번호:</span>
-                    </label>
-                    <input class="input input-bordered" id="sample4_postcode" name="postalNum"
-                           required
-                           th:field="*{postalNum}" type="text" placeholder="(우편번호)">
+                    <div class="flex items-center">
+                        <input class="input input-bordered" id="sample4_postcode" placeholder="우편번호" required
+                               th:field="*{postalNum}" type="text">
+                        <input onclick="sample4_execDaumPostcode()" type="button" value="우편번호 찾기"
+                               class="btn btn-secondary ml-2 btn-outline">
+                    </div>
                 </div>
+
 
                 <!-- 도로명주소 -->
                 <div class="form-control">
@@ -306,24 +305,24 @@
                 <!-- 수정 완료 버튼 -->
                 <div class="grid grid-cols-2 mt-2 gap-2">
                     <a class="btn btn-secondary btn-outline" href="/member/profile">취소하기</a>
-                    <input class="btn btn-primary" type="submit" value="회원정보 수정 완료">
+                    <input class="btn btn-primary btn-outline" type="submit" value="회원정보 수정 완료">
                 </div>
             </form>
-<!--            &lt;!&ndash; 회원탈퇴 &ndash;&gt;-->
-<!--            <section class="section section-profile flex-grow flex flex-col items-center justify-center">-->
-<!--                <div class="max-w-md w-full px-2 pt-4">-->
-<!--                    <h1 class="font-bold text-lg">-->
-<!--                        <i class="fa-solid fa-trash-can"></i>-->
-<!--                        회원탈퇴-->
-<!--                    </h1>-->
-<!--                    <form th:action="@{/member/delete}" method="post">-->
-<!--                        <button type="submit" class="btn btn-danger">회원탈퇴</button>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </section>-->
+            <!--            &lt;!&ndash; 회원탈퇴 &ndash;&gt;-->
+            <!--            <section class="section section-profile flex-grow flex flex-col items-center justify-center">-->
+            <!--                <div class="max-w-md w-full px-2 pt-4">-->
+            <!--                    <h1 class="font-bold text-lg">-->
+            <!--                        <i class="fa-solid fa-trash-can"></i>-->
+            <!--                        회원탈퇴-->
+            <!--                    </h1>-->
+            <!--                    <form th:action="@{/member/delete}" method="post">-->
+            <!--                        <button type="submit" class="btn btn-danger">회원탈퇴</button>-->
+            <!--                    </form>-->
+            <!--                </div>-->
+            <!--            </section>-->
             <!-- 회원탈퇴 -->
-            <section class="section section-profile flex-grow flex flex-col items-center justify-center">
-                <div class="max-w-md w-full px-2 pt-4">
+            <section class="section section-profile mt-[50px]">
+                <div class="max-w-md w-full px-2 pt-4 flex justify-between">
                     <h1 class="font-bold text-lg">
                         <i class="fa-solid fa-trash-can"></i>
                         회원탈퇴

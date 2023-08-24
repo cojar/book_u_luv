@@ -2,8 +2,8 @@ package com.project.bookuluv.domain.rebate;
 
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.domain.admin.domain.Product;
-import com.project.bookuluv.domain.order.Order;
-import com.project.bookuluv.domain.order.OrderItem;
+import com.project.bookuluv.domain.order.domain.Order;
+import com.project.bookuluv.domain.order.domain.OrderItem;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;

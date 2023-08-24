@@ -1,0 +1,64 @@
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+<link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.1/dist/full.css" rel="stylesheet" type="text/css"/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+
+<!-- toastr -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+<link rel="stylesheet" href="https://jhs512.github.io/toastr/toastr.css">
+
+<!-- 폰트어썸 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+<!-- 테일윈드 -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div class="mx-auto mt-10 max-w-screen-xl">
+    <div>
+        <span class="text-[50px] font-bold">장바구니</span>
+        <i class="fas fa-shopping-cart text-red-500 text-[50px]"></i>
+    </div>
+    <div class="mx-auto mt-10 max-w-screen-lg">
+        <table class="w-full ">
+            <tbody>
+            <tr>
+                <td>
+                    <div class="flex items-center justify-center">
+                        <input type="checkbox" class="w-[20px] h-[20px]">
+                    </div>
+                </td>
+                <td class=" px-4 py-2 w-60">
+                    <div class="flex justify-center">
+                        <img src="https://i.postimg.cc/9MnXmgL2/image.jpg" class="w-[120px] h-[150px]">
+                    </div>
+                </td>
+                <td class="px-4 py-2 w-auto">
+                    <div>
+                        <span class="block text-center">책제목</span>
+                        <span class="block text-center">작가</span>
+                        <span class="block text-center">출판사</span>
+                        <span class="block text-center">가격</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex items-center justify-center">
+                        <button>
+                            <i class="fas fa-times text-2xl"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="border-t mt-4 pt-4">
+        </div>
+        <div class="mt-[20px] flex justify-end w-full">
+            <button id="buyButton" class="ml-2 px-4 py-2 bg-green-500 w-24 text-white rounded text-center">구매</button>
+        </div>
+    </div>
+</div>

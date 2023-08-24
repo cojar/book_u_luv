@@ -24,7 +24,8 @@
                 <span class="ml-2">출판사 : <span th:text="${products.publisher}"></span></span>
             </div>
             <div class="mb-2 mx-auto">
-                <span>정가 : <span class="line-through text-gray-500" th:text="${products.priceStandard} + '원'"></span></span>
+                <span>정가 : <span class="line-through text-gray-500"
+                                 th:text="${products.priceStandard} + '원'"></span></span>
                 <span>할인가 : <span th:text="${products.priceSales} + '원'"></span></span>
             </div>
             <div class="border-t mt-4 pt-4">
@@ -129,9 +130,6 @@
       toggleStar(index);
     });
   });
-
-
-
 
 
     </script>

@@ -2,22 +2,29 @@ package com.project.bookuluv.domain.order.controller;
 
 import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.service.ProductService;
+import com.project.bookuluv.domain.cash.service.CashService;
+import com.project.bookuluv.domain.member.domain.Member;
+import com.project.bookuluv.domain.member.service.MemberService;
+import com.project.bookuluv.domain.order.domain.Order;
+import com.project.bookuluv.domain.order.domain.OrderItem;
+import com.project.bookuluv.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import com.project.bookuluv.domain.member.domain.Member;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.security.Principal;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/order")
@@ -29,16 +36,25 @@ public class OrderController {
 
     private final ProductService productService;
 
-    @GetMapping("/detail")
-    public String detail(Model model, @RequestParam Long productsId) {
-        Product product = this.productService.getById(productsId);
-        model.addAttribute("product", product);
+    private final MemberService memberService;
 
+    private final CashService cashService;
+
+    private final OrderService orderService;
+
+    @GetMapping("/detail")
+    public String detail(Model model, @RequestParam Long productsId, Principal principal) {
+        Product product = this.productService.findById(productsId);
+        Member member = this.memberService.getMember(principal.getName());
+        Order order = orderService.getByBuyerAndProductId(member.getUserName(), productsId);
+        model.addAttribute("product", product);
+        model.addAttribute("member", member);
+        model.addAttribute("order", order);
         return "order/detail";
     }
 
-    @GetMapping("/success")
-    public String paymentResult(Model model, @RequestParam(value = "orderId") String orderId, @RequestParam(value = "amount") Integer amount, @RequestParam(value = "paymentKey") String paymentKey) throws Exception {
+    @GetMapping("/{id}/success")
+    public String paymentResult(Model model, @PathVariable Long id, @RequestParam(value = "orderId") String orderId, @RequestParam(value = "amount") Integer amount, @RequestParam(value = "paymentKey") String paymentKey, Principal principal) throws Exception {
 
         String secretKey = paymentSecretKey;
 
@@ -90,6 +106,15 @@ public class OrderController {
             model.addAttribute("code", (String) jsonObject.get("code"));
             model.addAttribute("message", (String) jsonObject.get("message"));
         }
+
+        Member member = this.memberService.getMember(principal.getName());
+        Product product = this.productService.findById(id);
+        Order order = this.orderService.createOrder(member, product);
+
+        model.addAttribute("member", member);
+        model.addAttribute("product", product);
+        model.addAttribute("order", order);
+        this.cashService.addCashLog(member, member.getLastName(), member.getFirstName(), product, product.getTitle(), amount);
         return "order/success";
     }
 
