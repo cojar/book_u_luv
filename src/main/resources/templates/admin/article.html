@@ -14,6 +14,8 @@
 <body>
 
 <main layout:fragment="content">
+
+
   <header class="p-4 text-left border-b">
     <div class="flex justify-between items-center">
       <h1 class="text-2xl">관리자 페이지</h1>
@@ -21,22 +23,22 @@
         <div class="admin_menu flex space-x-4">
           <ul class="flex space-x-4">
             <li>
-              <a href="@{/admin/adminUser}" class="menu-link">회원관리</a>
+              <a th:href="@{/admin/member}" class="menu-link">회원관리</a>
             </li>
             <li>
-              <a href="@{/admin/adminAuthor}" class="menu-link">작가관리</a>
+              <a th:href="@{/admin/author}" class="menu-link">작가관리</a>
             </li>
             <li>
-              <a href="@{/admin/adminNotice}" class="menu-link">공지사항 관리</a>
+              <a th:href="@{/admin/notice}" class="menu-link">공지사항 관리</a>
             </li>
             <li>
-              <a href="@{/admin/adminAriticle}" class="menu-link">판매 글 관리</a>
+              <a th:href="@{/admin/article}" class="menu-link">판매 글 관리</a>
             </li>
             <li>
-              <a href="@{/admin/adminProduct}" class="menu-link">도서관리</a>
+              <a th:href="@{/admin/product}" class="menu-link">도서관리</a>
             </li>
             <li>
-              <a href="@{/admin/adminCalculate}" class="menu-link">정산관리</a>
+              <a th:href="@{/admin/calculate}" class="menu-link">정산관리</a>
             </li>
           </ul>
         </div>
@@ -44,33 +46,30 @@
     </div>
     <!-- ... -->
   </header>
-
-  <!-- 판매글 관리 테이블 -->
-  <h1 class="text-3xl font-semibold mt-8 mb-4">도서 관리</h1>
+  <!-- 회원 관리 테이블 -->
+  <h1 class="text-3xl font-semibold mt-8 mb-4">판매글 관리</h1>
   <div class="overflow-x-auto">
     <table class="min-w-full">
       <thead>
       <tr>
         <th class="py-2 px-4 border">NO.</th>
         <th class="py-2 px-4 border">제목</th>
-        <th class="py-2 px-4 border">작가</th>
-        <th class="py-2 px-4 border">출판일</th>
-        <th class="py-2 px-4 border">출판사</th>
+        <th class="py-2 px-4 border">작성자</th>
+        <th class="py-2 px-4 border">작성일자</th>
+        <th class="py-2 px-4 border">수정일자</th>
       </tr>
       </thead>
       <tbody>
-      <tr class="bg-white" th:each="product : ${productList}">
-        <th class="py-2 px-4 border" th:text="${product.id}"></th>
-        <th class="py-2 px-4 border" th:text="${product.title}"></th>
-        <th class="py-2 px-4 border" th:text="${product.author}"></th>
-        <th class="py-2 px-4 border" th:text="${product.pubDate}"></th>
-        <th class="py-2 px-4 border" th:text="${product.publisher}"></th>
+      <tr th:each="article : ${articleList}">
+        <th class="py-2 px-4 border" th:text="${article.id}">NO.</th>
+        <th class="py-2 px-4 border" th:text="${article.subject}"></th>
+        <th class="py-2 px-4 border" th:text="${article.register}"></th>
+        <th class="py-2 px-4 border" th:text="${article.createDate}"></th>
+        <th class="py-2 px-4 border" th:text="${article.modifyDate}"></th>
       </tr>
       </tbody>
     </table>
   </div>
-
-
 </main>
 </body>
 </html>

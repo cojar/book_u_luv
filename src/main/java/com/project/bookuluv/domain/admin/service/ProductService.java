@@ -1,18 +1,20 @@
 package com.project.bookuluv.domain.admin.service;
 
-import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
+import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.*;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,14 +49,13 @@ public class ProductService {
         return getBooksFromApi(url);
     }
 
-    public Page<Product> getDomestic(Pageable pageable) {
-        return productRepository.findByMallType("BOOK", pageable);
+    // 국내, 외국 도서 목록 페이징에 담아서 불러오는 service
+    public Page<Product> getProducts(String type, int page, String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(sorts));
+        return this.productRepository.findAllByKeyword(kw, type.toUpperCase(), pageable);
     }
-
-    public Page<Product> getForeign(Pageable pageable) {
-        return productRepository.findByMallType("FOREIGN", pageable);
-    }
-
 
     private String buildSearchUrl(String queryType, String query) {
         return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Book&Foreign" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";

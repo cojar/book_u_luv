@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>BOOKU_LUV 도서 목록</title>
+</head>
+
+<body layout:fragment="content">
+<div class="text-center mt-[50px]">
+    <span class="text-[50px] font-bold"
+          th:text="${type == 'book' ? '국내 도서' : (type == 'foreign' ? '외국 도서' : '기타 도서')}"></span>
+</div>
+
+<!-- 검색 창과 검색 버튼 -->
+<div class="flex justify-center">
+    <div class="flex justify-end mt-4 w-[83%]">
+        <input class="border p-2 rounded" id="search_kw" placeholder="검색어를 입력하세요" type="text">
+        <button class="bg-blue-500 text-white px-4 py-2 ml-2 rounded" id="btn_search">검색</button>
+    </div>
+</div>
+
+<!-- 검색과 제품갯수 출력결과 information-box -->
+<div class="flex justify-center">
+    <div class="w-[83%] px-4 py-3 bg-blue-100 rounded-md mt-4 grid grid-cols-2 gap-4">
+        <!-- 검색어가 있을 때 -->
+        <div class="px-2 col-span-2 sm:col-span-1" th:if="${kw != null && kw != ''}">
+            <h2 class="text-xl font-semibold mb-2">검색 결과</h2>
+            <p class="text-gray-600">"<span style="display:inline-block;" th:text="${kw}"></span>" 검색어가 포함된 모든 결과입니다.
+            </p>
+        </div>
+        <!-- 검색어가 없을 때 -->
+        <div class="col-span-2 sm:col-span-1" th:unless="${kw != null && kw != ''}">
+            <h2 class="text-xl font-semibold mb-2"></h2>
+            <p class="text-gray-600"></p>
+        </div>
+        <div class="col-span-2 sm:col-span-1 flex justify-end items-center">
+            <div class="search-result inline-block mr-1 text-xl font-semibold"
+                 th:text="${products.totalElements}"></div>
+            건의 결과가 있어요
+        </div>
+    </div>
+</div>
+
+<!-- 국내 도서 목록 -->
+<div class="flex justify-center items-center" th:if="${products}">
+    <div class="my-10">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-8">
+            <!-- 도서 정보 표시 -->
+            <div class="flex flex-col mx-auto w-80 p-4" th:each="product : ${products}">
+                <div class="text-center">
+                    <a class="block text-lg font-semibold my-4" th:href="@{|/product/domestic/detail/${product.id}|}">
+                        <div class="hover:scale-105 transition-transform">
+                            <img alt="Book Cover" class="mx-auto w-48 h-72" th:src="${product.coverImg}">
+                        </div>
+                        <span class="block text-lg font-semibold my-4" th:text="${product.title}"></span>
+                    </a>
+                    <span class="block text-gray-600 mb-2" th:text="${product.author}"></span>
+                    <span class="block text-gray-600 mb-2" th:text="${product.publisher}"></span>
+                    <div class="mt-2">
+                        <div>
+                            <span class="text-gray-500">정가 : </span>
+                            <span class="line-through text-gray-500" th:text="${product.priceStandard} + '원'"></span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">할인가 : </span>
+                            <span class="text-green-600" th:text="${product.priceSales} + '원'"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 페이지네이션 -->
+<div th:if="${!products.isEmpty()}">
+    <div class="flex justify-center mt-4">
+        <ul class="flex list-reset border border-gray-300 rounded">
+            <li class="page-item hover:bg-gray-200"
+                th:classappend="${!products.hasPrevious()} ? 'disabled'">
+                <a class="page-link px-3 py-2 block text-center" href="javascript:void(0)"
+                   th:data-page="${products.number}">
+                    <span><</span>
+                </a>
+            </li>
+            <li class="page-item" th:each="page: ${#numbers.sequence(1, products.totalPages)}"
+                th:if="${page >= products.number-5 and page <= products.number+5}">
+                <a class="page-link block text-center px-3 py-2 hover:bg-gray-200"
+                   href="javascript:void(0)" th:classappend="${page == products.number+1} ? 'bg-blue-300'"
+                   th:data-page="${page}">
+                    <span th:text="${page}"></span>
+                </a>
+            </li>
+            <li class="page-item hover:bg-gray-200" th:classappend="${!products.hasNext()} ? 'disabled'">
+                <a class="page-link px-3 py-2 block text-center" href="javascript:void(0)"
+                   th:data-page="${products.number+2}">
+                    <span>></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<form id="searchForm" method="get" th:action="@{/product/list}">
+    <input id="type" name="type" th:value="${type}" type="hidden">
+    <input id="kw" name="kw" th:value="${kw}" type="hidden">
+    <input id="page" name="page" th:value="${products.number}" type="hidden">
+</form>
+
+<script layout:fragment="script" type="text/javascript">
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
+    });
+    const btn_search = document.getElementById("btn_search");
+    btn_search.addEventListener('click', function() {
+        document.getElementById('kw').value = document.getElementById('search_kw').value;
+        document.getElementById('page').value = 1;
+        document.getElementById('searchForm').submit();
+    });
+
+</script>
+</body>
+
+</html>
