@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:layout="" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -21,25 +21,25 @@
                 <div class="admin_menu flex space-x-4">
                     <ul class="flex space-x-4">
                         <li>
-                            <a th:href="@{/admin/member}" class="menu-link">회원관리</a>
+                            <a class="menu-link" th:href="@{/admin/member}">회원관리</a>
                         </li>
                         <li>
-                            <a th:href="@{/admin/notice}" class="menu-link">공지사항 관리</a>
+                            <a class="menu-link" th:href="@{/admin/notice}">공지사항 관리</a>
                         </li>
                         <li>
-                            <a th:href="@{/admin/domestic}" class="menu-link">국내도서 관리</a>
+                            <a class="menu-link" th:href="@{/admin/domestic}">국내도서 관리</a>
                         </li>
                         <li>
-                            <a th:href="@{/admin/foreign}" class="menu-link">외국도서 관리</a>
+                            <a class="menu-link" th:href="@{/admin/foreign}">외국도서 관리</a>
                         </li>
                         <li>
-                            <a th:href="@{/admin/author}" class="menu-link">작가관리</a>
+                            <a class="menu-link" th:href="@{/admin/author}">작가관리</a>
                         </li>
                         <li>
-                            <a th:href="@{/admin/article}" class="menu-link">판매 글 관리</a>
+                            <a class="menu-link" th:href="@{/admin/article}">판매 글 관리</a>
                         </li>
                         <li>
-                            <a th:href="@{/admin/calculate}" class="menu-link">정산관리</a>
+                            <a class="menu-link" th:href="@{/admin/calculate}">정산관리</a>
                         </li>
                     </ul>
                 </div>
@@ -62,8 +62,10 @@
                     <th class="py-2 px-4 border w-auto">성별</th>
                     <th class="py-2 px-4 border w-auto">생년월일</th>
                     <th class="py-2 px-4 border w-auto">전화번호</th>
-                    <th class="py-2 px-4 border w-auto">활성 여부</th>
                     <th class="py-2 px-4 border w-auto">권한</th>
+                    <th class="py-2 px-4 border w-auto">활성 여부</th>
+                    <th class="py-2 px-4 border w-auto">권한 부여</th>
+                    <th class="py-2 px-4 border w-auto">삭제</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -73,11 +75,39 @@
                     <td class="py-2 px-4 border" th:text="${member.lastName}"></td>
                     <td class="py-2 px-4 border" th:text="${member.firstName}"></td>
                     <td class="py-2 px-4 border" th:text="${member.nickName}"></td>
-                    <td class="py-2 px-4 border" th:text="${member.gender}"></td>
+                    <td class="py-2 px-4 border" th:text="${member.gender == true ? '남성' : (member.gender == false ? '여성' : '알 수 없음')}"></td>
                     <td class="py-2 px-4 border" th:text="${member.birthDate}"></td>
                     <td class="py-2 px-4 border" th:text="${member.phone}"></td>
-                    <td class="py-2 px-4 border" th:text="${member.isActive}"></td>
-                    <td class="py-2 px-4 border"></td>
+                    <td class="py-2 px-4 border" th:text="${member.role}"></td>
+                    <td class="py-2 px-4 border">
+                        <form method="post" th:action="@{/admin/member/toggle-active}">
+                            <input name="memberId" th:value="${member.id}" type="hidden"/>
+                            <button class="text-black px-2 py-1 rounded transition-colors duration-300 ease-in-out hover:bg-blue-600"
+                                    th:classappend="${member.isActive ? 'text-red-500 bg-red-200 hover:bg-red-600' : 'text-blue-500 bg-blue-200 hover:bg-blue-600'}"
+                                    type="submit">
+                                <span th:text="${member.isActive ? '비활성화' : '활성화'}"></span>
+                            </button>
+                        </form>
+                    </td>
+                    <td class="py-2 px-4 border">
+                        <form method="post" th:action="@{/admin/member/update-role}">
+                            <input name="memberId" th:value="${member.id}" type="hidden"/>
+                            <select name="newRole">
+                                <option th:selected="${member.role == 'MEMBER'}" value="MEMBER">Member</option>
+                                <option th:selected="${member.role == 'ADMIN'}" value="ADMIN">Admin</option>
+                                <option th:selected="${member.role == 'AUTHOR'}" value="AUTHOR">Author</option>
+                                <!-- 다른 권한 옵션들 추가 -->
+                            </select>
+                            <button type="submit">변경</button>
+                        </form>
+                    </td>
+                    <td class="py-2 px-4 border">
+                        <form method="post" th:action="@{/admin/member/delete}">
+                            <input name="memberId" th:value="${member.id}" type="hidden"/>
+                            <button class="bg-red-500 text-red-500 px-2 py-1 rounded hover:bg-red-600"
+                                    type="submit">삭제</button>
+                        </form>
+                    </td>
                 </tr>
                 </tbody>
             </table>

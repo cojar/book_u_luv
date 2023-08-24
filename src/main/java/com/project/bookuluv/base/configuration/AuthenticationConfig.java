@@ -1,6 +1,7 @@
 package com.project.bookuluv.base.configuration;
 
 import com.project.bookuluv.domain.member.service.MemberService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +15,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class AuthenticationConfig {
     @Autowired
@@ -43,6 +44,10 @@ public class AuthenticationConfig {
                         "/v3/api-docs",
                         "/**"
                 ).permitAll()
+                .requestMatchers("/admin/**").hasAnyRole("SUPERADMIN", "ADMIN")
+                .requestMatchers("/author/**").hasAnyRole("SUPERADMIN", "ADMIN", "AUTHOR")
+                .requestMatchers("/member/**").hasAnyRole("SUPERADMIN", "ADMIN", "AUTHOR", "MEMBER")
+                .anyRequest().authenticated()
                 .and()
                 .formLogin(
                         formLogin -> formLogin

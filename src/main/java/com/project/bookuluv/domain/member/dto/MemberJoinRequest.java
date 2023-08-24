@@ -55,4 +55,6 @@ public class MemberJoinRequest {
     private String jibunAddress;
     private String detailAddress;
     private String extraAddress;
+
+    private String adminKey;
 }
