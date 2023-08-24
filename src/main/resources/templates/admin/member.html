@@ -94,8 +94,9 @@
                             <input name="memberId" th:value="${member.id}" type="hidden"/>
                             <select name="newRole">
                                 <option th:selected="${member.role == 'MEMBER'}" value="MEMBER">Member</option>
-                                <option th:selected="${member.role == 'ADMIN'}" value="ADMIN">Admin</option>
                                 <option th:selected="${member.role == 'AUTHOR'}" value="AUTHOR">Author</option>
+                                <option th:selected="${member.role == 'ADMIN'}" value="ADMIN">Admin</option>
+                                <option th:selected="${member.role == 'SUPERADMIN'}" value="SUPERADMIN">SuperAdmin</option>
                                 <!-- 다른 권한 옵션들 추가 -->
                             </select>
                             <button type="submit">변경</button>
