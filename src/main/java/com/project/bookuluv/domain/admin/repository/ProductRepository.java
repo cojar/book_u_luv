@@ -28,4 +28,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             // mall_type 조건 추가
             + "   and (p.mallType = :book) ")
     Page<Product> findAllByKeyword(@Param("kw") String kw, @Param("book") String mallType, Pageable pageable);
+
+    Product findByProductId(Long id);
 }
