@@ -53,8 +53,9 @@
                         <tbody th:if="${notices}">
                         <tr th:each="notice, loop : ${notices}" class="border-b">
                             <td th:text="${notices.getTotalElements() - (notices.getNumber() * notices.getSize()) - loop.index}"></td>
-                            <td class="text-left">
-                                <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}" th:text="${notice.subject}" th:attr="data-id=${notice.id}"></a>
+                            <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}"  th:attr="data-id=${notice.id}">
+                            <td class="text-left" th:text="${notice.subject}">
+
                             </td>
                             <td th:text="${notice.register.nickName}" class="py-2"></td>
                             <td th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}"
@@ -64,6 +65,7 @@
                                 class="py-2"></td>
                             <td th:unless="${notice.modifyDate != null}" class="py-2">-</td>
                             <td th:text="${notice.hit}" class="py-2"></td>
+                            </a>
                             <td class="py-2">
                                 <!-- 수정/삭제 버튼 -->
                                 <a th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}"
