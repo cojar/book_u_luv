@@ -3,12 +3,19 @@ package com.project.bookuluv.domain.admin.controller;
 import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.service.ProductService;
+import com.project.bookuluv.domain.member.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -17,6 +24,8 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+
+    private final MemberService memberService;
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String searchBooks(Model model, @RequestParam String query) {
@@ -49,16 +58,83 @@ public class ProductController {
     }
 
     @GetMapping(value = "/domestic/detail/{id}")
-    private String domesticDetail(Model model, @PathVariable("id") Long id) {
+    public String domesticDetail(Model model, @PathVariable("id") Long id) {
         Product products = this.productService.findById(id);
         model.addAttribute("products", products);
         return "product/detail";
     }
 
     @GetMapping(value = "/foreign/detail/{id}")
-    private String foreignDetail(Model model, @PathVariable("id") Long id) {
+    public String foreignDetail(Model model, @PathVariable("id") Long id) {
         Product products = this.productService.findById(id);
         model.addAttribute("products", products);
         return "product/detail";
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @GetMapping("/create")
+    @PreAuthorize("isAuthenticated()")
+    private String create(ProductDto productDto) {
+        return "product/product_form";
+    }
+
+    @PostMapping("/create")
+    @PreAuthorize("isAuthenticated()")
+    public String articleCreate(@ModelAttribute("productDto") @Valid ProductDto productDto,
+                                 BindingResult bindingResult,
+                                 @RequestParam("file1") MultipartFile file1,
+                                 @RequestParam("file2") MultipartFile file2) throws IOException {
+        if (bindingResult.hasErrors()) {
+            return "product/product_form";
+        }
+
+        this.productService.create(productDto, file1, file2);
+        return "redirect:/";
+    }
+
+
+    @GetMapping("/modify/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String modifyForm(@Valid ProductDto productDto, @PathVariable("id") Long id, Model model) {
+        return "product_form";
+    }
+
+    @PostMapping("/modify/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String modifyProduct(@ModelAttribute("productDto") @Valid ProductDto productDto,
+                                BindingResult bindingResult,
+                                @PathVariable("id") Long id,
+                                @RequestParam("files") MultipartFile[] files) throws IOException {
+        if (bindingResult.hasErrors()) {
+            return "product_form";
+        }
+
+        productService.modify(productDto, id, files);
+        return "redirect:/";
+    }
+
+    @PostMapping("/delete/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String delete(@PathVariable("id") Long id, BindingResult bindingResult, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/";
+        }
+        Product product = this.productService.findById(id);
+        this.productService.delete(product);
+        return "redirect:/";
+    }
+
 }
