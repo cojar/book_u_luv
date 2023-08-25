@@ -34,9 +34,9 @@
                     </div>
 
                     <!-- 글쓰기 버튼 -->
-                    <div class="flex justify-end mb-4">
+                    <div class="flex justify-end my-4">
                         <a th:href="@{/notice/create}" th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}"
-                           class="px-4 py-2 bg-blue-500 text-white rounded-md transition duration-300 hover:bg-blue-600 btn btn-primer btn-outline">글쓰기</a>
+                           class="btn btn-primer btn-outline">글쓰기</a>
                     </div>
                     <table class="w-full border-collapse">
                         <thead>

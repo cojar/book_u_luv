@@ -1,60 +1,62 @@
+<!DOCTYPE html>
 <html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
       xmlns:th="http://www.thymeleaf.org">
-
-<body>
-<main layout:fragment="content">
-    <div class="mx-auto max-w-screen-xl h-auto">
-        <div class="bg-white rounded-lg shadow">
-            <div class="flex justify-center my-[40px]">
-                <img class="w-96 h-auto" th:src="${products.coverImg}" alt="">
-            </div>
-            <div class="flex justify-between items-center mb-5">
-                <div class="flex items-center">
-                    <span th:text="${products.title}" class="text-2xl w-[500px] font-bold">
-             </span>
-                </div>
-                <div>
-            <span class="w-[200px]">
-              현재평점/총평점
-            </span>
-                </div>
-            </div>
-            <div class="my-2 sm:my-3">
-                <span>작가 : <span th:text="${products.author}"></span></span>
-                <span class="ml-2">출판사 : <span th:text="${products.publisher}"></span></span>
-            </div>
-            <div class="mb-2 mx-auto">
-                <span>정가 : <span class="line-through text-gray-500"
-                                 th:text="${products.priceStandard} + '원'"></span></span>
-                <span>할인가 : <span th:text="${products.priceSales} + '원'"></span></span>
-            </div>
-            <div class="border-t mt-4 pt-4">
-                <div>상품정보 및 내용</div>
-            </div>
-            <div class="mt-4 w-[700px]">
-                <div th:text="${products.description}"></div>
-            </div>
-            <div class="border-solid mt-4 pt-4">
-                <div>
-                    <div>
-              <span>
+<head>
+    <meta charset="UTF-8">
+    <link href="" rel="stylesheet">
+    <title>상품상세페이지</title>
+</head>
+<body layout:fragment="content">
+<div class="mx-auto max-w-screen-xl h-auto">
+    <div class="bg-white rounded-lg shadow">
+        <div class="flex justify-center my-[40px]">
+            <img class="w-96 h-auto" th:src="${products.coverImg}" alt="">
+        </div>
+    </div>
+    <div class="flex justify-between items-center mb-5">
+        <div class="flex items-center">
+            <span th:text="${products.title}" class="text-2xl w-[500px] font-bold"></span>
+        </div>
+        <span class="w-[200px] text-end">현재평점/총평점</span>
+    </div>
+    <div class="my-2 sm:my-3">
+        <span>작가 : </span>
+        <span th:text="${products.author}"></span>
+        <span class="ml-2">출판사 : </span>
+        <span th:text="${products.publisher}"></span>
+    </div>
+    <div class="mb-2 mx-auto">
+        <span>정가 : </span>
+        <span class="line-through text-gray-500"
+              th:text="${products.priceStandard} + '원'"></span>
+        <span>할인가 : </span>
+        <span th:text="${products.priceSales} + '원'"></span>
+    </div>
+    <div class="border-t mt-4 pt-4">
+        <div>상품정보 및 내용</div>
+    </div>
+    <div class="mt-4 w-[700px]">
+        <div th:text="${products.description}"></div>
+    </div>
+    <div class="border-solid mt-4 pt-4">
+        <div>
+            <span>
                 <!-- 리뷰글쓸때 선택한 별점색칠 -->
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
-              </span>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <div>쓴 리뷰글</div>
-                </div>
-                <div class="border-t mt-4 pt-4">
-                    <div class="my-4">
-                        <span class="font-bold text-[20px]">리뷰 작성</span>
-                    </div>
-                    <div>
+            </span>
+        </div>
+        <div class="mt-4">
+            <div>쓴 리뷰글</div>
+        </div>
+        <div class="border-t mt-4 pt-4">
+            <div class="my-4">
+                <span class="font-bold text-[20px]">리뷰 작성</span>
+            </div>
+            <div>
               <span id="starRating">
                 <!-- 리뷰글쓸때 선택한 별점색칠 -->
                 <i class="star fas fa-star"></i>
@@ -63,33 +65,29 @@
                 <i class="star fas fa-star"></i>
                 <i class="star fas fa-star"></i>
               </span>
-                    </div>
-                    <div class="mt-4">
-                            <textarea class="w-full h-auto resize-none p-2 border rounded"
-                                      placeholder="리뷰를 작성해주세요..."></textarea>
-                        <div class="flex justify-end">
-                            <button class="mt-2 px-4 py-2 bg-blue-600 text-white rounded">작성</button>
-                        </div>
-                    </div>
-                    <div class="flex items-center mt-4 border-t pt-4">
-                        <i id="likeIcon" class="far fa-heart text-2xl cursor-pointer"></i>
-                        <div class="flex justify-end w-full mr-[10px]">
-                            <button class="ml-2 px-4 py-2 w-24 btn btn-primary text-white">장바구니
-                            </button>
-                        </div>
-                        <form th:action="@{/order/detail}">
-                            <input type="hidden" name="productsId" th:value="${products.id}">
-                            <input type="submit" value="구매" class="btn btn-primary text-white">
-                        </form>
-                    </div>
+            </div>
+            <div class="mt-4">
+                <textarea class="w-full h-auto resize-none p-2 border rounded" placeholder="리뷰를 작성해주세요..."></textarea>
+                <div class="flex justify-end">
+                    <button class="mt-2 px-4 py-2 bg-blue-600 text-white rounded">작성</button>
                 </div>
+            </div>
+            <div class="flex items-center mt-4 border-t pt-4">
+                <i id="likeIcon" class="far fa-heart text-2xl cursor-pointer"></i>
+                <div class="flex justify-end w-full mr-[10px]">
+                    <button class="ml-2 px-4 py-2 w-24 btn btn-primary text-white">장바구니</button>
+                </div>
+                <form th:action="@{/order/detail}">
+                    <input type="hidden" name="productsId" th:value="${products.id}">
+                    <input type="submit" value="구매" class="btn btn-primary text-white">
+                </form>
             </div>
         </div>
     </div>
-    </div>
+</div>
 
 
-    <script>
+<script>
   // 찜 스크립트
   const likeIcon = document.getElementById('likeIcon');
   let isLiked = false; // 좋아요 상태 여부
@@ -132,7 +130,7 @@
   });
 
 
-    </script>
-</main>
+
+</script>
 </body>
 </html>
