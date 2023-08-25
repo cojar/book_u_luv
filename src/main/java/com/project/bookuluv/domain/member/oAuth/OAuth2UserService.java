@@ -60,7 +60,8 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         }
         String provider = userRequest.getClientRegistration().getRegistrationId();
         String providerId = "";
-
+        MemberRole role = null;
+        
 
         if (isNew(oauthType, oauthId)) {
             switch (oauthType) {
@@ -78,7 +79,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                     LocalDate birthDate = null;
                     Boolean mailAuth = null;
                     boolean isActive = true;
-
+                    role = MemberRole.MEMBER;
 
                     if ((boolean) attributesKakaoAccount.get("has_email")) { // 만약 이메일 공개 동의 시 수집 가능
                         email = (String) attributesKakaoAccount.get("email");
@@ -122,7 +123,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                             .imgFilePath(profileImgUrl)             // 사용자 프로필 사진 추가
                             .createDate(LocalDateTime.now())        // 계정 생성일 추가
                             .birthDate(birthDate)                   // 사용자 생년월일 추가
-                            .role(MemberRole.valueOf("MEMBER")) // 사용자 권한 추가
+                            .role(role) // 사용자 권한 추가
                             .mailAuth(mailAuth)                     // 사용자 메일 인증여부 추가(일반 가입시 true)
                             .gender(gender)                         // 사용자 성별 추가
                             .firstName(firstname)               // 사용자 이름 추가
@@ -146,9 +147,9 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                     Boolean gender = null;
                     boolean mailAuth = false;
                     boolean isActive = true;
+                    role = MemberRole.MEMBER;
                     String lastname;
                     String firstname;
-
                     String email;
                     if (attributesResponse.containsKey("email")) {
                         email = (String) attributesResponse.get("email");
@@ -223,7 +224,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                             .gender(gender)                     // 사용자 성별 추가
                             .provider(provider)
                             .providerId(providerId)
-                            .role(MemberRole.valueOf("MEMBER")) // 사용자 권한 추가
+                            .role(role) // 사용자 권한 추가
                             .isActive(isActive)                     // 계정 활성 여부 추가
                             .build(); // 빌드완료
                     memberRepository.save(member);
@@ -241,7 +242,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                     Boolean gender = null;
                     boolean mailAuth = true;
                     boolean isActive = true;
-
+                    role = MemberRole.MEMBER;
                     // 저장
                     member = Member.builder()
                             .userName(userName)                 // 사용자ID 추가(email형식) sub+google
@@ -256,7 +257,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                             .gender(gender)                     // 사용자 성별 추가
                             .provider(provider)
                             .providerId(providerId)
-                            .role(MemberRole.valueOf("MEMBER")) // 사용자 권한 추가
+                            .role(role) // 사용자 권한 추가
                             .isActive(isActive)                     // 계정 활성 여부 추가
                             .build(); // 빌드완료
                     memberRepository.save(member);
@@ -268,11 +269,15 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
             if (!member.isActive()) {
                 throw new DisabledException("해당 회원은 비활성화 되었습니다.");
             }
+            if (member.getRole() != null) { // 가입된 계정에 권한이 있다면 불러옴
+                role = member.getRole(); // role에 가입된 계정의 권한 할당
+            }
         }
-
+        
+        String roleAuthority = role.getAuthority(); // 권한의 문자열 값 가져오기
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("member"));
-        return new MemberContext(member, authorities, attributes, userNameAttributeName);
+        authorities.add(new SimpleGrantedAuthority(roleAuthority)); // 권한 배열에 해당 멤버의 권한 추가
+        return new MemberContext(member, authorities, attributes, userNameAttributeName); // 종합된 멤버의 권한으로 로그인 처리
     }
 
     private boolean isNew(String oAuthType, String oauthId) {

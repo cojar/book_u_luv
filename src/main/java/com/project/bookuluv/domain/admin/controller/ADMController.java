@@ -32,6 +32,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -61,7 +62,7 @@ public class ADMController {
             // 인증 코드 검증
             if (dto.getMailKey().equals(dto.getGenMailKey())) {
                 LocalDateTime currentDate = LocalDateTime.now();
-                MemberRole role = MemberRole.SUPERADMIN;
+                MemberRole role = MemberRole.SUPERADMIN; // TODO : 추후 MemberRole.ADMIN; 으로 할당값 변경
                 this.adminService.createAdminMember(
                         dto.getUserName(),
                         dto.getPassword1(),
@@ -163,9 +164,16 @@ public class ADMController {
         return "/admin/article";
     }
 
+    @GetMapping("/admin/author")
+    public String adminAuthor(Model model) {
+        List<Article> articleList = this.articleService.getAll();
+        model.addAttribute("articleList", articleList);
+        return "/admin/article";
+    }
+
     @GetMapping("/admin/member")
     public String adminMember(Model model) {
-        if (!userHasRequiredRoles()) {
+        if (!userIsAdmin()) { // 모든 관리자권한 가능
             throw new AccessDeniedException("Access is denied");
         }
         List<Member> memberList = this.memberService.getAll();
@@ -173,22 +181,13 @@ public class ADMController {
         return "/admin/member";
     }
 
-    private boolean userHasRequiredRoles() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return false;
-        }
-
-        // 슈퍼관리자(ROLE_SUPERADMIN) 이거나 일반관리자(ROLE_ADMIN)인지 확인해서 반환함
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return userDetails.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ROLE_SUPERADMIN")
-                        || authority.getAuthority().equals("ROLE_ADMIN"));
-    }
 
     @PostMapping("/admin/member/update-role")
     public String updateMemberRole(@RequestParam Long memberId, @RequestParam MemberRole newRole) {
+        if (!userIsAdmin()) { // 슈퍼 관리자만 가능
+            throw new AccessDeniedException("Access is denied");
+        }
         // userId와 newRole을 사용하여 해당 유저의 권한을 업데이트하는 로직 작성
         memberService.updateMemberRole(memberId, newRole);
         return "redirect:/admin/member"; // 회원 목록 페이지로 리다이렉트
@@ -197,6 +196,9 @@ public class ADMController {
     // 회원 활성화 / 비활성화 PostMapping
     @PostMapping("/admin/member/toggle-active")
     public String toggleMemberActive(@RequestParam Long memberId) {
+        if (!userIsSuperAdmin()) { // 모든 관리자권한 가능 TODO : 추후 슈퍼관리자만 가능으로 변경
+            throw new AccessDeniedException("Access is denied");
+        }
         memberService.toggleMemberActive(memberId);
         return "redirect:/admin/member"; // 회원 목록 페이지로 리다이렉트
     }
@@ -204,12 +206,18 @@ public class ADMController {
     // 회원 삭제(HARD DELETE) PostMapping
     @PostMapping("/admin/member/delete")
     public String deleteMember(@RequestParam Long memberId) {
+        if (!userIsAdmin()) { // 모든 관리자권한 가능
+            throw new AccessDeniedException("Access is denied");
+        }
         memberService.deleteMember(memberId);
         return "redirect:/admin/member"; // 회원 목록 페이지로 리다이렉트
     }
 
     @GetMapping("/admin/domestic")
     public String adminDomestic(Model model) {
+        if (!userIsAdmin()) { // 모든 관리자권한 가능
+            throw new AccessDeniedException("Access is denied");
+        }
         List<Product> productList = this.productService.getAll();
         model.addAttribute("productList", productList);
         return "/admin/domestic";
@@ -217,6 +225,9 @@ public class ADMController {
 
     @GetMapping("/admin/foreign")
     public String adminForeign(Model model) {
+        if (!userIsAdmin()) { // 모든 관리자권한 가능
+            throw new AccessDeniedException("Access is denied");
+        }
         List<Product> productList = this.productService.getAll();
         model.addAttribute("productList", productList);
         return "/admin/foreign";
@@ -224,8 +235,42 @@ public class ADMController {
 
     @GetMapping("/admin/notice")
     public String adminNotice(Model model) {
+        if (!userIsAdmin()) { // 모든 관리자권한 가능
+            throw new AccessDeniedException("Access is denied");
+        }
         List<Notice> noticeList = this.noticeService.getAll();
         model.addAttribute("noticeList", noticeList);
         return "/admin/notice";
     }
+    private boolean hasAuthority(String... roles) { // String...은 Java에서 가변 인자(variable arity)를 나타내는 문법.
+        // String...과 같이 선언하면, 해당 메서드를 호출할 때 여러 개의 인자를 전달할 수 있고, 이렇게 전달된 인자들은 배열로 처리됨.(roles 는 배열변수로써 권한정보를 문자열로 담고 있다.)
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return false;
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return userDetails.getAuthorities().stream()
+                .anyMatch(authority -> Arrays.stream(roles)
+                        .anyMatch(role -> authority.getAuthority().equals("ROLE_" + role)));
+    }
+
+    private boolean userIsSuperAdmin() {
+        return hasAuthority("SUPERADMIN");
+    }
+
+    boolean userIsAdmin() {
+        return hasAuthority("SUPERADMIN", "ADMIN");
+    }
+
+    boolean userIsAuthor() {
+        return hasAuthority("SUPERADMIN", "ADMIN", "AUTHOR");
+    }
+
+    boolean userHasAnyRole() {
+        return hasAuthority("SUPERADMIN", "ADMIN", "AUTHOR", "MEMBER");
+    }
+
+
 }

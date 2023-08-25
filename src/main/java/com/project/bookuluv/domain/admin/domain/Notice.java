@@ -16,7 +16,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 public class Notice extends BaseEntity {
 
     @Column(name = "subject")
@@ -25,7 +25,7 @@ public class Notice extends BaseEntity {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "hit")
+    @Column(name = "hit", columnDefinition = "integer default 0", nullable = false)
     private int hit;
 
     @ManyToOne
