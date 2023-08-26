@@ -30,7 +30,8 @@ public class MemberService {
 
     @Value("${custom.genFileDirPath}")
     private String genFileDirPath;
-
+    @Value("${custom.originPath}")
+    private String originPath;
     private final MemberRepository memberRepository;
 
     private final BCryptPasswordEncoder encoder;
@@ -134,7 +135,7 @@ public class MemberService {
 
         UUID uuid = UUID.randomUUID();
         String fileName = uuid + "_" + file.getOriginalFilename();
-        String filePath = "/img_upload/" + fileName;
+        String filePath = originPath + fileName;
 
         File saveFile = new File(projectPath, fileName);
         file.transferTo(saveFile); // 업로드된 파일 저장

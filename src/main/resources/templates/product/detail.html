@@ -1,45 +1,53 @@
-<!DOCTYPE html>
-<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
-      xmlns:th="http://www.thymeleaf.org">
+<!doctype html>
+<html lang="ko" layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
+      xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <link href="" rel="stylesheet">
-    <title>상품상세페이지</title>
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>도서 상세페이지</title>
 </head>
+
 <body layout:fragment="content">
 <div class="mx-auto max-w-screen-xl h-auto">
     <div class="bg-white rounded-lg shadow">
         <div class="flex justify-center my-[40px]">
-            <img class="w-96 h-auto" th:src="${products.coverImg}" alt="">
+            <img alt="" class="w-96 h-auto" th:src="${products.coverImg}">
         </div>
     </div>
+
     <div class="flex justify-between items-center mb-5">
         <div class="flex items-center">
-            <span th:text="${products.title}" class="text-2xl w-[500px] font-bold"></span>
+            <span class="text-2xl w-[500px] font-bold" th:text="${products.title}"></span>
         </div>
         <span class="w-[200px] text-end">현재평점/총평점</span>
     </div>
+
     <div class="my-2 sm:my-3">
         <span>작가 : </span>
         <span th:text="${products.author}"></span>
         <span class="ml-2">출판사 : </span>
         <span th:text="${products.publisher}"></span>
     </div>
+
     <div class="mb-2 mx-auto">
         <span>정가 : </span>
-        <span class="line-through text-gray-500"
-              th:text="${products.priceStandard} + '원'"></span>
+        <span class="line-through text-gray-500" th:text="${products.priceStandard} + '원'"></span>
         <span>할인가 : </span>
         <span th:text="${products.priceSales} + '원'"></span>
     </div>
+
     <div class="border-t mt-4 pt-4">
-        <div>상품정보 및 내용</div>
+        상품정보 및 내용
     </div>
+
     <div class="mt-4 w-[700px]">
         <div th:text="${products.description}"></div>
     </div>
+
     <div class="border-solid mt-4 pt-4">
-        <div>
             <span>
                 <!-- 리뷰글쓸때 선택한 별점색칠 -->
                 <i class="fas fa-star"></i>
@@ -48,24 +56,21 @@
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
             </span>
-        </div>
         <div class="mt-4">
-            <div>쓴 리뷰글</div>
+            쓴 리뷰글
         </div>
         <div class="border-t mt-4 pt-4">
             <div class="my-4">
                 <span class="font-bold text-[20px]">리뷰 작성</span>
             </div>
-            <div>
-              <span id="starRating">
-                <!-- 리뷰글쓸때 선택한 별점색칠 -->
-                <i class="star fas fa-star"></i>
-                <i class="star fas fa-star"></i>
-                <i class="star fas fa-star"></i>
-                <i class="star fas fa-star"></i>
-                <i class="star fas fa-star"></i>
-              </span>
-            </div>
+            <span id="starRating">
+                    <!-- 리뷰글쓸때 선택한 별점색칠 -->
+                    <i class="star fas fa-star"></i>
+                    <i class="star fas fa-star"></i>
+                    <i class="star fas fa-star"></i>
+                    <i class="star fas fa-star"></i>
+                    <i class="star fas fa-star"></i>
+                </span>
             <div class="mt-4">
                 <textarea class="w-full h-auto resize-none p-2 border rounded" placeholder="리뷰를 작성해주세요..."></textarea>
                 <div class="flex justify-end">
@@ -73,64 +78,63 @@
                 </div>
             </div>
             <div class="flex items-center mt-4 border-t pt-4">
-                <i id="likeIcon" class="far fa-heart text-2xl cursor-pointer"></i>
+                <i class="far fa-heart text-2xl cursor-pointer" id="likeIcon"></i>
                 <div class="flex justify-end w-full mr-[10px]">
-                    <button class="ml-2 px-4 py-2 w-24 btn btn-primary text-white">장바구니</button>
+                    <button class="ml-2 px-4 py-2 w-24 btn btn-primary text-white">
+                        장바구니
+                    </button>
                 </div>
                 <form th:action="@{/order/detail}">
-                    <input type="hidden" name="productsId" th:value="${products.id}">
-                    <input type="submit" value="구매" class="btn btn-primary text-white">
+                    <input name="productsId" th:value="${products.id}" type="hidden">
+                    <input class="btn btn-primary text-white" type="submit" value="구매">
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-
 <script>
-  // 찜 스크립트
-  const likeIcon = document.getElementById('likeIcon');
-  let isLiked = false; // 좋아요 상태 여부
-  // 좋아요 아이콘 상태 변경 함수
-  likeIcon.classList.add('text-red-500');
+        // 찜 스크립트
+        const likeIcon = document.getElementById('likeIcon');
+        let isLiked = false; // 좋아요 상태 여부
+        // 좋아요 아이콘 상태 변경 함수
+        likeIcon.classList.add('text-red-500');
 
-  function toggleLike() {
-    if (isLiked) {
-      likeIcon.classList.remove('fas', 'text-red-500');
-      likeIcon.classList.add('far', 'text-red-500');
-    } else {
-      likeIcon.classList.remove('far', 'text-red-500');
-      likeIcon.classList.add('fas', 'text-red-500');
-    }
-    isLiked = !isLiked;
-  }
-  likeIcon.addEventListener('click', toggleLike);
-  // 별점 스크립트
-  const stars = document.querySelectorAll('.star');
-  let selectedStars = 0;
+        function toggleLike() {
+            if (isLiked) {
+                likeIcon.classList.remove('fas', 'text-red-500');
+                likeIcon.classList.add('far', 'text-red-500');
+            } else {
+                likeIcon.classList.remove('far', 'text-red-500');
+                likeIcon.classList.add('fas', 'text-red-500');
+            }
+            isLiked = !isLiked;
+        }
+        likeIcon.addEventListener('click', toggleLike);
+        // 별점 스크립트
+        const stars = document.querySelectorAll('.star');
+        let selectedStars = 0;
 
-  function toggleStar(index) {
-    if (stars[index].classList.contains('text-yellow-500')) {
-      selectedStars = index; // 이전에 선택한 별점을 취소하므로 index만큼 별점을 선택한 것으로 갱신
-    } else {
-      selectedStars = index + 1; // 클릭한 별점까지 선택한 상태로 변경
-    }
-    for (let i = 0; i < stars.length; i++) {
-      if (i < selectedStars) {
-        stars[i].classList.add('text-yellow-500');
-      } else {
-        stars[i].classList.remove('text-yellow-500');
-      }
-    }
-  }
-  stars.forEach((star, index) => {
-    star.addEventListener('click', () => {
-      toggleStar(index);
-    });
-  });
-
-
-
+        function toggleStar(index) {
+            if (stars[index].classList.contains('text-yellow-500')) {
+                selectedStars = index; // 이전에 선택한 별점을 취소하므로 index만큼 별점을 선택한 것으로 갱신
+            } else {
+                selectedStars = index + 1; // 클릭한 별점까지 선택한 상태로 변경
+            }
+            for (let i = 0; i < stars.length; i++) {
+                if (i < selectedStars) {
+                    stars[i].classList.add('text-yellow-500');
+                } else {
+                    stars[i].classList.remove('text-yellow-500');
+                }
+            }
+        }
+        stars.forEach((star, index) => {
+            star.addEventListener('click', () => {
+                toggleStar(index);
+            });
+        });
 </script>
 </body>
+
 </html>

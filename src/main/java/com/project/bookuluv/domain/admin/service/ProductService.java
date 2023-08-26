@@ -15,10 +15,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,10 +35,122 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
+    @Value("${custom.genFileDirPath}")
+    private String genFileDirPath;
+    @Value("${custom.originPath}")
+    private String originPath;
     @Value("${spring.aladin.api.key}")
     private String apiKey;
     private final String searchUrl = "http://www.aladdin.co.kr/ttb/api/ItemSearch.aspx";
     private final String listUrl = "http://www.aladin.co.kr/ttb/api/ItemList.aspx";
+
+    public void createㅇ(ProductDto productDto, MultipartFile[] files) throws IOException {
+
+
+        Product product = Product.builder()
+                .title(productDto.getTitle())
+                .author(productDto.getAuthor())
+                .pubDate(productDto.getPubDate())
+                .description(productDto.getDescription())
+                .isbn(productDto.getIsbn())
+                .isbn13(productDto.getIsbn13())
+                .priceStandard(productDto.getPriceStandard())
+                .priceSales(productDto.getPriceSales())
+                .mallType(productDto.getMallType())
+                .coverImg(productDto.getCoverImg())
+                .contentsPdf(productDto.getContentsPdf())
+                .publisher(productDto.getPublisher())
+                .adult(productDto.isAdult())
+                .categoryName(productDto.getCategoryName())
+                .createDate(LocalDateTime.now())
+                .build();
+        this.productRepository.save(product);
+    }
+
+    public void create(ProductDto productDto, MultipartFile file1, MultipartFile file2) throws IOException {
+        String SanitizedMallType = "";
+        if (productDto.getMallType().equals("국내도서")) {
+            SanitizedMallType= "BOOK";
+        } else if (productDto.getMallType().equals("외국도서")) {
+            SanitizedMallType= "FOREIGN";
+        } else {
+            productDto.getMallType();
+        }
+
+        Product product = Product.builder()
+                .title(productDto.getTitle())
+                .author(productDto.getAuthor())
+                .pubDate(productDto.getPubDate())
+                .description(productDto.getDescription())
+                .isbn(productDto.getIsbn())
+                .isbn13(productDto.getIsbn13())
+                .priceStandard(productDto.getPriceStandard())
+                .priceSales(productDto.getPriceSales())
+                .mallType(SanitizedMallType)
+                .publisher(productDto.getPublisher())
+                .adult(productDto.isAdult())
+                .categoryName(productDto.getCategoryName())
+                .createDate(LocalDateTime.now())
+                .build();
+
+        UUID uuid = UUID.randomUUID();
+
+        String coverImgFileName = uuid + "_" + file1.getOriginalFilename();
+        String coverImgFilePath = originPath + coverImgFileName;
+        File saveFile1 = new File(genFileDirPath, coverImgFileName);
+
+        String contentPdfFileName = uuid + "_" + file2.getOriginalFilename();
+        String contentPdfFilePath = originPath + contentPdfFileName;
+        File saveFile2 = new File(genFileDirPath, contentPdfFileName);
+
+        file1.transferTo(saveFile1); // 업로드된 파일 저장
+        file2.transferTo(saveFile2); // 업로드된 파일 저장
+
+        // 파일업로드를 위한 리빌드
+        Product fileUpload = product.toBuilder()
+                .coverImg(coverImgFilePath)
+                .coverImgName(coverImgFileName)
+                .contentsPdf(contentPdfFilePath)
+                .contentsPdfName(contentPdfFileName)
+                .build();
+
+        // 제품을 데이터베이스에 저장
+        this.productRepository.save(fileUpload);
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public void modify(ProductDto productDto, Long id, MultipartFile[] files) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물을 찾을 수 없습니다."));
+
+        Product modifiedProduct = product.toBuilder()
+                .title(productDto.getTitle())
+                .author(productDto.getAuthor())
+                .pubDate(productDto.getPubDate())
+                .description(productDto.getDescription())
+                .isbn(productDto.getIsbn())
+                .isbn13(productDto.getIsbn13())
+                .priceStandard(productDto.getPriceStandard())
+                .priceSales(productDto.getPriceSales())
+                .mallType(productDto.getMallType())
+                .coverImg(productDto.getCoverImg())
+                .contentsPdf(productDto.getContentsPdf())
+                .publisher(productDto.getPublisher())
+                .adult(productDto.isAdult())
+                .categoryName(productDto.getCategoryName())
+                .createDate(LocalDateTime.now())
+                .build();
+        this.productRepository.save(modifiedProduct);
+    }
 
     public List<ProductDto> searchBooks(String query) {
         String url = buildSearchUrl("Keyword", query);
@@ -96,6 +213,7 @@ public class ProductService {
                             .pubDate(item.optString("pubDate"))
                             .description(item.optString("description"))
                             .isbn(item.optString("isbn"))
+                            .adult(item.optBoolean("adult"))
                             .categoryName(item.optString("categoryName"))
                             .publisher(item.optString("publisher"))
                             .priceStandard(item.optLong("priceStandard"))
@@ -112,6 +230,7 @@ public class ProductService {
                             .description(item.optString("description"))
                             .publisher(result.getPublisher())
                             .isbn(result.getIsbn())
+                            .adult(result.isAdult())
                             .categoryName(result.getCategoryName())
                             .priceStandard(result.getPriceStandard())
                             .priceSales(result.getPriceSales())
@@ -126,6 +245,9 @@ public class ProductService {
             }
         }
         return results;
+    }
+    public void delete(Product product) {
+        this.productRepository.delete(product);
     }
 
     public List<Product> getAll() {
