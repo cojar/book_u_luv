@@ -1,44 +1,47 @@
-<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
-      xmlns:th="http://www.thymeleaf.org">
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
     <title>공지사항 상세 페이지</title>
 </head>
+
 <body layout:fragment="content">
-<div class="container mx-auto p-5 mt-10">
-    <span class="text-2xl font-bold text-black">공지사항 상세 페이지</span>
+<div class="w-[1080px] mx-auto p-5 mt-10">
     <div class="notice mt-8">
         <div class="notice-subject">
 
             <table class="w-full border-collapse border-separate">
                 <tr class="border-b-2 border-black">
-                    <th class="w-1/4 text-left text-base pr-4">제 목</th>
-                    <td class="text-base" th:text="${notice.subject}"></td>
+                    <th class="text-left text-center pr-4 border-r-2 border-black">제 목</th>
+                    <td class="pl-20 text-start" th:text="${notice.subject}"></td>
                 </tr>
                 <tr class="border-b-2 border-black">
-                    <th class="w-1/4 text-left text-base pr-4">작 성 일</th>
-                    <td class="text-base" th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <th class="w-1/4 text-center text-base pr-4 border-r-2 border-black">작 성 일</th>
+                    <td class="pl-20 text-start" th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}"></td>
                 </tr>
                 <tr class="border-b-2 border-black" th:if="${notice.modifyDate != null}">
-                    <th class="w-1/4 text-left text-base pr-4">수 정 일</th>
-                    <td class="text-base" th:text="${#temporals.format(notice.modifyDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <th class="w-1/4 text-center pr-4 border-r-2 border-black">수 정 일</th>
+                    <td class="pl-20 text-start" th:text="${#temporals.format(notice.modifyDate, 'yyyy-MM-dd HH:mm')}"></td>
                 </tr>
                 <tr class="border-b-2 border-black" th:unless="${notice.modifyDate != null}">
-                    <th class="w-1/4 text-left text-base pr-4">수 정 일</th>
-                    <td class="text-base">-</td>
+                    <th class="w-1/4 text-center pr-4 border-r-2 border-black">수 정 일</th>
+                    <td class="pl-20 text-start"></td>
                 </tr>
                 <tr class="border-b-2 border-black">
-                    <th class="w-1/4 text-left text-base pr-4">조 회 수</th>
-                    <td class="text-base" th:text="${notice.hit}"></td>
+                    <th class="w-1/4 text-center text-base pr-4 border-r-2 border-black">조 회 수</th>
+                    <td class="pl-20 text-start" th:text="${notice.hit}"></td>
                 </tr>
             </table>
         </div>
-        <div class="underline-1 border-b-2 border-black w-full mt-8"></div>
-        <div class="notice-content mt-6">
-            <span class="text-base" th:text="${notice.content}"></span>
+        <div class="border-b-2 border-black my-8"></div>
+        <div class="bg-white p-8 rounded shadow-md flex justify-center">
+            <div class="notice-content">
+                <span th:text="${notice.content}"></span>
+            </div>
         </div>
-        <div class="underline-2 border-b-2 border-black w-full mt-8"></div>
+        <div class="border-b-2 border-black w-full mt-8"></div>
         <!-- 버튼 컨테이너 -->
         <div class="button flex mt-5 justify-between">
             <div>
@@ -66,8 +69,6 @@
                 </a>
             </div>
         </div>
-
-
     </div>
 </div>
 <script>
