@@ -89,7 +89,6 @@
                         </tr>
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
@@ -148,7 +147,7 @@
         document.getElementById('page').value = 1;
         document.getElementById('searchForm').submit();
     });
-        function confirmDelete(event) {
+    function confirmDelete(event) {
         event.preventDefault();
         if (confirm("정말로 삭제하시겠습니까?\n삭제된 공지사항은 되돌릴 수 없습니다.")) {
             location.href = event.target.getAttribute("data-uri");

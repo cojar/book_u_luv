@@ -71,6 +71,9 @@ public class Product extends BaseEntity {
     @Column(name = "category_name")
     private String categoryName;
 
+    @Column(name = "hit", columnDefinition = "integer default 0", nullable = false)
+    private int hit;
+
     // TODO : 별점과 좋아요 처리 해야 함.
 
 }

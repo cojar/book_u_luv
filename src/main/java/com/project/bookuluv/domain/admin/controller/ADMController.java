@@ -11,6 +11,7 @@ import com.project.bookuluv.domain.member.dto.MemberRole;
 import com.project.bookuluv.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
@@ -129,24 +131,43 @@ public class ADMController {
     }
 
     @GetMapping("/admin/domestic")
-    public String adminDomestic(Model model) {
+    public String adminDomestic(Model model,
+                                @RequestParam(value = "page", defaultValue = "1") int page,
+                                @RequestParam(value = "kw", defaultValue = "") String kw) {
         if (!userIsAdmin()) { // 모든 관리자권한 가능
             throw new AccessDeniedException("Access is denied");
         }
-        List<Product> productList = this.productService.getAll();
-        model.addAttribute("productList", productList);
-        return "/admin/domestic";
+        if (page <= 0) {
+            return "redirect:/admin/domestic?page=1";
+        }
+        Page<Product> products = this.productService.getDomesticProducts(page, kw);
+
+
+        model.addAttribute("kw", kw);
+        model.addAttribute("products", products);
+
+        return "admin/domestic";
     }
 
     @GetMapping("/admin/foreign")
-    public String adminForeign(Model model) {
+    public String adminForeign(Model model,
+                               @RequestParam(value = "page", defaultValue = "1") int page,
+                               @RequestParam(value = "kw", defaultValue = "") String kw) {
         if (!userIsAdmin()) { // 모든 관리자권한 가능
             throw new AccessDeniedException("Access is denied");
         }
-        List<Product> productList = this.productService.getAll();
-        model.addAttribute("productList", productList);
-        return "/admin/foreign";
+        if (page <= 0) {
+            return "redirect:/admin/foreign?page=1";
+        }
+        Page<Product> products = this.productService.getForeignProducts(page, kw);
+
+
+        model.addAttribute("kw", kw);
+        model.addAttribute("products", products);
+
+        return "admin/foreign";
     }
+
 
     @GetMapping("/admin/notice")
     public String adminNotice(Model model) {
@@ -155,7 +176,7 @@ public class ADMController {
         }
         List<Notice> noticeList = this.noticeService.getAll();
         model.addAttribute("noticeList", noticeList);
-        return "/admin/notice";
+        return "admin/notice";
     }
     private boolean hasAuthority(String... roles) { // String...은 Java에서 가변 인자(variable arity)를 나타내는 문법.
         // String...과 같이 선언하면, 해당 메서드를 호출할 때 여러 개의 인자를 전달할 수 있고, 이렇게 전달된 인자들은 배열로 처리됨.(roles 는 배열변수로써 권한정보를 문자열로 담고 있다.)

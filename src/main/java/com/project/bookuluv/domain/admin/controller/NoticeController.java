@@ -38,7 +38,7 @@ public class NoticeController {
                              @RequestParam(value = "kw", defaultValue = "") String kw,
                              @RequestParam(value = "field", defaultValue = "title") String field) {
         if (page <= 0) {
-            return "redirect:/product/list?page=1";
+            return "redirect:/notice/list?page=1";
         }
         Page<Notice> notices = this.noticeService.getNotices(page, kw, field);
         model.addAttribute("notices", notices);
