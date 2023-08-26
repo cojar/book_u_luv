@@ -43,27 +43,23 @@
     <div class="toggle-menu flex">
         <div class="flex w-full items-start">
             <!-- 좌측 메뉴 -->
-            <div class="w-2/12 bg-white p-4 h-auto">
+            <div class="w-1/2 md:w-2/12 bg-white p-4 h-auto">
                 <ul class="space-y-4">
-                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 flex justify-between"
-                        th:onclick="|toggleSection('profileContent');|">
-                        <span>내 정보</span>
-                        <span><i class="fas fa-chevron-right"></i></span>
+                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 md:flex md:justify-between">
+                        <span class="md:inline-block">내 정보</span>
+                        <span class="md:inline-block"><i class="fas fa-chevron-right"></i></span>
                     </li>
-                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 flex justify-between"
-                        th:onclick="|toggleSection('likesContent');|">
-                        <span>내 좋아요</span>
-                        <span><i class="fas fa-chevron-right"></i></span>
+                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 md:flex md:justify-between">
+                        <span class="md:inline-block">내 좋아요</span>
+                        <span class="md:inline-block"><i class="fas fa-chevron-right"></i></span>
                     </li>
-                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 flex justify-between"
-                        th:onclick="|toggleSection('cartContent');|">
-                        <span>장바구니</span>
-                        <span><i class="fas fa-chevron-right"></i></span>
+                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 md:flex md:justify-between">
+                        <span class="md:inline-block">장바구니</span>
+                        <span class="md:inline-block"><i class="fas fa-chevron-right"></i></span>
                     </li>
-                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 flex justify-between"
-                        th:onclick="|toggleSection('purchaseHistoryContent');|">
-                        <span>구매내역</span>
-                        <span><i class="fas fa-chevron-right"></i></span>
+                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 md:flex md:justify-between">
+                        <span class="md:inline-block">구매내역</span>
+                        <span class="md:inline-block"><i class="fas fa-chevron-right"></i></span>
                     </li>
                 </ul>
             </div>
@@ -214,14 +210,14 @@
                         <div>
                             <table class="table">
                                 <thead>
-                                    <tr>
-                                        <th>제목</th>
-                                    </tr>
+                                <tr>
+                                    <th>제목</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>제목</td>
-                                    </tr>
+                                <tr>
+                                    <td>제목</td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
