@@ -57,6 +57,19 @@ public class ProductController {
         }
     }
 
+    @GetMapping(value = "/newBook/detail/{id}")
+    private String newBookDetail(Model model, @PathVariable("id") Long id) {
+        Product products = this.productService.findById(id);
+        model.addAttribute("products", products);
+        return "product/detail";
+    }
+    @GetMapping(value = "/bestseller/detail/{id}")
+    private String bestsellerDetail(Model model, @PathVariable("id") Long id) {
+        Product products = this.productService.findById(id);
+        model.addAttribute("products", products);
+        return "product/detail";
+    }
+
     @GetMapping(value = "/domestic/detail/{id}")
     public String domesticDetail(Model model, @PathVariable("id") Long id) {
         Product products = this.productService.findById(id);
