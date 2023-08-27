@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +23,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
@@ -89,6 +89,7 @@ public class ADMController {
     }
 
     @GetMapping("/admin/member")
+    @PreAuthorize("isAuthenticated()")
     public String adminMember(Model model) {
         if (!userIsAdmin()) { // 모든 관리자권한 가능
             throw new AccessDeniedException("Access is denied");
@@ -101,6 +102,7 @@ public class ADMController {
 
 
     @PostMapping("/admin/member/update-role")
+    @PreAuthorize("isAuthenticated()")
     public String updateMemberRole(@RequestParam Long memberId, @RequestParam MemberRole newRole) {
         if (!userIsAdmin()) { // 슈퍼 관리자만 가능
             throw new AccessDeniedException("Access is denied");
@@ -112,6 +114,7 @@ public class ADMController {
 
     // 회원 활성화 / 비활성화 PostMapping
     @PostMapping("/admin/member/toggle-active")
+    @PreAuthorize("isAuthenticated()")
     public String toggleMemberActive(@RequestParam Long memberId) {
         if (!userIsSuperAdmin()) { // 모든 관리자권한 가능 TODO : 추후 슈퍼관리자만 가능으로 변경
             throw new AccessDeniedException("Access is denied");
@@ -122,6 +125,7 @@ public class ADMController {
 
     // 회원 삭제(HARD DELETE) PostMapping
     @PostMapping("/admin/member/delete")
+    @PreAuthorize("isAuthenticated()")
     public String deleteMember(@RequestParam Long memberId) {
         if (!userIsAdmin()) { // 모든 관리자권한 가능
             throw new AccessDeniedException("Access is denied");
@@ -131,6 +135,7 @@ public class ADMController {
     }
 
     @GetMapping("/admin/domestic")
+    @PreAuthorize("isAuthenticated()")
     public String adminDomestic(Model model,
                                 @RequestParam(value = "page", defaultValue = "1") int page,
                                 @RequestParam(value = "kw", defaultValue = "") String kw) {
@@ -150,6 +155,7 @@ public class ADMController {
     }
 
     @GetMapping("/admin/foreign")
+    @PreAuthorize("isAuthenticated()")
     public String adminForeign(Model model,
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "kw", defaultValue = "") String kw) {
@@ -170,6 +176,7 @@ public class ADMController {
 
 
     @GetMapping("/admin/notice")
+    @PreAuthorize("isAuthenticated()")
     public String adminNotice(Model model) {
         if (!userIsAdmin()) { // 모든 관리자권한 가능
             throw new AccessDeniedException("Access is denied");
