@@ -46,4 +46,7 @@ public class ProductDto {
     private boolean adult; // 청불 여부
 
     private String categoryName; // 카테고리 : ex) 국내도서>예술/대중문화>예술/대중문화의 이해>미학/예술이론  select태그 option으로 프론트템플릿에서 지정하면 productService에서 등록할때 concat이나 += 혹은 append 등으로 한 줄로 이어붙여서 문자열로 가공하여 데이터베이스에 입력
+
+    private int hit;
+
 }

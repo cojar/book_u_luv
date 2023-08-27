@@ -2,11 +2,15 @@ package com.project.bookuluv.domain.admin.controller;
 
 import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
+import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import com.project.bookuluv.domain.admin.service.ProductService;
 import com.project.bookuluv.domain.member.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,24 +19,25 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.security.Principal;
-import java.util.List;
+import java.net.URISyntaxException;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/product")
 public class ProductController {
+    @Value("${custom.genFileDirPath}")
+    private String genFileDirPath;
+
+    @Value("${custom.resourcePath}")
+    private String resourcePath;
 
     private final ProductService productService;
 
     private final MemberService memberService;
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String searchBooks(Model model, @RequestParam String query) {
-        List<ProductDto> results = productService.searchBooks(query);
-        model.addAttribute("results", results);
-        return "searchBooks";
-    }
+    private final ProductRepository productRepository;
+
+    private final ADMController admController;
 
     @GetMapping("/list")
     public String productList(Model model,
@@ -57,50 +62,18 @@ public class ProductController {
         }
     }
 
-    @GetMapping(value = "/newBook/detail/{id}")
-    private String newBookDetail(Model model, @PathVariable("id") Long id) {
-        Product products = this.productService.findById(id);
-        model.addAttribute("products", products);
-        return "product/detail";
-    }
-    @GetMapping(value = "/bestseller/detail/{id}")
-    private String bestsellerDetail(Model model, @PathVariable("id") Long id) {
-        Product products = this.productService.findById(id);
-        model.addAttribute("products", products);
-        return "product/detail";
-    }
-
-    @GetMapping(value = "/domestic/detail/{id}")
+    @GetMapping(value = "/detail/{id}")
     public String domesticDetail(Model model, @PathVariable("id") Long id) {
-        Product products = this.productService.findById(id);
+        Product products = this.productService.getById(id);
         model.addAttribute("products", products);
         return "product/detail";
     }
-
-    @GetMapping(value = "/foreign/detail/{id}")
-    public String foreignDetail(Model model, @PathVariable("id") Long id) {
-        Product products = this.productService.findById(id);
-        model.addAttribute("products", products);
-        return "product/detail";
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @GetMapping("/create")
     @PreAuthorize("isAuthenticated()")
-    private String create(ProductDto productDto) {
+    public String create(ProductDto productDto) {
+        if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
+            throw new AccessDeniedException("Access is denied");
+        }
         return "product/product_form";
     }
 
@@ -110,19 +83,77 @@ public class ProductController {
                                  BindingResult bindingResult,
                                  @RequestParam("file1") MultipartFile file1,
                                  @RequestParam("file2") MultipartFile file2) throws IOException {
+        if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
+            throw new AccessDeniedException("Access is denied");
+        }
         if (bindingResult.hasErrors()) {
             return "product/product_form";
         }
-
-        this.productService.create(productDto, file1, file2);
-        return "redirect:/";
+        Product createdProduct = this.productService.create(productDto, file1, file2);
+        Long productId = createdProduct.getId();
+        return "redirect:/product/detail/" + productId + "?success=create";
     }
-
 
     @GetMapping("/modify/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String modifyForm(@Valid ProductDto productDto, @PathVariable("id") Long id, Model model) {
-        return "product_form";
+    public String modifyForm(@PathVariable("id") Long id, Model model, HttpServletRequest request) throws URISyntaxException {
+        if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
+            throw new AccessDeniedException("Access is denied");
+        }
+        Product product = this.productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물을 찾을 수 없습니다."));
+
+        ProductDto productDto = new ProductDto(); // 새로운 ProductDto 객체 생성
+
+        // Product 객체의 정보를 ProductDto에 설정
+        productDto.setTitle(product.getTitle());
+        productDto.setAuthor(product.getAuthor());
+        productDto.setPublisher(product.getPublisher());
+        productDto.setPubDate(product.getPubDate());
+        productDto.setPriceStandard(product.getPriceStandard());
+        productDto.setPriceSales(product.getPriceSales());
+        productDto.setDescription(product.getDescription());
+        productDto.setAdult(product.isAdult());
+        productDto.setIsbn(product.getIsbn());
+        productDto.setCategoryName(product.getCategoryName());
+        // 이미지 파일과 PDF 파일의 경로를 설정
+        productDto.setCoverImg(product.getCoverImg());
+        productDto.setContentsPdf(product.getContentsPdf());
+        productDto.setCoverImgName(product.getCoverImgName());
+        productDto.setContentsPdfName(product.getContentsPdfName());
+
+        String defaultImgUrl = "https://media.istockphoto.com/id/1286477689/vector/drag-and-drop-icon-cursor-pointer-computer-mouse-drag-line-icon-vector-on-isolated-white.jpg?s=612x612&w=0&k=20&c=yK04wER5n-Wfe29PWc2BKruoKUpgkcSEYlXWleqP1IU=";
+        String currentDomain = this.productService.getRootDomain(request.getRequestURL().toString());
+
+        // 이미지 경로 처리
+        String preImgFile;
+        if (product.getCoverImg() != null) {
+            if (product.getCoverImg().startsWith("http")) {
+                preImgFile = product.getCoverImg();
+            } else {
+                preImgFile = currentDomain + product.getCoverImg();
+            }
+        } else {
+            preImgFile = defaultImgUrl;
+        }
+
+        // PDF 파일 경로 처리
+        String prePdfFile;
+        if (product.getContentsPdf() != null) {
+            if (product.getContentsPdf().startsWith("http")) {
+                prePdfFile = product.getContentsPdf();
+            } else {
+                prePdfFile = currentDomain + product.getContentsPdfName();
+            }
+        } else {
+            prePdfFile = null;
+        }
+
+        model.addAttribute("productDto", productDto);
+        model.addAttribute("preimgFile", preImgFile);
+        model.addAttribute("prePdfFile", prePdfFile);
+
+        return "product/product_form"; // 수정 폼 페이지로 이동
     }
 
     @PostMapping("/modify/{id}")
@@ -130,24 +161,34 @@ public class ProductController {
     public String modifyProduct(@ModelAttribute("productDto") @Valid ProductDto productDto,
                                 BindingResult bindingResult,
                                 @PathVariable("id") Long id,
-                                @RequestParam("files") MultipartFile[] files) throws IOException {
+                                @RequestParam("file1") MultipartFile file1,
+                                @RequestParam("file2") MultipartFile file2) throws IOException {
+        if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
+            throw new AccessDeniedException("Access is denied");
+        }
+
         if (bindingResult.hasErrors()) {
             return "product_form";
         }
-
-        productService.modify(productDto, id, files);
-        return "redirect:/";
+        Product modifiedProduct = this.productService.modify(productDto, id, file1, file2);
+        Long productId = modifiedProduct.getId();
+        return "redirect:/product/detail/" + productId + "?success=modify";
     }
 
-    @PostMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     @PreAuthorize("isAuthenticated()")
-    public String delete(@PathVariable("id") Long id, BindingResult bindingResult, Principal principal) {
-        if (bindingResult.hasErrors()) {
-            return "redirect:/";
+    public String delete(@PathVariable("id") Long id) {
+        if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
+            throw new AccessDeniedException("Access is denied");
         }
-        Product product = this.productService.findById(id);
-        this.productService.delete(product);
+        this.productService.delete(id);
         return "redirect:/";
+    }
+    @PostMapping("/increase-hit")
+    @ResponseBody
+    public String increaseHitCount(@RequestParam Long id) {
+        productService.incrementHitCount(id);
+        return "success";
     }
 
 }

@@ -3,6 +3,7 @@ package com.project.bookuluv.domain.admin.service;
 import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.repository.ProductRepository;
+import com.project.bookuluv.domain.member.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,6 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,114 +47,6 @@ public class ProductService {
     private final String searchUrl = "http://www.aladdin.co.kr/ttb/api/ItemSearch.aspx";
     private final String listUrl = "http://www.aladin.co.kr/ttb/api/ItemList.aspx";
 
-    public void createㅇ(ProductDto productDto, MultipartFile[] files) throws IOException {
-
-
-        Product product = Product.builder()
-                .title(productDto.getTitle())
-                .author(productDto.getAuthor())
-                .pubDate(productDto.getPubDate())
-                .description(productDto.getDescription())
-                .isbn(productDto.getIsbn())
-                .isbn13(productDto.getIsbn13())
-                .priceStandard(productDto.getPriceStandard())
-                .priceSales(productDto.getPriceSales())
-                .mallType(productDto.getMallType())
-                .coverImg(productDto.getCoverImg())
-                .contentsPdf(productDto.getContentsPdf())
-                .publisher(productDto.getPublisher())
-                .adult(productDto.isAdult())
-                .categoryName(productDto.getCategoryName())
-                .createDate(LocalDateTime.now())
-                .build();
-        this.productRepository.save(product);
-    }
-
-    public void create(ProductDto productDto, MultipartFile file1, MultipartFile file2) throws IOException {
-        String SanitizedMallType = "";
-        if (productDto.getMallType().equals("국내도서")) {
-            SanitizedMallType= "BOOK";
-        } else if (productDto.getMallType().equals("외국도서")) {
-            SanitizedMallType= "FOREIGN";
-        } else {
-            productDto.getMallType();
-        }
-
-        Product product = Product.builder()
-                .title(productDto.getTitle())
-                .author(productDto.getAuthor())
-                .pubDate(productDto.getPubDate())
-                .description(productDto.getDescription())
-                .isbn(productDto.getIsbn())
-                .isbn13(productDto.getIsbn13())
-                .priceStandard(productDto.getPriceStandard())
-                .priceSales(productDto.getPriceSales())
-                .mallType(SanitizedMallType)
-                .publisher(productDto.getPublisher())
-                .adult(productDto.isAdult())
-                .categoryName(productDto.getCategoryName())
-                .createDate(LocalDateTime.now())
-                .build();
-
-        UUID uuid = UUID.randomUUID();
-
-        String coverImgFileName = uuid + "_" + file1.getOriginalFilename();
-        String coverImgFilePath = originPath + coverImgFileName;
-        File saveFile1 = new File(genFileDirPath, coverImgFileName);
-
-        String contentPdfFileName = uuid + "_" + file2.getOriginalFilename();
-        String contentPdfFilePath = originPath + contentPdfFileName;
-        File saveFile2 = new File(genFileDirPath, contentPdfFileName);
-
-        file1.transferTo(saveFile1); // 업로드된 파일 저장
-        file2.transferTo(saveFile2); // 업로드된 파일 저장
-
-        // 파일업로드를 위한 리빌드
-        Product fileUpload = product.toBuilder()
-                .coverImg(coverImgFilePath)
-                .coverImgName(coverImgFileName)
-                .contentsPdf(contentPdfFilePath)
-                .contentsPdfName(contentPdfFileName)
-                .build();
-
-        // 제품을 데이터베이스에 저장
-        this.productRepository.save(fileUpload);
-    }
-
-
-
-
-
-
-
-
-
-
-
-    public void modify(ProductDto productDto, Long id, MultipartFile[] files) {
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 게시물을 찾을 수 없습니다."));
-
-        Product modifiedProduct = product.toBuilder()
-                .title(productDto.getTitle())
-                .author(productDto.getAuthor())
-                .pubDate(productDto.getPubDate())
-                .description(productDto.getDescription())
-                .isbn(productDto.getIsbn())
-                .isbn13(productDto.getIsbn13())
-                .priceStandard(productDto.getPriceStandard())
-                .priceSales(productDto.getPriceSales())
-                .mallType(productDto.getMallType())
-                .coverImg(productDto.getCoverImg())
-                .contentsPdf(productDto.getContentsPdf())
-                .publisher(productDto.getPublisher())
-                .adult(productDto.isAdult())
-                .categoryName(productDto.getCategoryName())
-                .createDate(LocalDateTime.now())
-                .build();
-        this.productRepository.save(modifiedProduct);
-    }
-
     public List<ProductDto> searchBooks(String query) {
         String url = buildSearchUrl("Keyword", query);
         return getBooksFromApi(url);
@@ -166,21 +61,12 @@ public class ProductService {
         String url = buildListUrl("Bestseller");
         return getBooksFromApi(url);
     }
-
-    // 국내, 외국 도서 목록 페이징에 담아서 불러오는 service
-    public Page<Product> getProducts(String type, int page, String kw) {
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(sorts));
-        return this.productRepository.findAllByKeyword(kw, type.toUpperCase(), pageable);
-    }
-
     private String buildSearchUrl(String queryType, String query) {
-        return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Book" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
+        return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=50" + "&start=1" + "&SearchTarget=Book&Foreign" + "&Cover=Big" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
     }
 
     private String buildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book&Foreign" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=30" + "&start=1" + "&SearchTarget=Book&Foreign" + "&Cover=Big" + "&output=js" + "&Version=20131101";
     }
 
     private String domesticBuildListUrl(String queryType) {
@@ -235,6 +121,7 @@ public class ProductService {
                             .priceStandard(result.getPriceStandard())
                             .priceSales(result.getPriceSales())
                             .mallType(result.getMallType())
+                            .createDate(LocalDateTime.now())
                             .build();
 
                     if (productRepository.countByIsbn(product.getIsbn()) == 0L) {//productRepository에 isbn이 0개라면 저장해라(0L의 L은 Long 타입이라 사용)
@@ -246,7 +133,146 @@ public class ProductService {
         }
         return results;
     }
-    public void delete(Product product) {
+
+    public Product create(ProductDto productDto, MultipartFile file1, MultipartFile file2) throws IOException {
+        String SanitizedMallType = "";
+        if (productDto.getMallType().equals("국내도서")) {
+            SanitizedMallType= "BOOK";
+        } else if (productDto.getMallType().equals("외국도서")) {
+            SanitizedMallType= "FOREIGN";
+        } else {
+            productDto.getMallType();
+        }
+
+        Product product = Product.builder()
+                .title(productDto.getTitle())
+                .author(productDto.getAuthor())
+                .pubDate(productDto.getPubDate())
+                .description(productDto.getDescription())
+                .isbn(productDto.getIsbn())
+                .isbn13(productDto.getIsbn13())
+                .priceStandard(productDto.getPriceStandard())
+                .priceSales(productDto.getPriceSales())
+                .mallType(SanitizedMallType)
+                .publisher(productDto.getPublisher())
+                .adult(productDto.isAdult())
+                .categoryName(productDto.getCategoryName())
+                .createDate(LocalDateTime.now())
+                .build();
+        this.productRepository.save(product);
+        UUID uuid = UUID.randomUUID();
+
+        String coverImgFileName = uuid + "_" + file1.getOriginalFilename();
+        String coverImgFilePath = originPath + coverImgFileName;
+        File saveFile1 = new File(genFileDirPath, coverImgFileName);
+
+        String contentPdfFileName = uuid + "_" + file2.getOriginalFilename();
+        String contentPdfFilePath = originPath + contentPdfFileName;
+        File saveFile2 = new File(genFileDirPath, contentPdfFileName);
+
+        file1.transferTo(saveFile1); // 업로드된 파일 저장
+        file2.transferTo(saveFile2); // 업로드된 파일 저장
+
+        // 파일업로드를 위한 리빌드
+        Product fileUpload = product.toBuilder()
+                .coverImg(coverImgFilePath)
+                .coverImgName(coverImgFileName)
+                .contentsPdf(contentPdfFilePath)
+                .contentsPdfName(contentPdfFileName)
+                .build();
+
+        // 제품을 데이터베이스에 저장
+        this.productRepository.save(fileUpload);
+        return product;
+    }
+
+    public Product modify(ProductDto productDto, Long id, MultipartFile file1, MultipartFile file2) throws IOException {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시물을 찾을 수 없습니다."));
+
+        String SanitizedMallType = "";
+        if (productDto.getMallType().equals("국내도서")) {
+            SanitizedMallType= "BOOK";
+        } else if (productDto.getMallType().equals("외국도서")) {
+            SanitizedMallType= "FOREIGN";
+        } else {
+            productDto.getMallType();
+        }
+
+        UUID uuid = UUID.randomUUID();
+        String coverImgFileName = product.getCoverImgName();
+        String coverImgFilePath = product.getCoverImg();
+        String contentPdfFileName = product.getContentsPdfName();
+        String contentPdfFilePath = product.getContentsPdf();
+
+        if (file1.getOriginalFilename() != null && !file1.getOriginalFilename().isEmpty()) {
+            coverImgFileName = uuid + "_" + file1.getOriginalFilename();
+            coverImgFilePath = originPath + coverImgFileName;
+            File saveFile1 = new File(genFileDirPath, coverImgFileName);
+            file1.transferTo(saveFile1); // 업로드된 파일 저장
+        }
+        if (file2.getOriginalFilename() != null && !file2.getOriginalFilename().isEmpty()) {
+            contentPdfFileName = uuid + "_" + file2.getOriginalFilename();
+            contentPdfFilePath = originPath + contentPdfFileName;
+            File saveFile2 = new File(genFileDirPath, contentPdfFileName);
+            file2.transferTo(saveFile2); // 업로드된 파일 저장
+        }
+
+        Product modifiedProduct = product.toBuilder()
+                .title(productDto.getTitle())
+                .author(productDto.getAuthor())
+                .pubDate(productDto.getPubDate())
+                .description(productDto.getDescription())
+                .isbn(productDto.getIsbn())
+                .isbn13(productDto.getIsbn13())
+                .priceStandard(productDto.getPriceStandard())
+                .priceSales(productDto.getPriceSales())
+                .mallType(SanitizedMallType)
+                .publisher(productDto.getPublisher())
+                .adult(productDto.isAdult())
+                .categoryName(productDto.getCategoryName())
+                .coverImg(coverImgFilePath)
+                .coverImgName(coverImgFileName)
+                .contentsPdf(contentPdfFilePath)
+                .contentsPdfName(contentPdfFileName)
+                .modifyDate(LocalDateTime.now())
+                .build();
+
+        this.productRepository.save(modifiedProduct);
+        return modifiedProduct;
+    }
+
+
+
+    // 국내, 외국 도서 목록 페이징에 담아서 불러오는 service
+    public Page<Product> getProducts(String type, int page, String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(sorts));
+        return this.productRepository.findAllByKeyword(kw, type.toUpperCase(), pageable);
+    }
+
+    public Page<Product> getForeignProducts(int page, String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(sorts));
+            return this.productRepository.findAllForeignByKeyword(kw, pageable);
+    }
+    public Page<Product> getDomesticProducts(int page, String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(sorts));
+        return this.productRepository.findAllDomesticByKeyword(kw, pageable);
+    }
+    public void incrementHitCount(Long id) {
+        Product product = productRepository.getById(id);
+        int currentHit = product.getHit();
+        product.setHit(currentHit + 1);
+        productRepository.save(product);
+    }
+
+    public void delete(Long id) {
+        Product product = findById(id);
         this.productRepository.delete(product);
     }
 
@@ -258,7 +284,22 @@ public class ProductService {
         return this.productRepository.getById(id);
     }
 
-    public Optional<Product> getById(Long id) {
-        return this.productRepository.findById(id);
+    public Product getById(Long id) {
+        Optional<Product> product = this.productRepository.findById(id);
+        if (product.isPresent()) {
+            return product.get();
+        } else {
+            throw new DataNotFoundException("product not found");
+        }
+    }
+    public String getRootDomain(String url) throws URISyntaxException {
+        URI uri = new URI(url);
+        String scheme = uri.getScheme();
+        String host = uri.getHost();
+        int port = uri.getPort();
+        // 기본 포트인 경우 포트 정보는 생략
+        String portString = (port == -1 || (scheme.equals("http") && port == 80) || (scheme.equals("https") && port == 443)) ? "" : ":" + port;
+
+        return scheme + "://" + host + portString;
     }
 }

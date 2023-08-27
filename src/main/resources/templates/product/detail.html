@@ -77,6 +77,12 @@
                     <button class="mt-2 px-4 py-2 bg-blue-600 text-white rounded">작성</button>
                 </div>
             </div>
+            <div th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">
+                <div class="flex justify-between mt-4">
+                    <a th:href="@{|/product/modify/${products.id}|}" class="px-4 py-2 bg-green-500 text-white rounded">수정</a>
+                    <a th:href="@{|/product/delete/${products.id}|}" class="px-4 py-2 bg-red-500 text-white rounded">삭제</a>
+                </div>
+            </div>
             <div class="flex items-center mt-4 border-t pt-4">
                 <i class="far fa-heart text-2xl cursor-pointer" id="likeIcon"></i>
                 <div class="flex justify-end w-full mr-[10px]">
@@ -84,6 +90,8 @@
                         장바구니
                     </button>
                 </div>
+
+
                 <form th:action="@{/order/detail}">
                     <input name="productsId" th:value="${products.id}" type="hidden">
                     <input class="btn btn-primary text-white" type="submit" value="구매">
@@ -94,6 +102,17 @@
 </div>
 
 <script>
+    /* 페이지 로딩 시 등록/수정 성공 여부 파라미터 확인 및 알림 메시지 띄우기 */
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const successType = urlParams.get('success');
+
+        if (successType === 'create') {
+            alert('등록이 완료되었습니다.');
+        } else if (successType === 'modify') {
+            alert('수정이 완료되었습니다.');
+        }
+    });
         // 찜 스크립트
         const likeIcon = document.getElementById('likeIcon');
         let isLiked = false; // 좋아요 상태 여부

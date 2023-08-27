@@ -29,7 +29,4 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
             + "   or (:field = 'content' and n.content like %:kw%) "
             + "   or (:field = 'register' and n.register.nickName like %:kw%)")
     Page<Notice> findAllByKeywordAndField(@Param("kw") String kw, @Param("field") String field, Pageable pageable);
-
-
-
 }

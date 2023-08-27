@@ -12,16 +12,16 @@
 
 <body layout:fragment="content">
 <div class="mx-auto max-w-screen-xl h-auto">
-    <form th:action="@{/product/create}" th:object="${productDto}" method="post" enctype="multipart/form-data">
+    <form th:object="${productDto}" method="post" enctype="multipart/form-data">
         <label class="cursor-pointer" for="coverImg">
         <div class="bg-white rounded-lg shadow">
                 <div class="flex justify-center my-[40px] h-[555px]"
                      ondragleave="dragLeaveHandler(event)" ondragover="dragOverHandler(event)"
                      ondrop="dropHandler(event)">
-                    <img alt="이미지 미리보기 영역" class="w-96 h-full border-4 border-dashed border-gray-300 object-scale-down"
+                    <img alt="이미지 미리보기 영역" class="w-96 h-full border-4 border-dashed border-gray-300 object-contain"
                          id="imagePreview"
                          ondragover="event.preventDefault()"
-                         src="https://media.istockphoto.com/id/1286477689/vector/drag-and-drop-icon-cursor-pointer-computer-mouse-drag-line-icon-vector-on-isolated-white.jpg?s=612x612&w=0&k=20&c=yK04wER5n-Wfe29PWc2BKruoKUpgkcSEYlXWleqP1IU=">
+                         th:src="${preimgFile != null ? preimgFile : 'https://media.istockphoto.com/id/1286477689/vector/drag-and-drop-icon-cursor-pointer-computer-mouse-drag-line-icon-vector-on-isolated-white.jpg?s=612x612&w=0&k=20&c=yK04wER5n-Wfe29PWc2BKruoKUpgkcSEYlXWleqP1IU='}">
                 </div>
                 <p class="text-gray-400 text-center mt-1">이미지 파일을 드래그 앤 드랍하세요</p>
                 <p class="text-gray-400 text-center mt-1">권장 사이즈 : 500 X 734(px)</p>
@@ -36,10 +36,14 @@
         </div>
         </label>
 
-        <!-- PDF파일 업로드 -->
+        <!-- PDF 파일 업로드 -->
         <div class="bg-white rounded-lg shadow p-4 mt-4">
             <label class="block mb-1 font-medium" for="contentsPdf">내용 PDF :</label>
             <input class="w-full rounded border p-2" id="contentsPdf" name="file2" type="file" accept=".pdf">
+            <p class="text-gray-400 mt-2">기존 PDF 파일:
+                <a th:href="${prePdfFile}" target="_blank" th:if="${prePdfFile != null}" th:text="${productDto.contentsPdfName}"></a>
+                <span th:unless="${prePdfFile != null}">PDF 파일이 없습니다.</span>
+            </p>
         </div>
 
         <!-- 제목 -->
@@ -116,7 +120,7 @@
         <div class="bg-white rounded-lg shadow p-4 mt-4">
             <label class="block mb-1 font-medium" for="categoryName">카테고리 :</label>
             <div class="relative">
-                <input class="w-full rounded border p-2" id="categoryName" name="categoryName" type="text" readonly>
+                <input class="w-full rounded border p-2" id="categoryName" name="categoryName" th:field="${productDto.categoryName}" type="text" readonly>
                 <span class="absolute right-2 top-3 text-gray-400">카테고리 선택</span>
             </div>
         </div>
@@ -134,7 +138,6 @@
             <input class="w-full rounded border p-2" id="isbn" th:field="${productDto.isbn}" type="text" readonly>
         </div>
 
-
         <div class="border-solid mt-4 pt-4">
             <div class="flex items-center mt-4 border-t pt-4">
                 <div class="flex justify-end w-full">
@@ -145,7 +148,7 @@
     </form>
 </div>
 
-<script>
+<script th:inline="javascript">
     // 이미지 미리보기를 업데이트하는 함수
     function updateImagePreview(file) {
         const imagePreview = document.getElementById('imagePreview');
@@ -220,14 +223,28 @@ function dropHandler(event) {
         }
     };
  // 카테고리 정보를 업데이트하는 함수
-    function updateCategoryName() {
-        const mallType = document.getElementById('mallType').value;
-        const middleCategory = document.getElementById('middleCategory').value;
-        const smallCategory = document.getElementById('smallCategory').value;
+function updateCategoryName() {
+    const mallType = document.getElementById('mallType').value;
+    const middleCategory = document.getElementById('middleCategory').value;
+    const smallCategory = document.getElementById('smallCategory').value;
 
-        const categoryNameInput = document.getElementById('categoryName');
-        categoryNameInput.value = `${mallType}>${middleCategory}>${smallCategory}`;
+    const categoryNameInput = document.getElementById('categoryName');
+    if (mallType !== "") {
+        categoryNameInput.value = `${mallType}`;
+        if (middleCategory !== "") {
+            categoryNameInput.value += `>${middleCategory}`;
+            if (smallCategory !== "") {
+                categoryNameInput.value += `>${smallCategory}`;
+            }
+        }
+    } else if (mallType === "") {
+        if (categoryNameInput.value.startsWith('국내도서')) {
+           document.getElementById('mallType').value = '국내도서';
+        } else if (categoryNameInput.value.startsWith('외국도서')) {
+            document.getElementById('mallType').value = '외국도서';
+        }
     }
+}
 
     // 대분류 선택이 변경되었을 때 실행되는 함수
     function handleMallTypeChange() {
@@ -276,7 +293,6 @@ function dropHandler(event) {
     updateCategoryName();
 
 
-
     // Function to generate a random ISBN
     function generateRandomISBN() {
         const digits = '0123456789';
@@ -304,10 +320,14 @@ function dropHandler(event) {
         return isbn;
     }
 
-    // Update the ISBN input field with a generated ISBN
+    // 새로운 isbn을 로직에 맞게 생성하고 isbn표시란에 입력
     document.addEventListener("DOMContentLoaded", function() {
         const isbnInput = document.getElementById('isbn');
-        isbnInput.value = generateRandomISBN();
+
+        // isbn 표시란이 공백인 경우에만 랜덤으로 생성된 isbn을 업데이트함(기존 제품정보를 수정 시엔 기존 제품정보의 isbn을 가져옴)
+        if (isbnInput.value.trim() === '') {
+            isbnInput.value = generateRandomISBN();
+        }
     });
 </script>
 </body>
