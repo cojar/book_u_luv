@@ -44,8 +44,8 @@ public class OrderController {
 
     @GetMapping("/detail")
     public String detail(Model model, @RequestParam Long productsId, Principal principal) {
-        Product product = this.productService.findById(productsId);
         Member member = this.memberService.getMember(principal.getName());
+        Product product = this.productService.findById(productsId);
         Order order = orderService.getByBuyerAndProductId(member.getUserName(), productsId);
         model.addAttribute("product", product);
         model.addAttribute("member", member);
@@ -54,7 +54,12 @@ public class OrderController {
     }
 
     @GetMapping("/{id}/success")
-    public String paymentResult(Model model, @PathVariable Long id, @RequestParam(value = "orderId") String orderId, @RequestParam(value = "amount") Integer amount, @RequestParam(value = "paymentKey") String paymentKey, Principal principal) throws Exception {
+    public String paymentResult(Model model,
+                                @PathVariable Long id,
+                                @RequestParam(value = "orderId") String orderId,
+                                @RequestParam(value = "amount") Integer amount,
+                                @RequestParam(value = "paymentKey") String paymentKey,
+                                Principal principal) throws Exception {
 
         String secretKey = paymentSecretKey;
 

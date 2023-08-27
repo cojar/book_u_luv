@@ -262,13 +262,6 @@ public class MemberService {
         return this.memberRepository.findAll();
     }
 
-
-    // public String me(String userName) {
-    //  User user = memberRepository.findByUserName(userName)
-    //           .orElseThrow();
-    //   return ;
-    // }
-
     @Transactional
     public void deleteMember(Member member) {
         // 회원과 연관된 공지사항과 제품의 연결을 해제

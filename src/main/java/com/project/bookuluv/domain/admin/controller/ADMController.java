@@ -9,6 +9,9 @@ import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.dto.MemberJoinRequest;
 import com.project.bookuluv.domain.member.dto.MemberRole;
 import com.project.bookuluv.domain.member.service.MemberService;
+import com.project.bookuluv.domain.order.domain.OrderItem;
+import com.project.bookuluv.domain.rebate.domain.RebateOrderItem;
+import com.project.bookuluv.domain.rebate.service.RebateService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,6 +44,8 @@ public class ADMController {
     private final ProductService productService;
 
     private final AdminService adminService;
+
+    private final RebateService rebateService;
 
     @GetMapping("/admin/signup")
     public String showAdminSignup(MemberJoinRequest memberJoinRequest) {
@@ -214,4 +220,36 @@ public class ADMController {
     boolean userHasAnyRole() {
         return hasAuthority("SUPERADMIN", "ADMIN", "AUTHOR", "MEMBER");
     }
+
+    @GetMapping("/admin/rebate")
+    public String showRebate(Model model) {
+        return "rebate";
+    }
+
+    @GetMapping("/admin/perform-rebate")
+    public String rebate(Model model) {
+        long totalPaidAmount = rebateService.rebateForMonth();
+
+        // 추가 코드: 상품 판매 정보 조회
+        Map<Product, Integer> productSales = rebateService.getProductSalesForMonth();
+        model.addAttribute("productSales", productSales);
+
+        // 추가 코드: 회원별 구매 내역 조회
+        Map<Member, List<OrderItem>> memberPurchase = rebateService.getMemberPurchaseForMonth();
+        long totalAmount = 0;
+
+        for (List<OrderItem> orderItems : memberPurchase.values()) {
+            for (OrderItem orderItem : orderItems) {
+                totalAmount += orderItem.getPayPrice();
+            }
+        }
+        model.addAttribute("memberPurchase", memberPurchase);
+
+        model.addAttribute("totalPaidAmount", totalPaidAmount);
+        model.addAttribute("totalAmount", totalAmount);
+
+        model.addAttribute("message", "1개월 동안의 정산이 수행되었습니다.");
+        return "rebate";
+    }
+
 }

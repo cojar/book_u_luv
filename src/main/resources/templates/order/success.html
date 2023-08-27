@@ -9,19 +9,17 @@
 </head>
 
 <body class="bg-gray-100 flex items-center justify-center h-screen">
-<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+<div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
     <div class="modal bg-white p-8 rounded shadow-md max-w-md w-full">
         <div class="bg-white p-8 rounded shadow-md max-w-md w-full">
             <h1 class="text-2xl font-semibold mb-4">결제가 성공적으로 완료되었습니다!</h1>
-            <p th:text="${product.id}">상품아이디</p>
-            <p th:text="${product.title}">상품제목</p>
-            <p th:text="${product.priceSales}">상품가격</p>
-            <p th:text="${member.lastName} + ${member.firstName}">회원이름</p>
-            <p class="text-gray-600 my-4">감사합니다! 궁금한 점이나 문의 사항이 있으시면 언제든지 문의해주세요.</p>
-            <a href="#" class="text-blue-500 hover:underline close-button">고객 지원에 문의하기</a>
+            <p th:text="'주문번호 : ' + ${order.id}"></p>
+            <p th:text="'상품제목 : ' + ${product.title}"></p>
+            <p th:text="'상품가격 : ' + ${product.priceSales}"></p>
+            <p th:text="'회원이름 : ' + ${member.lastName} + ' ' + ${member.firstName}"></p>
         </div>
         <div class="flex justify-end">
-            <a href="#" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded close-button">닫기</a>
+            <a href="/" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded close-button">확인</a>
         </div>
     </div>
 </div>

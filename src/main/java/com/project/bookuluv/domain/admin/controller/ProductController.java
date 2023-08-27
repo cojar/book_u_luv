@@ -4,6 +4,7 @@ import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import com.project.bookuluv.domain.admin.service.ProductService;
+
 import com.project.bookuluv.domain.member.service.MemberService;
 import com.project.bookuluv.domain.review.domain.Review;
 import com.project.bookuluv.domain.review.dto.ReviewDto;
@@ -78,6 +79,7 @@ public class ProductController {
         productService.updateAverageRating(product);
         return "product/detail";
     }
+
 
     @GetMapping("/create")
     @PreAuthorize("isAuthenticated()")

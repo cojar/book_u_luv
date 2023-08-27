@@ -9,12 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+
+import java.util.Optional;
+
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     long countByIsbn(String isbn);
-
-
 
     Page<Product> findByMallType(String book, Pageable pageable);
 
@@ -31,6 +32,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             + "   and (p.mallType = :book) ")
     Page<Product> findAllByKeyword(@Param("kw") String kw, @Param("book") String mallType, Pageable pageable);
 
+    Optional<Product> findById(Long id);
+}
     @Query("select distinct p " +
             "from Product p " +
             "where " +
