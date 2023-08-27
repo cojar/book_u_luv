@@ -46,8 +46,8 @@ public class AuthenticationConfig {
                 ).permitAll()
                 .requestMatchers("/admin/**").hasAnyRole("SUPERADMIN", "ADMIN")
                 .requestMatchers("/author/**").hasAnyRole("SUPERADMIN", "ADMIN", "AUTHOR")
-                .requestMatchers("/member/**").hasAnyRole("SUPERADMIN", "ADMIN", "AUTHOR", "MEMBER")
-                .anyRequest().authenticated()
+                .requestMatchers("/member/**").authenticated() // 로그인만 필요
+                .anyRequest().authenticated() // 기타 모든 요청에 대해서도 로그인만 필요
                 .and()
                 .formLogin(
                         formLogin -> formLogin

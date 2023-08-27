@@ -61,6 +61,12 @@
                         <span class="md:inline-block">구매내역</span>
                         <span class="md:inline-block"><i class="fas fa-chevron-right"></i></span>
                     </li>
+                    <li th:unless="${#authentication.principal.userName.startsWith('KAKAO_') || #authentication.principal.userName.startsWith('NAVER_') || #authentication.principal.userName.startsWith('GOOGLE_')}"
+                        class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 md:flex md:justify-between"
+                        th:onclick="|toggleSection('passwordModify');|">
+                        <span class="md:inline-block">비밀번호 변경</span>
+                        <span class="md:inline-block"><i class="fas fa-chevron-right"></i></span>
+                    </li>
                 </ul>
             </div>
             <!-- 메뉴 컨텐츠 -->
@@ -188,10 +194,6 @@
                                 <a class="btn btn-secondary btn-outline" href="/member/updateprofile">내용 수정/추가</a>
                             </div>
                             <div class="grid grid-cols-2 mt-2 gap-2">
-                                <a class="btn btn-secondary btn-outline"
-                                   href="/mypage/changePassword"
-                                   th:unless="${#authentication.principal.userName.startsWith('KAKAO_') || #authentication.principal.userName.startsWith('NAVER_') || #authentication.principal.userName.startsWith('GOOGLE_')}">비밀번호
-                                    변경</a>
                                 <!--                    <a th:unless="${@rq.hasAuthority('AUTHOR')}" href="/member/beAuthor" class="btn btn-primary">작가활동 시작</a>-->
                                 <!--                    <a th:if="${@rq.hasAuthority('AUTHOR')}" class="btn btn-primary btn-disabled">이미 작가회원입니다.</a>-->
                             </div>
@@ -277,6 +279,89 @@
                         </div>
                     </div>
                 </div>
+                <!-- 비밀번호 변경 컨텐츠 -->
+                <div class="menu-content hidden h-auto" id="passwordModify">
+                    <!-- 구매내역 내용을 여기에 표시 -->
+                    <h1 class="text-[50px] font-bold mb-4">비밀번호 변경</h1>
+                    <!-- 구매내역 -->
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="text-[20px]">비밀번호 변경</span>
+                        </label>
+                        <div>
+                            <section class="section section-login flex-grow flex flex-col items-center justify-center">
+
+                                <div class="max-w-md w-full px-2 pt-4">
+                                    <h1 class="font-bold text-lg">
+                                        <i class="fa-solid fa-lock"></i>
+                                        비밀번호 변경
+                                    </h1>
+                                    <form class="flex flex-col gap-3" method="POST" action="/mypage/changePassword" onsubmit="MemberModifyPassword__submit(this); return false;">
+                                        <div class="form-control">
+                                            <label class="label">
+                                                <span class="label-text">기존 비밀번호</span>
+                                            </label>
+                                            <input class="input input-bordered" maxlength="50"
+                                                   name="oldpassword" placeholder="기존 비밀번호" type="password">
+                                        </div>
+
+                                        <div class="form-control">
+                                            <label class="label">
+                                                <span class="label-text">비밀번호</span>
+                                            </label>
+                                            <input class="input input-bordered" maxlength="50"
+                                                   name="newpassword" placeholder="비밀번호" type="password">
+                                        </div>
+
+                                        <div class="form-control">
+                                            <label class="label">
+                                                <span class="label-text">비밀번호 확인</span>
+                                            </label>
+                                            <input class="input input-bordered" maxlength="50"
+                                                   name="newpasswordcf" placeholder="비밀번호 확인" type="password">
+                                        </div>
+                                        <input class="btn btn-primary" type="submit" value="비밀번호 변경">
+                                    </form>
+                                    <script>
+            function MemberModifyPassword__submit(form) {
+                // 기존 비밀번호, 새 비밀번호, 새 비밀번호 확인을 가져옴
+                var oldPassword = form.oldpassword.value;
+                var newPassword = form.newpassword.value;
+                var newPasswordConfirm = form.newpasswordcf.value;
+
+                // AJAX 호출 수행
+                $.ajax({
+                    type: 'POST',
+                    url: '/mypage/changePassword',
+                    data: {
+                        oldpassword: oldPassword,
+                        newpassword: newPassword,
+                        newpasswordcf: newPasswordConfirm
+                    },
+                    dataType: 'json',
+                    success: function(result) {
+                        if (result.success) {
+                            alert("비밀번호가 성공적으로 변경되었습니다.\n변경된 비밀번호로 로그인해주세요.");
+                            // 로그아웃 처리
+                            $.ajax({
+                                type: 'POST',
+                                url: '/member/logout',
+                                success: function() {
+                                    location.href = '/'; // 로그아웃 후 메인 페이지로 이동
+                                }
+                            });
+                        } else {
+                            alert(result.message); // 실패 시 메시지 출력
+                        }
+                    }
+                });
+            }
+            </script>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -320,9 +405,6 @@
                         $("#formatted-username").text(formattedUserName);
                     });
                 });
-
-
-
 </script>
 </body>
 </html>
