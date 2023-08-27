@@ -52,12 +52,6 @@
               <a class="menu-link" th:href="@{/admin/foreign}">외국도서 관리</a>
             </li>
             <li>
-              <a class="menu-link" th:href="@{/admin/author}">작가관리</a>
-            </li>
-            <li>
-              <a class="menu-link" th:href="@{/admin/article}">판매 글 관리</a>
-            </li>
-            <li>
               <a class="menu-link" th:href="@{/admin/calculate}">정산관리</a>
             </li>
             <li>
@@ -73,7 +67,7 @@
   <!-- 판매글 관리 테이블 -->
   <div class="w-[1580px] mx-auto mt-[100px]">
     <h1 class="text-3xl font-semibold mt-8 mb-4">국내 도서 관리</h1>
-    <div class="search_box flex items-center justify-center mt-8">
+    <div class="search_box flex items-center justify-end my-8">
       <select id="dropdown" class="p-2 border rounded">
         <option value="all">제목 + 내용</option>
         <option value="title">제목</option>
