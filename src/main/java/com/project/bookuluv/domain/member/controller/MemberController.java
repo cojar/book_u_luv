@@ -1,5 +1,11 @@
 package com.project.bookuluv.domain.member.controller;
 
+import com.project.bookuluv.domain.admin.domain.Product;
+import com.project.bookuluv.domain.admin.service.ProductService;
+import com.project.bookuluv.domain.cart.domain.Cart;
+import com.project.bookuluv.domain.cart.service.CartService;
+import com.project.bookuluv.domain.cartItem.domain.CartItem;
+import com.project.bookuluv.domain.cartItem.service.CartItemService;
 import com.project.bookuluv.domain.mail.MailController;
 import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.dto.MemberJoinRequest;
@@ -29,6 +35,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -39,6 +46,9 @@ public class MemberController {
     private final MemberSecurityService memberSecurityService;
     private final MailController mailController;
     private final PasswordEncoder passwordEncoder;
+    private final CartService cartService;
+    private final CartItemService cartItemService;
+    private final ProductService productService;
 
     @PostMapping("/api/v1/members/join")
     public ResponseEntity<String> join(@RequestBody MemberJoinRequest dto) {
@@ -264,6 +274,7 @@ public class MemberController {
             return "fail";
         }
     }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage/changePassword")
     public String showModifyPassword(HttpServletRequest request) {
@@ -328,6 +339,95 @@ public class MemberController {
         Member member = memberService.getUser(principal.getName());
         memberService.deactivateMember(member);
         return "redirect:/member/logout"; // 로그아웃 후 리다이렉트
+    }
+
+    @PostMapping("/member/cart/{id}/{productId}")
+    public String addCartItem(@PathVariable("id") Long id,
+                              @PathVariable("productId") Long productId,
+                              int amount)
+    {
+
+        Member member = memberService.findById(id);
+        Product product = productService.findById(productId);
+        if(member != null){
+
+            cartService.addCart(product, member, amount);
+
+            return "redirect:/product/domestic/detail/{productId}";
+
+        } else {
+            return "redirect:/login?message=장바구니%20서비스는%20로그인%20상태에서만%20이용%20가능합니다.";
+        }
+
+    }
+
+    @GetMapping("/member/cart/{id}")
+    public String memberCartPage(@PathVariable("id") Long id, Model model, Principal principal) {
+
+        Member member = this.memberService.getMember(principal.getName());
+        if (member.getId() == id) {
+
+            member = memberService.findById(id);
+            // 로그인 되어 있는 유저에 해당하는 장바구니 가져오기
+            Cart cart = member.getCart();
+
+            // 장바구니에 들어있는 아이템 모두 가져오기
+            List<CartItem> cartItemList = cartItemService.getAll(cart);
+
+            // 장바구니에 들어있는 상품들의 총 가격
+            int totalPrice = 0;
+            for (CartItem cartitem : cartItemList) {
+                totalPrice += cartitem.getCount() * cartitem.getProduct().getPriceSales();
+            }
+
+            model.addAttribute("totalPrice", totalPrice);
+//            model.addAttribute("totalCount", cart.getCount());
+            model.addAttribute("cartItems", cartItemList);
+            model.addAttribute("member", memberService.findById(id));
+
+            return "cart";
+        }
+        // 로그인 id와 장바구니 접속 id가 같지 않는 경우
+        else {
+            return "redirect:/main";
+        }
+    }
+
+    @GetMapping("/member/cart/{id}/{cartItemId}/delete")
+    public String deleteCartItem(@PathVariable("id") Long id, @PathVariable("cartItemId") Long itemId, Model model, Principal principal) {
+        Member member = this.memberService.getMember(principal.getName());
+        if (member.getId().equals(id)) {
+            // itemId로 장바구니 상품 찾기
+            CartItem cartItem = cartService.findCartItemById(itemId);
+
+            // 장바구니 물건 삭제
+            cartItemService.cartItemDelete(itemId);
+
+            // 해당 유저의 카트 찾기
+            Cart cart = cartService.getCartByMemberId(id);
+
+            // 해당 유저의 장바구니 상품들
+            List<CartItem> cartItemList = cartService.getAllMemberCart(cart);
+
+            // 총 가격 += 수량 * 가격
+            int totalPrice = 0;
+            for (CartItem cartitem : cartItemList) {
+                totalPrice += cartitem.getCount() * cartitem.getProduct().getPriceSales();
+            }
+
+            cart.setCount(cart.getCount() - cartItem.getCount());
+
+            model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("totalCount", cart.getCount());
+            model.addAttribute("cartItems", cartItemList);
+            model.addAttribute("member", memberService.findById(id));
+
+            return "redirect:/member/cart/{id}}";
+        }
+        // 로그인 id와 장바구니 삭제하려는 유저의 id가 같지 않는 경우
+        else {
+            return "redirect:/main";
+        }
     }
 
 //    @PostMapping("/member/login")

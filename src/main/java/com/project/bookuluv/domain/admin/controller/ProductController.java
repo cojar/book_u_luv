@@ -4,6 +4,7 @@ import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import com.project.bookuluv.domain.admin.service.ProductService;
+
 import com.project.bookuluv.domain.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -66,6 +67,13 @@ public class ProductController {
     public String domesticDetail(Model model, @PathVariable("id") Long id) {
         Product products = this.productService.getById(id);
         model.addAttribute("products", products);
+
+        Member member = this.memberService.getMember(principal.getName());
+
+        if (member != null){
+            model.addAttribute("member", member);
+        }
+
         return "product/detail";
     }
     @GetMapping("/create")

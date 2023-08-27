@@ -259,6 +259,14 @@ public class MemberService {
         return this.memberRepository.findAll();
     }
 
+    public Member findById(Long id) {
+        Optional<Member> member = this.memberRepository.findById(id);
+        if (member.isPresent()) {
+            return member.get();
+        }
+        throw new DataNotFoundException("회원을 찾을 수 없습니다.");
+    }
+
 
     // public String me(String userName) {
     //  User user = memberRepository.findByUserName(userName)

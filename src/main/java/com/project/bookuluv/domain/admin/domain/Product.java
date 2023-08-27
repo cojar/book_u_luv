@@ -1,13 +1,18 @@
 package com.project.bookuluv.domain.admin.domain;
 
 import com.project.bookuluv.base.entity.BaseEntity;
+import com.project.bookuluv.domain.cartItem.domain.CartItem;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Entity
 @Setter
@@ -70,6 +75,9 @@ public class Product extends BaseEntity {
 
     @Column(name = "category_name")
     private String categoryName;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<CartItem> cartItemList;
 
     @Column(name = "hit", columnDefinition = "integer default 0", nullable = false)
     private int hit;

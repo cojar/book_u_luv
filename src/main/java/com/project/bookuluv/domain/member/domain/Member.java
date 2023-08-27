@@ -2,6 +2,7 @@ package com.project.bookuluv.domain.member.domain;
 
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.domain.admin.domain.Notice;
+import com.project.bookuluv.domain.cart.domain.Cart;
 import com.project.bookuluv.domain.member.dto.MemberRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -111,5 +112,7 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "register", cascade = CascadeType.REMOVE)
     private List<Notice> noticeList;
 
+    @OneToOne
+    private Cart cart;
 
 }
