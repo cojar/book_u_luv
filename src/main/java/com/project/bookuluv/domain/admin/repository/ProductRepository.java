@@ -31,3 +31,23 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findById(Long id);
 }
+    @Query("select distinct p " +
+            "from Product p " +
+            "where " +
+            "   (p.title like %:kw% " +
+            "   or p.publisher like %:kw% " +
+            "   or p.author like %:kw% " +
+            "   or p.categoryName like %:kw%) " +
+            "   and p.mallType = 'FOREIGN'")
+    Page<Product> findAllForeignByKeyword(@Param("kw") String kw, Pageable pageable);
+    @Query("select distinct p " +
+            "from Product p " +
+            "where " +
+            "   (p.title like %:kw% " +
+            "   or p.publisher like %:kw% " +
+            "   or p.author like %:kw% " +
+            "   or p.categoryName like %:kw%) " +
+            "   and p.mallType = 'BOOK'")
+    Page<Product> findAllDomesticByKeyword(@Param("kw") String kw, Pageable pageable);
+
+}

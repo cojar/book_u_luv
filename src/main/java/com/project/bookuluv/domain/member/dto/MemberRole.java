@@ -38,7 +38,3 @@ public enum MemberRole {
                 .collect(Collectors.toList());
     }
 }
-
-
-
-

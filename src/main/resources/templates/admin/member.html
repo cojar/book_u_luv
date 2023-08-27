@@ -8,8 +8,14 @@
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>관리자 페이지</title>
-    <!-- 테일윈드 스타일시트 링크 추가 -->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .truncate-230 {
+            max-width: 230px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
 </head>
 <body>
 
@@ -33,13 +39,10 @@
                             <a class="menu-link" th:href="@{/admin/foreign}">외국도서 관리</a>
                         </li>
                         <li>
-                            <a class="menu-link" th:href="@{/admin/author}">작가관리</a>
-                        </li>
-                        <li>
-                            <a class="menu-link" th:href="@{/admin/article}">판매 글 관리</a>
-                        </li>
-                        <li>
                             <a class="menu-link" th:href="@{/admin/calculate}">정산관리</a>
+                        </li>
+                        <li>
+                            <a class="menu-link" th:href="@{/product/create}">제품 등록</a>
                         </li>
                     </ul>
                 </div>
@@ -63,15 +66,15 @@
                     <th class="py-2 px-4 border w-auto">생년월일</th>
                     <th class="py-2 px-4 border w-auto">전화번호</th>
                     <th class="py-2 px-4 border w-auto">권한</th>
-                    <th class="py-2 px-4 border w-auto">활성 여부</th>
                     <th class="py-2 px-4 border w-auto">권한 부여</th>
-                    <th class="py-2 px-4 border w-auto">삭제</th>
+                    <th class="py-2 px-4 border w-auto">활성 상태</th>
+                    <th class="py-2 px-4 border w-auto">활성 여부</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr class="bg-white" th:each="member : ${memberList}">
                     <td class="py-2 px-4 border" th:text="${member.id}"></td>
-                    <td class="py-2 px-4 border" th:text="${member.userName}"></td>
+                    <td class="py-2 px-4 border truncate-230" th:text="${member.userName}"></td>
                     <td class="py-2 px-4 border" th:text="${member.lastName}"></td>
                     <td class="py-2 px-4 border" th:text="${member.firstName}"></td>
                     <td class="py-2 px-4 border" th:text="${member.nickName}"></td>
@@ -79,6 +82,21 @@
                     <td class="py-2 px-4 border" th:text="${member.birthDate}"></td>
                     <td class="py-2 px-4 border" th:text="${member.phone}"></td>
                     <td class="py-2 px-4 border" th:text="${member.role}"></td>
+                    <td class="py-2 px-4 border">
+                        <form method="post" th:action="@{/admin/member/update-role}">
+                            <input name="memberId" th:value="${member.id}" type="hidden"/>
+                            <select name="newRole">
+                                <option th:selected="${member.role == 'MEMBER'}" value="MEMBER">권한 선택</option>
+                                <option th:selected="${member.role == 'MEMBER'}" value="MEMBER">Member</option>
+                                <option th:selected="${member.role == 'AUTHOR'}" value="AUTHOR">Author</option>
+                                <option th:selected="${member.role == 'ADMIN'}" value="ADMIN">Admin</option>
+                                <option th:selected="${member.role == 'SUPERADMIN'}" value="SUPERADMIN">SuperAdmin</option>
+                                <!-- 다른 권한 옵션들 추가 -->
+                            </select>
+                            <button type="submit">변경</button>
+                        </form>
+                    </td>
+                    <td class="py-2 px-4 border" th:text="${member.isActive ? '활성화' : '비활성화'}"></td>
                     <td class="py-2 px-4 border">
                         <form method="post" th:action="@{/admin/member/toggle-active}">
                             <input name="memberId" th:value="${member.id}" type="hidden"/>
@@ -89,25 +107,14 @@
                             </button>
                         </form>
                     </td>
-                    <td class="py-2 px-4 border">
-                        <form method="post" th:action="@{/admin/member/update-role}">
-                            <input name="memberId" th:value="${member.id}" type="hidden"/>
-                            <select name="newRole">
-                                <option th:selected="${member.role == 'MEMBER'}" value="MEMBER">Member</option>
-                                <option th:selected="${member.role == 'ADMIN'}" value="ADMIN">Admin</option>
-                                <option th:selected="${member.role == 'AUTHOR'}" value="AUTHOR">Author</option>
-                                <!-- 다른 권한 옵션들 추가 -->
-                            </select>
-                            <button type="submit">변경</button>
-                        </form>
-                    </td>
-                    <td class="py-2 px-4 border">
-                        <form method="post" th:action="@{/admin/member/delete}">
-                            <input name="memberId" th:value="${member.id}" type="hidden"/>
-                            <button class="bg-red-500 text-red-500 px-2 py-1 rounded hover:bg-red-600"
-                                    type="submit">삭제</button>
-                        </form>
-                    </td>
+
+<!--                    <td class="py-2 px-4 border">-->
+<!--                        <form method="post" th:action="@{/admin/member/delete}">-->
+<!--                            <input name="memberId" th:value="${member.id}" type="hidden"/>-->
+<!--                            <button class="bg-red-500 text-red-500 px-2 py-1 rounded hover:bg-red-600"-->
+<!--                                    type="submit">삭제</button>-->
+<!--                        </form>-->
+<!--                    </td>-->
                 </tr>
                 </tbody>
             </table>

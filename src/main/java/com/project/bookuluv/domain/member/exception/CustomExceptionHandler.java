@@ -1,4 +1,4 @@
-package com.project.bookuluv.domain.member.controller;
+package com.project.bookuluv.domain.member.exception;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
