@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>관리자 페이지</title>
+    <!-- 테일윈드 스타일시트 링크 추가 -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<main layout:fragment="content">
+
+    <header class="w-[1580px] mx-auto p-4 text-left border-b">
+        <div class="flex justify-between items-center">
+            <h1 class="text-[50px]">관리자 페이지</h1>
+            <div class="menu">
+                <div class="admin_menu flex space-x-4">
+                    <ul class="flex space-x-4">
+                        <li>
+                            <a class="menu-link" th:href="@{/admin/member}">회원관리</a>
+                        </li>
+                        <li>
+                            <a class="menu-link" th:href="@{/admin/notice}">공지사항 관리</a>
+                        </li>
+                        <li>
+                            <a class="menu-link" th:href="@{/admin/domestic}">국내도서 관리</a>
+                        </li>
+                        <li>
+                            <a class="menu-link" th:href="@{/admin/foreign}">외국도서 관리</a>
+                        </li>
+                        <li>
+                            <a class="menu-link" th:href="@{/admin/calculate}">정산관리</a>
+                        </li>
+                        <li>
+                            <a class="menu-link" th:href="@{/product/create}">제품 등록</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- 회원 관리 테이블 -->
+    <div class="w-[1580px] mx-auto mt-[100px]">
+        <h1 class="text-3xl font-semibold my-6">정산 관리</h1>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                <tr>
+                    <th class="py-2 px-4 w-auto border">상품</th>
+                    <th class="py-2 px-4 w-auto border">판매량</th>
+                    <th class="py-2 px-4 w-auto border">상품가격</th>
+                    <th class="py-2 px-4 w-auto border">작가</th>
+                    <th class="py-2 px-4 w-auto border">출판사</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="text-center" th:each="entry : ${productSales}">
+                    <td class="py-2 px-4 w-auto border" th:text="${entry.key.title}">123123</td>
+                    <td class="py-2 px-4 border" th:text="${entry.value}">123123</td>
+                    <td class="py-2 px-4 border" th:text="${entry.key.priceSales}">123123</td>
+                    <td class="py-2 px-4 border" th:text="${entry.key.author}">123123</td>
+                    <td class="py-2 px-4 border" th:text="${entry.key.publisher}">123123</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="mt-4">
+                <span class="flex justify-end" th:text="'총 결제금액: ' + ${totalPaidAmount} + '원'">123123123</span>
+            </div>
+        </div>
+        <h1 class="text-3xl font-semibold my-6">유저 별 결제</h1>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                <tr>
+                    <th>회원</th>
+                    <th>주문 ID</th>
+                    <th>상품명</th>
+                    <th>가격</th>
+                    <th>결제일</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="text-center" th:each="entry : ${memberPurchase}">
+                    <td class="py-2 px-4 border" th:text="${entry.key.lastName} + ' ' + ${entry.key.firstName}">123123
+                    </td>
+                    <td class="py-2 px-4 border">
+                        <ul>
+                            <li th:each="orderItem : ${entry.value}" th:text="${orderItem.order.id}">123123</li>
+                        </ul>
+                    </td>
+                    <td class="py-2 px-4 border">
+                        <ul>
+                            <li th:each="orderItem : ${entry.value}" th:text="${orderItem.product.title}">123123</li>
+                        </ul>
+                    </td>
+                    <td class="py-2 px-4 border">
+                        <ul>
+                            <li th:each="orderItem : ${entry.value}" th:text="${orderItem.product.priceSales}">123123
+                            </li>
+                        </ul>
+                    </td>
+                    <td class="py-2 px-4 border">
+                        <ul>
+                            <li th:each="orderItem : ${entry.value}" th:text="${orderItem.payDate}">123123</li>
+                        </ul>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div th:each="entry : ${memberPurchase}" class="flex justify-end mt-4">
+                <span th:text="${#lists.size(entry.value)}"></span>
+                <span class="ml-4" th:text="'총 결제금액: ' + ${totalPaidAmount} + '원'"></span>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+
+</html>

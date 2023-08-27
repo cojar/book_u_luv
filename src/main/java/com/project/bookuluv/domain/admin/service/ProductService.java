@@ -63,7 +63,7 @@ public class ProductService {
     }
 
     private String buildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book&Foreign" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=50" + "&start=1" + "&SearchTarget=Foreign" + "&output=js" + "&Version=20131101";
     }
 
     private String domesticBuildListUrl(String queryType) {

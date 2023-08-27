@@ -3,12 +3,15 @@ package com.project.bookuluv.domain.admin.controller;
 import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.service.ProductService;
+import com.project.bookuluv.domain.member.domain.Member;
+import com.project.bookuluv.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -17,6 +20,8 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
+
+    private final MemberService memberService;
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String searchBooks(Model model, @RequestParam String query) {
@@ -49,9 +54,16 @@ public class ProductController {
     }
 
     @GetMapping(value = "/domestic/detail/{id}")
-    private String domesticDetail(Model model, @PathVariable("id") Long id) {
+    private String domesticDetail(Model model, @PathVariable("id") Long id, Principal principal) {
         Product products = this.productService.findById(id);
         model.addAttribute("products", products);
+
+        Member member = this.memberService.getMember(principal.getName());
+
+        if (member != null){
+            model.addAttribute("member", member);
+        }
+
         return "product/detail";
     }
 

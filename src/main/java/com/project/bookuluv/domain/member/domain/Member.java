@@ -112,6 +112,7 @@ public class Member extends BaseEntity {
     @OneToMany(mappedBy = "register", cascade = CascadeType.REMOVE)
     private List<Notice> noticeList;
 
+    @OneToOne
     private Cart cart;
 
 }

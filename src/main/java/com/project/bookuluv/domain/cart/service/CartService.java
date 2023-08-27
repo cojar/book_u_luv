@@ -28,38 +28,42 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
 
     private final CartItemService cartItemService;
-
-    private final CartService cartService;
-
     @Transactional
     public void addCart(Product newProduct, Member member, int amount) {
 
-        Cart cart = cartRepository.findCartByMemberId(member.getId());
+        Cart cart = cartRepository.findByMemberId(member.getId());
 
         if (cart == null) {
-            cart = cartService.createCart(member);
+            cart = createCart(member);
             cartRepository.save(cart);
         }
 
-        Product product = productRepository.findByProductId(newProduct.getId());
+        Optional<Product> _product = productRepository.findById(newProduct.getId());
 
-        CartItem cartItem = cartItemRepository.findCartItemByCartIdAndProductId(cart.getId(), product.getId());
+        if (_product.isPresent()){
+            Product product = _product.get();
 
-        if (cartItem == null) {
-            cartItem = cartItemService.createCartItem(cart, product, amount);
-            cartItemRepository.save(cartItem);
+            CartItem cartItem = cartItemRepository.findByCartIdAndProductId(cart.getId(), product.getId());
+
+            if (cartItem == null) {
+                cartItem = cartItemService.createCartItem(cart, product, amount);
+                cartItemRepository.save(cartItem);
+            } else {
+
+                CartItem update = cartItem;
+                update.setCart(cartItem.getCart());
+                update.setProduct(cartItem.getProduct());
+                update.addCount(amount);
+                update.setModifyDate(LocalDateTime.now());
+                cartItemRepository.save(update);
+
+            }
+
+            cart.setCount(cart.getCount() * amount);
+
         } else {
-
-            CartItem update = cartItem;
-            update.setCart(cartItem.getCart());
-            update.setProduct(cartItem.getProduct());
-            update.addCount(amount);
-            update.setModifyDate(LocalDateTime.now());
-            cartItemRepository.save(cartItem);
-
+            throw new DataNotFoundException("상품을 조회할 수 없습니다.");
         }
-
-        cart.setCount(cart.getCount() * amount);
     }
 
 
@@ -72,26 +76,14 @@ public class CartService {
         return this.cartRepository.save(cart);
     }
 
-    public void cartItemDelete(Long cartItemId) {
-        Optional<CartItem> cartItem = cartItemRepository.findById(cartItemId);
-        cartItem.ifPresentOrElse(
-                item -> cartItemRepository.delete(item),
-                () -> {
-                    throw new DataNotFoundException("삭제할 장바구니 항목을 찾을 수 없습니다.");
-                }
-        );
-    }
+
 
     public Cart getMemberCart(Long id) {
         return this.cartRepository.findByMemberId(id);
     }
 
     public List<CartItem> getAllMemberCart(Cart cart) {
-        return this.cartRepository.findAllMemberCart(cart);
-    }
-
-    public List<CartItem> findAll(Cart cart) {
-        return this.cartRepository.findAllMemberCart(cart);
+        return this.cartItemRepository.findAllByCart(cart);
     }
 
     public CartItem findCartItemById(Long itemId) {
@@ -104,6 +96,6 @@ public class CartService {
 
 
     public Cart getCartByMemberId(Long id) {
-        return this.cartRepository.findCartByMemberId(id);
+        return this.cartRepository.findByMemberId(id);
     }
 }
