@@ -1,5 +1,7 @@
 package com.project.bookuluv.domain.member.service;
 
+import com.project.bookuluv.domain.admin.domain.Notice;
+import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.dto.MemberRole;
 import com.project.bookuluv.domain.member.dto.MemberUpdateRequest;
@@ -9,6 +11,7 @@ import com.project.bookuluv.domain.member.exception.ErrorCode;
 import com.project.bookuluv.domain.member.repository.MemberRepository;
 import com.project.bookuluv.standard.utils.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -265,4 +268,20 @@ public class MemberService {
     //           .orElseThrow();
     //   return ;
     // }
+
+    @Transactional
+    public void deleteMember(Member member) {
+        // 회원과 연관된 공지사항과 제품의 연결을 해제
+        List<Notice> notices = member.getNoticeList();
+        for (Notice notice : notices) {
+            notice.setNoticeRegister(null);
+        }
+
+        List<Product> products = member.getProductList();
+        for (Product product : products) {
+            product.getReviews().clear(); // 제품과 연관된 리뷰를 일단 분리
+        }
+
+        memberRepository.delete(member); // 회원 삭제
+    }
 }

@@ -18,7 +18,7 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
             + "where "
             + "   (n.subject like %:kw% "
             + "   or n.content like %:kw% "
-            + "   or n.register like %:kw%)")
+            + "   or n.noticeRegister like %:kw%)")
     Page<Notice> findAllByKeyword(@Param("kw") String kw, Pageable pageable);
 
     @Query("select "
@@ -27,6 +27,6 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
             + "where "
             + "   (:field = 'title' and n.subject like %:kw%) "
             + "   or (:field = 'content' and n.content like %:kw%) "
-            + "   or (:field = 'register' and n.register.nickName like %:kw%)")
+            + "   or (:field = 'noticeRegister' and n.noticeRegister.nickName like %:kw%)")
     Page<Notice> findAllByKeywordAndField(@Param("kw") String kw, @Param("field") String field, Pageable pageable);
 }

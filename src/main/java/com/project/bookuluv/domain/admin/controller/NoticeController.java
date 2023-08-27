@@ -46,6 +46,7 @@ public class NoticeController {
         model.addAttribute("kw", kw);
         return "notice/list";
     }
+
     @ModelAttribute("searchResultLabel")
     public String getSearchResultLabel(@RequestParam(value = "field", defaultValue = "") String field) {
         if ("title".equals(field)) {
@@ -96,7 +97,7 @@ public class NoticeController {
         }
 
         Notice notice = this.noticeService.getById(id);
-        if (!notice.getRegister().getUserName().equals(principal.getName())) {
+        if (!notice.getNoticeRegister().getUserName().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
         if (notice == null) {
@@ -120,7 +121,7 @@ public class NoticeController {
             throw new AccessDeniedException("Access is denied");
         }
         Notice notice = this.noticeService.getById(id);
-        if (!notice.getRegister().getUserName().equals(principal.getName())) {
+        if (!notice.getNoticeRegister().getUserName().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
         if (bindingResult.hasErrors()) {

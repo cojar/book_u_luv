@@ -61,7 +61,7 @@ public class NoticeService {
         Notice notice = Notice.builder()
                 .subject(subject)
                 .content(content)
-                .register(member)
+                .noticeRegister(member)
                 .createDate(LocalDateTime.now())
                 .build();
         this.noticeRepository.save(notice);

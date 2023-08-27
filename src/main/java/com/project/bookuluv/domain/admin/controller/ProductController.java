@@ -5,6 +5,9 @@ import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import com.project.bookuluv.domain.admin.service.ProductService;
 import com.project.bookuluv.domain.member.service.MemberService;
+import com.project.bookuluv.domain.review.domain.Review;
+import com.project.bookuluv.domain.review.dto.ReviewDto;
+import com.project.bookuluv.domain.review.service.ReviewService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,6 +42,8 @@ public class ProductController {
     private final ProductRepository productRepository;
 
     private final ADMController admController;
+
+    private final ReviewService reviewService;
 
     @GetMapping("/list")
     public String productList(Model model,
@@ -64,10 +70,15 @@ public class ProductController {
 
     @GetMapping(value = "/detail/{id}")
     public String domesticDetail(Model model, @PathVariable("id") Long id) {
-        Product products = this.productService.getById(id);
-        model.addAttribute("products", products);
+        Product product = productService.getById(id);
+        List<Review> reviews = reviewService.getReviewsByProduct(product); // Fetch reviews for the product
+        model.addAttribute("product", product);
+        model.addAttribute("reviews", reviews); // Add the reviews to the model
+        model.addAttribute("reviewDto", new ReviewDto()); // ReviewDto 객체 초기화
+        productService.updateAverageRating(product);
         return "product/detail";
     }
+
     @GetMapping("/create")
     @PreAuthorize("isAuthenticated()")
     public String create(ProductDto productDto) {
