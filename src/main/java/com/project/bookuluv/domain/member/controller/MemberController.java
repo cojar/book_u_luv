@@ -115,7 +115,7 @@ public class MemberController {
                 LocalDateTime currentDate = LocalDateTime.now();
 
                 // 회원가입 처리
-                MemberRole role = dto.getUserName().startsWith("admin") ? MemberRole.ADMIN : MemberRole.MEMBER;
+                MemberRole role = MemberRole.MEMBER;
                 this.memberService.join(
                         dto.getUserName(),
                         dto.getPassword1(),

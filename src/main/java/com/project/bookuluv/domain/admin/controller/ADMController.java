@@ -10,7 +10,6 @@ import com.project.bookuluv.domain.member.dto.MemberJoinRequest;
 import com.project.bookuluv.domain.member.dto.MemberRole;
 import com.project.bookuluv.domain.member.service.MemberService;
 import com.project.bookuluv.domain.order.domain.OrderItem;
-import com.project.bookuluv.domain.rebate.domain.RebateOrderItem;
 import com.project.bookuluv.domain.rebate.service.RebateService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +59,7 @@ public class ADMController {
             // 인증 코드 검증
             if (dto.getMailKey().equals(dto.getGenMailKey())) {
                 LocalDateTime currentDate = LocalDateTime.now();
-                MemberRole role = MemberRole.SUPERADMIN; // TODO : 추후 MemberRole.ADMIN; 으로 할당값 변경
+                MemberRole role = MemberRole.ADMIN;
                 this.adminService.createAdminMember(
                         dto.getUserName(),
                         dto.getPassword1(),
