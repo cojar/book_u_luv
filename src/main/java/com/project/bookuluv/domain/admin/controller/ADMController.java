@@ -221,9 +221,9 @@ public class ADMController {
         return hasAuthority("SUPERADMIN", "ADMIN", "AUTHOR", "MEMBER");
     }
 
-    @GetMapping("/admin/rebate")
+    @GetMapping("/admin/calculate")
     public String showRebate(Model model) {
-        return "rebate";
+        return "admin/calculate";
     }
 
     @GetMapping("/admin/perform-rebate")
@@ -249,7 +249,7 @@ public class ADMController {
         model.addAttribute("totalAmount", totalAmount);
 
         model.addAttribute("message", "1개월 동안의 정산이 수행되었습니다.");
-        return "rebate";
+        return "admin/calculate";
     }
 
 }
