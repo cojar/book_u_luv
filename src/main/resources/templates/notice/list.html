@@ -55,7 +55,7 @@
                             <td>
                                 <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}" th:text="${notices.getTotalElements() - (notices.getNumber() * notices.getSize()) - loop.index}" th:attr="data-id=${notice.id}"></a>
                             </td>
-                            <td class="text-left max-w-lg whitespace-pre-line break-words">
+                            <td class="text-left max-w-lg break-words">
                                 <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}"
                                    th:text="${notice.subject}" th:attr="data-id=${notice.id}"></a>
                             </td>
