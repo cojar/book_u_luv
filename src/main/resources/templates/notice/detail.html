@@ -12,32 +12,32 @@
 <div class=" w-[1080px] mx-auto notice-subject">
     <table class="w-full border-collapse border-separate">
         <tr class="border-b-2 border-black">
-            <th class="text-left text-center pr-4 border-r-2 border-black w-1/4">제 목</th>
+            <th class="text-left pl-8 pr-4 border-r-2 border-black w-1/6">제 목</th>
             <td class="pl-20 text-start">
                 <div class="max-w-lg whitespace-pre-line break-words"
                      th:text="${notice.subject}"></div>
             </td>
         </tr>
         <tr class="border-b-2 border-black">
-            <th class="text-left text-center pr-4 border-r-2 border-black w-1/4">작 성 일</th>
+            <th class="text-left pl-8 border-r-2 border-black w-1/6">작 성 일</th>
             <td class="pl-20 text-start" th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}"></td>
         </tr>
         <tr class="border-b-2 border-black" th:if="${notice.modifyDate != null}">
-            <th class="text-left text-center pr-4 border-r-2 border-black w-1/4">수 정 일</th>
+            <th class="text-left pl-8 pr-4 border-r-2 border-black w-1/6">수 정 일</th>
             <td class="pl-20 text-start" th:text="${#temporals.format(notice.modifyDate, 'yyyy-MM-dd HH:mm')}"></td>
         </tr>
         <tr class="border-b-2 border-black" th:unless="${notice.modifyDate != null}">
-            <th class="text-left text-center pr-4 border-r-2 border-black w-1/4">수 정 일</th>
+            <th class="text-left pl-8 pr-4 border-r-2 border-black w-1/6">수 정 일</th>
             <td class="pl-20 text-start"></td>
         </tr>
         <tr class="border-b-2 border-black">
-            <th class="text-left text-center pr-4 border-r-2 border-black w-1/4">조 회 수</th>
+            <th class="text-left pl-8 pr-4 border-r-2 border-black w-1/6">조 회 수</th>
             <td class="pl-20 text-start" th:text="${notice.hit}"></td>
         </tr>
     </table>
     <div class="border-b-2 border-black my-8"></div>
-    <div class="bg-white p-8 rounded shadow-md flex justify-center">
-        <div class="notice-content w-[800px] break-words">
+    <div class="bg-white p-8 rounded shadow-md">
+        <div class="notice-content break-words">
             <span th:text="${notice.content}"></span>
         </div>
     </div>
