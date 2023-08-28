@@ -2,14 +2,10 @@ package com.project.bookuluv.domain.member.domain;
 
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.domain.admin.domain.Notice;
-import com.project.bookuluv.domain.cart.domain.Cart;
+import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.member.dto.MemberRole;
+import com.project.bookuluv.domain.review.domain.Review;
 import jakarta.persistence.*;
-import lombok.*;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -109,10 +105,12 @@ public class Member extends BaseEntity {
         this.isActive = false;
     }
 
-    @OneToMany(mappedBy = "register", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "noticeRegister", orphanRemoval = true)
     private List<Notice> noticeList;
 
-    @OneToOne
-    private Cart cart;
+    @OneToMany(mappedBy = "reviewRegister", orphanRemoval = true)
+    private List<Review> reviewList;
 
+    @OneToMany(mappedBy = "productRegister", orphanRemoval = true)
+    private List<Product> productList;
 }

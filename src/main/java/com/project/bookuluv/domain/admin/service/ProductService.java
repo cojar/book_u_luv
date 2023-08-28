@@ -4,6 +4,7 @@ import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import com.project.bookuluv.domain.member.exception.DataNotFoundException;
+import com.project.bookuluv.domain.review.domain.Review;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -303,4 +304,32 @@ public class ProductService {
 
         return scheme + "://" + host + portString;
     }
+
+    public void updateAverageRating(Product product) {
+        List<Review> reviews = product.getReviews();
+        if (!reviews.isEmpty()) {
+            double totalRating = 0.0;
+            for (Review review : reviews) {
+                totalRating += review.getRating();
+            }
+            double averageRating = totalRating / reviews.size();
+            product.setAverageRating(averageRating);
+            productRepository.save(product);
+        }
+    }
+
+
+//    public double calculateAverageStarRating(Product product) {
+//        List<Review> reviews = reviewRepository.findByProduct(product);
+//        if (reviews.isEmpty()) {
+//            return 0.0; // No reviews, so average rating is 0
+//        }
+//
+//        double totalRating = 0.0;
+//        for (Review review : reviews) {
+//            totalRating += review.getStarRating();
+//        }
+//
+//        return totalRating / reviews.size();
+//    }
 }

@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="ko" layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
-      xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+      xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
@@ -8,35 +9,48 @@
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>도서 상세페이지</title>
+    <style>
+        .star {
+            font-size: 24px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .star.active {
+            color: gold; /* 변경할 색상을 여기에 지정 */
+        }
+    </style>
 </head>
 
 <body layout:fragment="content">
 <div class="mx-auto max-w-screen-xl h-auto">
     <div class="bg-white rounded-lg shadow">
         <div class="flex justify-center my-[40px]">
-            <img alt="" class="w-96 h-auto" th:src="${products.coverImg}">
+            <img alt="" class="w-96 h-auto" th:src="${product.coverImg}">
         </div>
     </div>
 
     <div class="flex justify-between items-center mb-5">
         <div class="flex items-center">
-            <span class="text-2xl w-[500px] font-bold" th:text="${products.title}"></span>
+            <span class="text-2xl w-[450px] font-bold" th:text="${product.title}"></span>
         </div>
-        <span class="w-[200px] text-end">현재평점/총평점</span>
+        <span class="w-[250px] text-end">
+        현재평점/총평점 : <span th:text="${#numbers.formatDecimal(product.averageRating, 1, 2) + ' / 5.0'}"></span>
+    </span>
     </div>
+
 
     <div class="my-2 sm:my-3">
         <span>작가 : </span>
-        <span th:text="${products.author}"></span>
+        <span th:text="${product.author}"></span>
         <span class="ml-2">출판사 : </span>
-        <span th:text="${products.publisher}"></span>
+        <span th:text="${product.publisher}"></span>
     </div>
 
     <div class="mb-2 mx-auto">
         <span>정가 : </span>
-        <span class="line-through text-gray-500" th:text="${products.priceStandard} + '원'"></span>
+        <span class="line-through text-gray-500" th:text="${product.priceStandard} + '원'"></span>
         <span>할인가 : </span>
-        <span th:text="${products.priceSales} + '원'"></span>
+        <span th:text="${product.priceSales} + '원'"></span>
     </div>
 
     <div class="border-t mt-4 pt-4">
@@ -44,43 +58,115 @@
     </div>
 
     <div class="mt-4 w-[700px]">
-        <div th:text="${products.description}"></div>
+        <div th:text="${product.description}"></div>
     </div>
 
     <div class="border-solid mt-4 pt-4">
-            <span>
-                <!-- 리뷰글쓸때 선택한 별점색칠 -->
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-                <i class="fas fa-star"></i>
-            </span>
-        <div class="mt-4">
-            쓴 리뷰글
+        <div th:each="review : ${reviews}">
+            <div class="border p-4 mb-4 rounded">
+                <div class="flex justify-between">
+                    <div>
+                        <span class="font-bold" th:text="${review.product.title}"></span>
+                    </div>
+                    <div class="flex items-center">
+
+                        <span class="ml-2" id="staravg">
+                            <!-- 별점 표시용 아이콘 -->
+                            <i class="fas fa-star star-icon" data-star-index="0"></i>
+                            <i class="fas fa-star star-icon" data-star-index="1"></i>
+                            <i class="fas fa-star star-icon" data-star-index="2"></i>
+                            <i class="fas fa-star star-icon" data-star-index="3"></i>
+                            <i class="fas fa-star star-icon" data-star-index="4"></i>
+                        </span>
+                        <span class="font-bold ml-3" th:text="${review.rating} + ' / 5.0'"></span>
+                    </div>
+                </div>
+                <div class="mt-2 review-content" th:text="${review.content}" th:id="'reviewContent_' + ${review.id}"></div>
+
+                <!-- Edit Form (hidden by default) -->
+                <form th:object="${reviewDto}" th:action="@{|/review/modify/${review.id}|}"
+                      th:id="|review_modify_form_${review.id}|" method="post" class="edit-form hidden">
+                    <!-- ... (form fields) ... -->
+                    <textarea th:field="*{content}" class="w-full h-auto p-2 resize-none border rounded" placeholder="좋은 리뷰를 남겨주세요!"></textarea>
+                    <button type="submit" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded btn btn-primary btn-outline">수정 완료</button>
+                    <button type="button" class="mt-2 ml-2 px-4 py-2 bg-gray-300 text-gray-600 rounded btn btn-outline cancel-btn" th:onclick="toggleReviewModifyForm(this)">수정 취소</button>
+                </form>
+
+                <div class="flex justify-between text-gray-500 mt-2">
+                    <div>
+                        작성일: <span th:text="${#temporals.format(review.createDate, 'yyyy-MM-dd HH:mm')}"></span>
+                    </div>
+                    <div th:if="${review.modifyDate != null}">
+                        수정일: <span th:text="${#temporals.format(review.modifyDate, 'yyyy-MM-dd HH:mm')}"></span>
+                        (리뷰 수정됨) <!-- 수정됨 문구를 여기에 배치 -->
+                    </div>
+                    <div>
+                        작성자: <span th:text="${review.reviewRegister.nickName}"></span>
+                    </div>
+                </div>
+                <!-- 수정 및 삭제 버튼 -->
+                <div class="mt-2">
+                    <!-- Edit Button -->
+                    <a class="text-blue-500 mr-2 edit-btn"
+                       href="javascript:void(0);"
+                       sec:authorize="isAuthenticated()"
+                       th:if="${#authentication.principal.userName == review.reviewRegister.userName}"
+                       th:data-review-id="${review.id}"
+                       th:onclick="confirmReviewModify(${review.id})"
+                       th:text="수정"></a>
+
+                    <!-- Delete Button -->
+                    <a class="text-red-500 delete delete-btn"
+                       href="javascript:void(0);"
+                       sec:authorize="isAuthenticated()"
+                       th:data-uri="@{|/review/delete/${review.id}|}"
+                       th:if="${#authentication.principal.userName == review.reviewRegister.userName}"
+                       th:text="삭제"></a>
+                </div>
+            </div>
         </div>
+
+        <script>
+            $(document).ready(function () {
+                $('.star-icon').each(function () {
+                    const rating = parseFloat($(this).closest('.border').find('.font-bold').eq(1).text()); // 해당 리뷰의 별점 수치 가져오기
+                    const index = $(this).data('star-index'); // 별 아이콘의 인덱스
+
+                    if (index < rating) {
+                        $(this).removeClass('fa-regular text-yellow-100').addClass('fas text-yellow-300'); // 클래스명 수정
+                    } else {
+                        $(this).removeClass('fas text-yellow-300').addClass('fa-regular text-yellow-100'); // 클래스명 수정
+                    }
+                });
+            });
+        </script>
+
         <div class="border-t mt-4 pt-4">
             <div class="my-4">
                 <span class="font-bold text-[20px]">리뷰 작성</span>
             </div>
-            <span id="starRating">
-                    <!-- 리뷰글쓸때 선택한 별점색칠 -->
-                    <i class="star fas fa-star"></i>
-                    <i class="star fas fa-star"></i>
-                    <i class="star fas fa-star"></i>
-                    <i class="star fas fa-star"></i>
-                    <i class="star fas fa-star"></i>
+            <form th:object="${reviewDto}" th:action="@{|/review/create/${product.id}|}" method="post">
+                <input type="hidden" name="productId" th:value="${product.id}">
+                <span id="starRating">
+                    <i class="star fa-star fa-regular text-2xl" data-star-index="0"></i>
+                    <i class="star fa-star fa-regular text-2xl" data-star-index="1"></i>
+                    <i class="star fa-star fa-regular text-2xl" data-star-index="2"></i>
+                    <i class="star fa-star fa-regular text-2xl" data-star-index="3"></i>
+                    <i class="star fa-star fa-regular text-2xl" data-star-index="4"></i>
                 </span>
-            <div class="mt-4">
-                <textarea class="w-full h-auto resize-none p-2 border rounded" placeholder="리뷰를 작성해주세요..."></textarea>
-                <div class="flex justify-end">
-                    <button class="mt-2 px-4 py-2 bg-blue-600 text-white rounded">작성</button>
+                <span id="starText">별점: 5.0</span>
+                <div class="mt-4">
+                    <textarea th:field="*{content}" class="w-full h-auto p-2 resize-none border rounded" placeholder="좋은 리뷰를 남겨주시면 BOOK_U_LUV에 큰 힘이 됩니다!"></textarea>
+                    <input type="hidden" id="ratingInput" th:field="*{rating}" value="5" /> <!-- 별점 정보 -->
+                    <div class="flex justify-end">
+                        <button type="submit" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded btn btn-primary btn-outline">작성</button>
+                    </div>
                 </div>
-            </div>
+            </form>
             <div th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">
                 <div class="flex justify-between mt-4">
-                    <a th:href="@{|/product/modify/${products.id}|}" class="px-4 py-2 bg-green-500 text-white rounded">수정</a>
-                    <a th:href="@{|/product/delete/${products.id}|}" class="px-4 py-2 bg-red-500 text-white rounded">삭제</a>
+                    <a th:href="@{|/product/modify/${product.id}|}" class="px-4 py-2 bg-green-500 text-white rounded">수정</a>
+                    <a th:href="@{|/product/delete/${product.id}|}" class="px-4 py-2 bg-red-500 text-white rounded">삭제</a>
                 </div>
                 <div class="border-t mt-4 pt-4">
                     <div class="my-4">
@@ -128,67 +214,146 @@
                     </button>
                 </div>
                 <form th:action="@{/order/detail}">
-                    <input name="productsId" th:value="${products.id}" type="hidden">
+                    <input name="productsId" th:value="${product.id}" type="hidden">
                     <input class="btn btn-primary text-white" type="submit" value="구매">
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 <script>
-    /* 페이지 로딩 시 등록/수정 성공 여부 파라미터 확인 및 알림 메시지 띄우기 */
-    document.addEventListener('DOMContentLoaded', function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const successType = urlParams.get('success');
-
-        if (successType === 'create') {
-            alert('등록이 완료되었습니다.');
-        } else if (successType === 'modify') {
-            alert('수정이 완료되었습니다.');
+        function confirmReviewModify(reviewId) {
+            if (confirm("정말 수정하시겠습니까?")) {
+                showReviewModifyForm(reviewId);
+            }
         }
-    });
-        // 찜 스크립트
-        const likeIcon = document.getElementById('likeIcon');
+
+        function confirmReviewCancel(reviewId) {
+            if (confirm("리뷰 수정을 취소하시겠습니까?")) {
+                hideReviewModifyForm(reviewId);
+            }
+        }
+
+        function showReviewModifyForm(reviewId) {
+            const contentDiv = $('#reviewContent_' + reviewId);
+            const editForm = $('#review_modify_form_' + reviewId);
+
+            const content = contentDiv.text(); // 기존 리뷰 내용을 가져옴
+            contentDiv.addClass('hidden'); // 리뷰 내용 영역을 숨김
+            editForm.removeClass('hidden'); // 수정 폼을 보여줌
+            editForm.find('textarea').val(content); // 수정 폼에 내용을 설정
+        }
+
+        function hideReviewModifyForm(reviewId) {
+            const contentDiv = $('#reviewContent_' + reviewId);
+            const editForm = $('#review_modify_form_' + reviewId);
+
+            editForm.addClass('hidden'); // 수정 폼을 숨김
+            contentDiv.removeClass('hidden').text(editForm.find('textarea').val()); // 리뷰 내용 영역을 표시하고 내용을 설정
+
+        }
+
+        function toggleReviewModifyForm(button) {
+            const editForm = $(button).closest('.edit-form'); // 해당 수정 폼을 찾음
+            const contentDiv = editForm.siblings('.review-content'); // 수정 폼의 형제 요소 중 리뷰 내용 영역을 찾음
+
+            editForm.addClass('hidden'); // 수정 폼을 숨김
+            contentDiv.removeClass('hidden'); // 리뷰 내용 영역을 보여줌
+        }
+    // 페이지 로딩 시 실행할 함수
+    $(document).ready(function () {
+
+
+        // 수정 버튼 클릭 이벤트 핸들러 등록
+            // '수정' 버튼 클릭 시
+            $('.edit-btn').on('click', function () {
+                const reviewId = $(this).data('review-id');
+                confirmReviewModify(reviewId);
+            });
+
+            // '수정 취소' 버튼 클릭 시
+            $('.cancel-btn').on('click', function () {
+                const reviewId = $(this).data('review-id');
+                confirmReviewCancel(reviewId);
+            });
+
+        // 삭제 버튼 클릭 이벤트 핸들러 등록
+        $('.delete').on('click', function () {
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+                alert('삭제가 완료되었습니다.');
+            } else {
+                alert('삭제가 취소되었습니다.');
+            }
+        });
+
+        // 찜 버튼 클릭 이벤트 핸들러 등록
+        const likeIcon = $('#likeIcon');
         let isLiked = false; // 좋아요 상태 여부
-        // 좋아요 아이콘 상태 변경 함수
-        likeIcon.classList.add('text-red-500');
 
         function toggleLike() {
             if (isLiked) {
-                likeIcon.classList.remove('fas', 'text-red-500');
-                likeIcon.classList.add('far', 'text-red-500');
+                likeIcon.removeClass('fas text-red-500').addClass('far text-red-500');
             } else {
-                likeIcon.classList.remove('far', 'text-red-500');
-                likeIcon.classList.add('fas', 'text-red-500');
+                likeIcon.removeClass('far text-red-500').addClass('fas text-red-500');
             }
             isLiked = !isLiked;
         }
-        likeIcon.addEventListener('click', toggleLike);
+        likeIcon.on('click', toggleLike);
+
         // 별점 스크립트
-        const stars = document.querySelectorAll('.star');
-        let selectedStars = 0;
+        const stars = $('.star');
+
+        function updateStarRatingText() {
+            $('#starText').text(`별점: ${selectedStars.toFixed(1)}`);
+        }
 
         function toggleStar(index) {
-            if (stars[index].classList.contains('text-yellow-500')) {
-                selectedStars = index; // 이전에 선택한 별점을 취소하므로 index만큼 별점을 선택한 것으로 갱신
-            } else {
-                selectedStars = index + 1; // 클릭한 별점까지 선택한 상태로 변경
-            }
-            for (let i = 0; i < stars.length; i++) {
-                if (i < selectedStars) {
-                    stars[i].classList.add('text-yellow-500');
+            stars.each(function (i) {
+                if (i <= index) {
+                    $(this).removeClass('fa-star fa-regular').addClass('fa-star fas active');
                 } else {
-                    stars[i].classList.remove('text-yellow-500');
+                    $(this).removeClass('fa-star fas active').addClass('fa-star fa-regular');
                 }
-            }
-        }
-        stars.forEach((star, index) => {
-            star.addEventListener('click', () => {
-                toggleStar(index);
             });
+
+            selectedStars = index + 1;
+            updateStarRatingText();
+
+            // Update the hidden input value
+            $('#ratingInput').val(selectedStars);
+        }
+
+        let selectedStars = 5;
+        stars.on('mouseenter', function () {
+            const index = $(this).data('star-index');
+            toggleStar(index);
         });
+
+        stars.on('mouseleave', function () {
+            toggleStar(selectedStars - 1);
+        });
+
+        stars.on('click', function () {
+            const index = $(this).data('star-index');
+            selectedStars = index + 1;
+            toggleStar(index);
+        });
+
+        toggleStar(selectedStars - 1);
+
+        // 페이지 로딩 시 등록/수정 성공 여부 파라미터 확인 및 알림 메시지 띄우기
+        const urlParams = new URLSearchParams(window.location.search);
+        const successType = urlParams.get('success');
+        const currentUrl = window.location.href;
+        if (successType === 'create') {
+            alert('등록이 완료되었습니다.');
+        } else if (currentUrl.includes('success=modify')) {
+            alert('수정이 완료되었습니다.');
+        }
+    });
 </script>
+
 </body>
 
 </html>

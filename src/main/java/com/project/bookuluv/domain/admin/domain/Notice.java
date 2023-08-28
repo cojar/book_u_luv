@@ -2,9 +2,7 @@ package com.project.bookuluv.domain.admin.domain;
 
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.domain.member.domain.Member;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +27,8 @@ public class Notice extends BaseEntity {
     private int hit;
 
     @ManyToOne
-    private Member register;
+    @JoinColumn(name = "notice_register_id")
+    private Member noticeRegister; // 공지사항 작성자
 
 
 }

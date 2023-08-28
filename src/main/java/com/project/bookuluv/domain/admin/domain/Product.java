@@ -1,11 +1,9 @@
 package com.project.bookuluv.domain.admin.domain;
 
 import com.project.bookuluv.base.entity.BaseEntity;
-import com.project.bookuluv.domain.cartItem.domain.CartItem;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import com.project.bookuluv.domain.member.domain.Member;
+import com.project.bookuluv.domain.review.domain.Review;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -76,12 +74,17 @@ public class Product extends BaseEntity {
     @Column(name = "category_name")
     private String categoryName;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-    private List<CartItem> cartItemList;
-
     @Column(name = "hit", columnDefinition = "integer default 0", nullable = false)
     private int hit;
 
-    // TODO : 별점과 좋아요 처리 해야 함.
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
 
+    // 평균 별점 필드 추가
+    @Transient
+    private double averageRating;
+
+    @ManyToOne
+    @JoinColumn(name = "product_register_id")
+    private Member productRegister; // 제품 작성자
 }
