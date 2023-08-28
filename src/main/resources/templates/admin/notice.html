@@ -66,11 +66,11 @@
             <table class="min-w-full text-center">
                 <thead>
                 <tr>
-                    <th class="py-2 px-4 w-auto border">NO.</th>
-                    <th class="py-2 px-4 w-auto border">제목</th>
+                    <th class="py-2 px-4 w-[100px] border">NO.</th>
+                    <th class="py-2 px-4 w-[560px] border">제목</th>
                     <th class="py-2 px-4 w-auto border">작성자</th>
-                    <th class="py-2 px-4 w-auto border">작성일자</th>
-                    <th class="py-2 px-4 w-auto border">수정일자</th>
+                    <th class="py-2 px-4 w-[200px] border">작성일자</th>
+                    <th class="py-2 px-4 w-[200px] border">수정일자</th>
                     <th class="py-2 px-4 w-auto border">수정 / 삭제</th>
 
                 </tr>
@@ -78,7 +78,7 @@
                 <tbody>
                 <tr class="bg-white" th:each="notice : ${noticeList}">
                     <td class="py-2 px-4 border" th:text="${notice.id}"></td>
-                    <td class="py-2 px-4 border max-w-lg break-words" th:text="${notice.subject}"></td>
+                    <td class="py-2 px-4 border w-[300px] max-w-lg break-words" th:text="${notice.subject}"></td>
                     <td class="py-2 px-4 border" th:text="${notice.noticeRegister.nickName}"></td>
                     <td class="py-2 px-4 border" th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}"></td>
                     <td class="py-2 px-4 border" th:unless="${notice.modifyDate != null}">-</td>
