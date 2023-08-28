@@ -15,6 +15,8 @@ import com.project.bookuluv.domain.member.dto.MemberUpdateRequest;
 import com.project.bookuluv.domain.member.exception.DataNotFoundException;
 import com.project.bookuluv.domain.member.service.MemberSecurityService;
 import com.project.bookuluv.domain.member.service.MemberService;
+import com.project.bookuluv.domain.order.domain.Order;
+import com.project.bookuluv.domain.order.service.OrderService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +51,7 @@ public class MemberController {
     private final CartService cartService;
     private final CartItemService cartItemService;
     private final ProductService productService;
+    private final OrderService orderService;
 
     @PostMapping("/api/v1/members/join")
     public ResponseEntity<String> join(@RequestBody MemberJoinRequest dto) {
@@ -154,6 +157,11 @@ public class MemberController {
     @GetMapping("/member/profile")
     public String myPage(Model model, Principal principal) {
         Member member = memberService.getUser(principal.getName());
+        List<Order> OrderList = orderService.getByBuyerId(member.getId());
+        Cart cart = cartService.getCartByMemberId(member.getId());
+        model.addAttribute("OrderList", OrderList);
+        model.addAttribute("member", member);
+        model.addAttribute("cart", cart);
         return "member/useageHistory";
     }
 
@@ -344,12 +352,11 @@ public class MemberController {
     @PostMapping("/member/cart/{id}/{productId}")
     public String addCartItem(@PathVariable("id") Long id,
                               @PathVariable("productId") Long productId,
-                              int amount)
-    {
+                              int amount) {
 
         Member member = memberService.findById(id);
         Product product = productService.findById(productId);
-        if(member != null){
+        if (member != null) {
 
             cartService.addCart(product, member, amount);
 

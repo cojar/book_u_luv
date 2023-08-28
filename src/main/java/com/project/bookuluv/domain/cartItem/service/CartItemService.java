@@ -28,7 +28,7 @@ public class CartItemService {
     public void cartItemDelete(Long cartItemId) {
         Optional<CartItem> _cartItem = cartItemRepository.findById(cartItemId);
 
-        if (_cartItem.isPresent()){
+        if (_cartItem.isPresent()) {
             CartItem cartItem = _cartItem.get();
             this.cartItemRepository.delete(cartItem);
         } else {
@@ -40,4 +40,5 @@ public class CartItemService {
     public List<CartItem> getAll(Cart cart) {
         return this.cartItemRepository.findAll();
     }
+
 }
