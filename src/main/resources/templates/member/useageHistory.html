@@ -201,30 +201,30 @@
                     </div>
                 </div>
                 <!-- 내 좋아요 컨텐츠 -->
-<!--                <div class="menu-content hidden h-auto" id="likesContent">-->
-<!--                    &lt;!&ndash; 내 좋아요 내용을 여기에 표시 &ndash;&gt;-->
-<!--                    <h1 class="text-[50px] font-bold mb-4">좋아요한 도서</h1>-->
-<!--                    &lt;!&ndash; 좋아요한 제품 &ndash;&gt;-->
-<!--                    <div class="form-control">-->
-<!--                        <label class="label">-->
-<!--                            <span class="text-[20px]">좋아요한 도서</span>-->
-<!--                        </label>-->
-<!--                        <div>-->
-<!--                            <table class="table">-->
-<!--                                <thead>-->
-<!--                                <tr>-->
-<!--                                    <th>제목</th>-->
-<!--                                </tr>-->
-<!--                                </thead>-->
-<!--                                <tbody>-->
-<!--                                <tr>-->
-<!--                                    <td>제목</td>-->
-<!--                                </tr>-->
-<!--                                </tbody>-->
-<!--                            </table>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <!--                <div class="menu-content hidden h-auto" id="likesContent">-->
+                <!--                    &lt;!&ndash; 내 좋아요 내용을 여기에 표시 &ndash;&gt;-->
+                <!--                    <h1 class="text-[50px] font-bold mb-4">좋아요한 도서</h1>-->
+                <!--                    &lt;!&ndash; 좋아요한 제품 &ndash;&gt;-->
+                <!--                    <div class="form-control">-->
+                <!--                        <label class="label">-->
+                <!--                            <span class="text-[20px]">좋아요한 도서</span>-->
+                <!--                        </label>-->
+                <!--                        <div>-->
+                <!--                            <table class="table">-->
+                <!--                                <thead>-->
+                <!--                                <tr>-->
+                <!--                                    <th>제목</th>-->
+                <!--                                </tr>-->
+                <!--                                </thead>-->
+                <!--                                <tbody>-->
+                <!--                                <tr>-->
+                <!--                                    <td>제목</td>-->
+                <!--                                </tr>-->
+                <!--                                </tbody>-->
+                <!--                            </table>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
                 <!-- 장바구니 컨텐츠 -->
                 <div class="menu-content hidden h-auto" id="cartContent">
                     <!-- 장바구니 내용을 여기에 표시 -->
@@ -247,7 +247,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:if="${not #lists.isEmpty(cart.cartItemList)}" th:each="cartItem : ${cart.cartItemList}">
+                                <tr th:if="${not #lists.isEmpty(cartItemList)}" th:each="cartItem : ${cartItemList}">
                                     <td>
                                         <a th:href="@{|/product/detail/${cartItem.product.id}|}">
                                             <img class="w-[100px] h-[120px]" th:src="${cartItem.product.coverImg}" alt="">
@@ -391,17 +391,6 @@
                     }
                 });
             }
-
-
-
-
-
-
-
-
-
-
-
                                     </script>
                                 </div>
                             </section>
@@ -413,6 +402,7 @@
     </div>
 </main>
 <script>
+
     function toggleSection(sectionId) {
         const section = document.getElementById(sectionId);
         const contentSections = document.querySelectorAll(".menu-content");
@@ -422,7 +412,7 @@
         });
         section.classList.remove("hidden");
     }
-    $(document).ready(function() {
+$(document).ready(function() {
                     $.get('/api/getUserName', function(data) {
                         var userName = data.userName;
                         var formattedUserName = userName;

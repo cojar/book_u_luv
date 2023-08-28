@@ -159,9 +159,11 @@ public class MemberController {
         Member member = memberService.getUser(principal.getName());
         List<Order> OrderList = orderService.getByBuyerId(member.getId());
         Cart cart = cartService.getCartByMemberId(member.getId());
+        List<CartItem> cartItemList = cartItemService.getAll(cart);
         model.addAttribute("OrderList", OrderList);
         model.addAttribute("member", member);
         model.addAttribute("cart", cart);
+        model.addAttribute("cartItemList", cartItemList);
         return "member/useageHistory";
     }
 
