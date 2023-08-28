@@ -12,30 +12,34 @@
     <span class="text-[50px] font-bold">장바구니</span>
     <i class="fas fa-shopping-cart text-red-500 text-[50px]"></i>
   </div>
-  <div class="mx-auto mt-10 max-w-screen-lg">
+  <div class="mx-auto mt-10 max-w-screen-xl">
     <table class="w-full">
       <tbody>
       <tr th:each="cartItem : ${cartItems}">
         <td>
-          <div class="flex items-center justify-center">
+          <div class="flex items-center justify-center w-1/7">
             <input type="checkbox" class="w-[20px] h-[20px]">
           </div>
         </td>
-        <td class="px-4 py-2 w-60">
-          <div class="flex justify-center">
+        <td class="px-4 py-2">
+          <div class="flex justify-center w-3/7">
             <img th:src="${cartItem.product.coverImg}" class="w-[120px] h-[150px]">
           </div>
         </td>
-        <td class="px-4 py-2 w-auto">
-          <div>
-            <span th:text="${cartItem.product.title}" class="block text-center">책제목</span>
-            <span th:text="${cartItem.product.author}" class="block text-center">작가</span>
-            <span th:text="${cartItem.product.publisher}" class="block text-center">출판사</span>
-            <span th:text="${cartItem.product.priceSales}" class="block text-center">가격</span>
-          </div>
+        <td class="px-4 py-2 w-auto w-1/7">
+            <span th:text="${cartItem.product.title}" class="block text-[20px] text-center">책제목</span>
+        </td>
+        <td class="px-4 py-2 w-auto w-1/7">
+            <span th:text="${cartItem.product.author}" class="block text-[20px] text-center">작가</span>
+        </td>
+        <td class="px-4 py-2 w-auto w-1/7">
+            <span th:text="${cartItem.product.publisher}" class="block text-[20px] text-center">출판사</span>
+        </td>
+        <td class="px-4 py-2 w-auto w-1/7">
+            <span th:text="${cartItem.product.priceSales} + '원' " class="block text-[20px] text-center">가격</span>
         </td>
         <td>
-          <div class="flex items-center justify-center">
+          <div class="flex items-center justify-center w-1/7">
             <a th:href="@{/member/cart/{id}/{cartItemId}/delete(id=${member.id}, cartItemId=${cartItem.id})}">
               <i class="fas fa-times text-2xl"></i>
             </a>

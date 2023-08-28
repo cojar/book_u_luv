@@ -63,7 +63,7 @@
                 <tbody>
                 <tr class="bg-white" th:each="notice : ${noticeList}">
                     <td class="py-2 px-4 border" th:text="${notice.id}"></td>
-                    <td class="py-2 px-4 border" th:text="${notice.subject}"></td>
+                    <td class="py-2 px-4 border max-w-lg whitespace-pre-line break-words" th:text="${notice.subject}"></td>
                     <td class="py-2 px-4 border" th:text="${notice.register.nickName}"></td>
                     <td class="py-2 px-4 border" th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}"></td>
                     <td class="py-2 px-4 border" th:unless="${notice.modifyDate != null}">-</td>

@@ -20,6 +20,10 @@
         }
 
 
+
+
+
+
     </style>
 </head>
 
@@ -31,7 +35,7 @@
         </div>
     </div>
 
-    <div th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">
+    <div class="mb-4" th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">
         <div class="flex justify-end mt-4">
             <a th:href="@{|/product/modify/${product.id}|}"
                class="px-4 py-2 mr-4 bg-green-500 text-white rounded">수정</a>
@@ -44,9 +48,10 @@
         <div class="flex items-center">
             <span class="text-2xl w-[450px] font-bold" th:text="${product.title}"></span>
         </div>
-        <span class="w-[250px] text-end">
-        현재평점/총평점 : <span th:text="${#numbers.formatDecimal(product.averageRating, 1, 2) + ' / 5.0'}"></span>
-    </span>
+        <div class="flex flex-col items-center">
+            <span>현재평점/총평점</span>
+            <span th:text="${#numbers.formatDecimal(product.averageRating, 1, 2) + ' / 5.0'}"></span>
+        </div>
     </div>
 
 
@@ -157,6 +162,10 @@
                     }
                 });
             });
+
+
+
+
 
 
         </script>
@@ -344,6 +353,10 @@
             alert('수정이 완료되었습니다.');
         }
     });
+
+
+
+
 
 </script>
 </body>
