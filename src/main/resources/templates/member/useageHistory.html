@@ -247,8 +247,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="cartItem : ${cart.cartItemList}">
-                                    <td class="flex justify-center">
+                                <tr th:if="${not #lists.isEmpty(cartItemList)}" th:each="cartItem : ${cartItemList}">
+                                    <td>
                                         <a th:href="@{|/product/detail/${cartItem.product.id}|}">
                                             <img class="w-[100px] h-[120px]" th:src="${cartItem.product.coverImg}" alt="">
                                         </a>
@@ -262,11 +262,15 @@
                                     <td class="text-center" th:text="${cartItem.product.priceSales} + '원'"></td>
                                     <td>
                                         <div class="flex items-center justify-center">
-                                            <a th:href="@{/member/cart/{id}/{cartItemId}/delete(id=${member.id}, cartItemId=${cartItem.id})}">
+                                            <a th:href="@{/member/cart/{id}/{cartItemId}/delete(id=${member.id},cartItemId=${cartItem.id})}">
                                                 <i class="fas fa-times text-2xl"></i>
                                             </a>
                                         </div>
                                     </td>
+                                </tr>
+                                <!-- 아이템이 없는 경우에 대한 처리 -->
+                                <tr th:if="${#lists.isEmpty(cartItemList)}">
+                                    <td colspan="6" class="text-center">장바구니에 아이템이 없습니다.</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -294,8 +298,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="order :${OrderList}">
-                                    <td class="flex justify-center">
+                                <tr th:if="${not #lists.isEmpty(OrderList)}" th:each="order :${OrderList}">
+                                    <td>
                                         <a th:href="@{|/product/detail/${order.product.id}|}">
                                             <img class="w-[100px] h-[120px]" th:src="${order.product.coverImg}" alt="">
                                         </a>
@@ -307,6 +311,10 @@
                                     <td class="text-center" th:text="${order.id}"></td>
                                     <td class="text-center" th:text="${order.product.priceSales}"></td>
                                     <td class="text-center" th:text="${order.createDate}"></td>
+                                </tr>
+                                <!-- 구매내역이 없는 경우에 대한 처리 -->
+                                <tr th:if="${#lists.isEmpty(OrderList)}">
+                                    <td colspan="5" class="text-center">구매내역이 없습니다.</td>
                                 </tr>
                                 </tbody>
                             </table>
