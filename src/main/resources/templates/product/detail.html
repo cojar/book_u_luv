@@ -20,6 +20,10 @@
         }
 
 
+
+
+
+
     </style>
 </head>
 
@@ -31,13 +35,23 @@
         </div>
     </div>
 
+    <div class="mb-4" th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">
+        <div class="flex justify-end mt-4">
+            <a th:href="@{|/product/modify/${product.id}|}"
+               class="px-4 py-2 mr-4 bg-green-500 text-white rounded">수정</a>
+            <a th:href="@{|/product/delete/${product.id}|}"
+               class="px-4 py-2 bg-red-500 text-white rounded">삭제</a>
+        </div>
+    </div>
+
     <div class="flex justify-between items-center mb-5">
         <div class="flex items-center">
             <span class="text-2xl w-[450px] font-bold" th:text="${product.title}"></span>
         </div>
-        <span class="w-[250px] text-end">
-        현재평점/총평점 : <span th:text="${#numbers.formatDecimal(product.averageRating, 1, 2) + ' / 5.0'}"></span>
-    </span>
+        <div class="flex flex-col items-center">
+            <span>현재평점/총평점</span>
+            <span th:text="${#numbers.formatDecimal(product.averageRating, 1, 2) + ' / 5.0'}"></span>
+        </div>
     </div>
 
 
@@ -150,6 +164,10 @@
             });
 
 
+
+
+
+
         </script>
 
         <div class="border-t mt-4 pt-4">
@@ -183,25 +201,13 @@
 
                 </div>
             </form>
-
-            <div th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">
-                <div class="flex justify-between mt-4">
-                    <a th:href="@{|/product/modify/${product.id}|}"
-                       class="px-4 py-2 bg-green-500 text-white rounded">수정</a>
-                    <a th:href="@{|/product/delete/${product.id}|}"
-                       class="px-4 py-2 bg-red-500 text-white rounded">삭제</a>
-                </div>
-            </div>
-            <div class="flex items-center mt-4 border-t pt-4">
-                <i id="likeIcon" class="far fa-heart text-2xl cursor-pointer"></i>
+            <div class="flex items-center justify-end mt-4 border-t pt-4">
                 <form sec:authorize="isAuthenticated()" class="d-flex" th:if="${#authentication.principal}"
                       th:action="@{/member/cart/{id}/{productId}(id=${member.id}, productId=${product.id})}"
                       method="post">
                     <div class="flex justify-end w-full mr-[10px]">
-                        <input class="form-control text-center me-3" id="amount" name="amount" type="number" value="1"
-                               style="max-width: 3rem"/>
                         <button
-                                class="ml-2 px-4 py-2 w-24 btn btn-primary text-white" type="submit">
+                                class="mr-4 px-4 py-2 w-24 btn btn-primary text-white" type="submit">
                             장바구니
                         </button>
                     </div>
@@ -347,6 +353,10 @@
             alert('수정이 완료되었습니다.');
         }
     });
+
+
+
+
 
 </script>
 </body>

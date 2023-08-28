@@ -1,6 +1,5 @@
 package com.project.bookuluv.domain.comment.domain;
 
-import com.project.bookuluv.domain.api.domain.Ebook;
 import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.domain.member.domain.Member;
@@ -28,9 +27,6 @@ public class Comment extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-    @ManyToOne
-    @JoinColumn(name = "ebook_id")
-    private Ebook ebook;
     @ManyToOne
     @JoinColumn(name = "register_id")
     private Member register;

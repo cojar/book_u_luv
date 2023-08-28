@@ -201,30 +201,30 @@
                     </div>
                 </div>
                 <!-- 내 좋아요 컨텐츠 -->
-                <div class="menu-content hidden h-auto" id="likesContent">
-                    <!-- 내 좋아요 내용을 여기에 표시 -->
-                    <h1 class="text-[50px] font-bold mb-4">좋아요한 도서</h1>
-                    <!-- 좋아요한 제품 -->
-                    <div class="form-control">
-                        <label class="label">
-                            <span class="text-[20px]">좋아요한 도서</span>
-                        </label>
-                        <div>
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th>제목</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>제목</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="menu-content hidden h-auto" id="likesContent">-->
+<!--                    &lt;!&ndash; 내 좋아요 내용을 여기에 표시 &ndash;&gt;-->
+<!--                    <h1 class="text-[50px] font-bold mb-4">좋아요한 도서</h1>-->
+<!--                    &lt;!&ndash; 좋아요한 제품 &ndash;&gt;-->
+<!--                    <div class="form-control">-->
+<!--                        <label class="label">-->
+<!--                            <span class="text-[20px]">좋아요한 도서</span>-->
+<!--                        </label>-->
+<!--                        <div>-->
+<!--                            <table class="table">-->
+<!--                                <thead>-->
+<!--                                <tr>-->
+<!--                                    <th>제목</th>-->
+<!--                                </tr>-->
+<!--                                </thead>-->
+<!--                                <tbody>-->
+<!--                                <tr>-->
+<!--                                    <td>제목</td>-->
+<!--                                </tr>-->
+<!--                                </tbody>-->
+<!--                            </table>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
                 <!-- 장바구니 컨텐츠 -->
                 <div class="menu-content hidden h-auto" id="cartContent">
                     <!-- 장바구니 내용을 여기에 표시 -->
@@ -237,28 +237,29 @@
                         <div>
                             <table class="table">
                                 <thead>
-                                <tr>
+                                <tr class="text-center">
                                     <th>표지</th>
                                     <th>제목</th>
                                     <th>작가</th>
                                     <th>출판사</th>
                                     <th>가격</th>
+                                    <th>취소</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr th:if="${not #lists.isEmpty(cart.cartItemList)}" th:each="cartItem : ${cart.cartItemList}">
                                     <td>
                                         <a th:href="@{|/product/detail/${cartItem.product.id}|}">
-                                            <img th:src="${cartItem.product.coverImg}" alt="">
+                                            <img class="w-[100px] h-[120px]" th:src="${cartItem.product.coverImg}" alt="">
                                         </a>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <a th:href="@{|/product/detail/${cartItem.product.id}|}"
                                            th:text="${cartItem.product.title}"></a>
                                     </td>
-                                    <td th:text="${cartItem.product.author}"></td>
-                                    <td th:text="${cartItem.product.publisher}"></td>
-                                    <td th:text="${cartItem.product.priceSales}"></td>
+                                    <td class="text-center" th:text="${cartItem.product.author}"></td>
+                                    <td class="text-center" th:text="${cartItem.product.publisher}"></td>
+                                    <td class="text-center" th:text="${cartItem.product.priceSales} + '원'"></td>
                                     <td>
                                         <div class="flex items-center justify-center">
                                             <a th:href="@{/member/cart/{id}/{cartItemId}/delete(id=${member.id},cartItemId=${cartItem.id})}">
@@ -284,7 +285,7 @@
                         <div>
                             <table class="table">
                                 <thead>
-                                <tr>
+                                <tr class="text-center">
                                     <th>표지</th>
                                     <th>제목</th>
                                     <th>주문번호</th>
@@ -296,16 +297,16 @@
                                 <tr th:if="${not #lists.isEmpty(OrderList)}" th:each="order :${OrderList}">
                                     <td>
                                         <a th:href="@{|/product/detail/${order.product.id}|}">
-                                            <img th:src="${order.product.coverImg}" alt="">
+                                            <img class="w-[100px] h-[120px]" th:src="${order.product.coverImg}" alt="">
                                         </a>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         <a th:href="@{|/product/detail/${order.product.id}|}"
                                            th:text="${order.name}"></a>
                                     </td>
-                                    <td th:text="${order.id}"></td>
-                                    <td th:text="${order.product.priceSales}"></td>
-                                    <td th:text="${order.createDate}"></td>
+                                    <td class="text-center" th:text="${order.id}"></td>
+                                    <td class="text-center" th:text="${order.product.priceSales}"></td>
+                                    <td class="text-center" th:text="${order.createDate}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -450,17 +451,6 @@
                         $("#formatted-username").text(formattedUserName);
                     });
                 });
-
-
-
-
-
-
-
-
-
-
-
 </script>
 </body>
 </html>

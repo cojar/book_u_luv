@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOOKU_LUV 공지사항</title>
+    <title>BOOK_U_LUV 공지사항</title>
 </head>
 
 <body>
@@ -42,12 +42,12 @@
                         <thead>
                         <tr class="border-y">
                             <th class="py-2 px-8">번호</th>
-                            <th class=" py-2">제목</th>
-                            <th class=" py-2">작성자</th>
-                            <th class=" py-2">작성일</th>
-                            <th class=" py-2">수정일</th>
-                            <th class=" py-2">조회수</th>
-                            <th class=" py-2" th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">수정 / 삭제</th>
+                            <th class="py-2">제목</th>
+                            <th class="py-2">작성자</th>
+                            <th class="py-2">작성일</th>
+                            <th class="py-2">수정일</th>
+                            <th class="py-2">조회수</th>
+                            <th class="py-2" th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">수정 / 삭제</th>
                         </tr>
                         </thead>
                         <tbody th:if="${notices}">
@@ -55,8 +55,9 @@
                             <td>
                                 <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}" th:text="${notices.getTotalElements() - (notices.getNumber() * notices.getSize()) - loop.index}" th:attr="data-id=${notice.id}"></a>
                             </td>
-                            <td class="text-left">
-                                <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}" th:text="${notice.subject}" th:attr="data-id=${notice.id}"></a>
+                            <td class="text-left max-w-lg whitespace-pre-line break-words">
+                                <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}"
+                                   th:text="${notice.subject}" th:attr="data-id=${notice.id}"></a>
                             </td>
                             <td class="py-2">
                                 <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}" th:text="${notice.noticeRegister.nickName}" th:attr="data-id=${notice.id}"></a>

@@ -23,10 +23,10 @@ import static jakarta.persistence.FetchType.LAZY;
 @Table(name = "product_order")
 public class Order extends BaseEntity {
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.REMOVE) // CascadeType.REMOVE 추가
     private Member buyer;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<OrderItem> orderItemList;
 
     @ManyToOne

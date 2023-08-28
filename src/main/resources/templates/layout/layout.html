@@ -182,7 +182,7 @@
             <a href="/notice/list" class="hover:text-red-500">
                 공지사항
             </a>
-            <a href="#" class="hover:text-red-500">
+            <a sec:authorize="isAuthenticated()" th:href="@{/member/cart/{id}(id=${#authentication.principal.id})}" class="hover:text-red-500">
                 장바구니
             </a>
             <a href="/admin/member" sec:authorize="hasRole('ROLE_ADMIN')" class="hover:text-red-500">
