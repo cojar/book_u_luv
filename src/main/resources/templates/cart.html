@@ -18,29 +18,29 @@
             <!-- 장바구니에 아이템이 있는 경우 -->
             <tr th:if="${!#lists.isEmpty(cartItems)}" th:each="cartItem : ${cartItems}">
                 <td>
-                    <div class="flex items-center justify-center w-1/7">
+                    <div class="flex items-center justify-center w-1/12">
                         <input type="checkbox" class="w-[20px] h-[20px]">
                     </div>
                 </td>
-                <td class="px-4 py-2">
-                    <div class="flex justify-center w-3/7">
+                <td class="px-4 py-2 flex justify-center">
+                    <div>
                         <img th:src="${cartItem.product.coverImg}" class="w-[120px] h-[150px]">
                     </div>
                 </td>
-                <td class="px-4 py-2 w-auto w-1/7">
+                <td class="px-4 py-2 w-5/12">
                     <span th:text="${cartItem.product.title}" class="block text-[20px] text-center">책제목</span>
                 </td>
-                <td class="px-4 py-2 w-auto w-1/7">
+                <td class="px-4 py-2 w-2/12">
                     <span th:text="${cartItem.product.author}" class="block text-[20px] text-center">작가</span>
                 </td>
-                <td class="px-4 py-2 w-auto w-1/7">
+                <td class="px-4 py-2 w-1/12">
                     <span th:text="${cartItem.product.publisher}" class="block text-[20px] text-center">출판사</span>
                 </td>
-                <td class="px-4 py-2 w-auto w-1/7">
+                <td class="px-4 py-2 w-2/12">
                     <span th:text="${cartItem.product.priceSales} + '원' " class="block text-[20px] text-center">가격</span>
                 </td>
                 <td>
-                    <div class="flex items-center justify-center w-1/7">
+                    <div class="flex items-center justify-center w-1/12">
                         <a th:href="@{/member/cart/{id}/{cartItemId}/delete(id=${member.id}, cartItemId=${cartItem.id})}">
                             <i class="fas fa-times text-2xl"></i>
                         </a>
