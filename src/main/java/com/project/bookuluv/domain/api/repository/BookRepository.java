@@ -1,7 +1,12 @@
 package com.project.bookuluv.domain.api.repository;
 
-import com.project.bookuluv.domain.member.domain.Member;
+import com.project.bookuluv.domain.admin.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface BookRepository extends JpaRepository<Member, Long> {
+import java.util.Optional;
+@Repository
+public interface BookRepository extends JpaRepository<Product, Long> {
+    Optional<Product> findById(long myBookId);
 }
+

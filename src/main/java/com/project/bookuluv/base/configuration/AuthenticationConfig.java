@@ -55,12 +55,7 @@ public class AuthenticationConfig {
                                 .loginProcessingUrl("/member/login") // POST
                                 .defaultSuccessUrl("/")
                 )
-//                .requestMatchers(HttpMethod.POST, "/api/v1/**").authenticated()
-//                .and()
-//                .addFilterBefore(new JwtFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class)
-//                .build();
-        // OAuth 로그인
-                .oauth2Login(
+                .oauth2Login(  // OAuth 로그인
                 oauth2Login -> oauth2Login
                         .loginPage("/member/login")
                         .defaultSuccessUrl("/")
