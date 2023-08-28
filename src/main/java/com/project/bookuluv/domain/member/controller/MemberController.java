@@ -429,7 +429,7 @@ public class MemberController {
             model.addAttribute("cartItems", cartItemList);
             model.addAttribute("member", memberService.findById(id));
 
-            return "redirect:/member/cart/{id}}";
+            return "redirect:/member/cart/{id}";
         }
         // 로그인 id와 장바구니 삭제하려는 유저의 id가 같지 않는 경우
         else {

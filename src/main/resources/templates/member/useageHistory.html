@@ -261,7 +261,7 @@
                                     <td th:text="${cartItem.product.priceSales}"></td>
                                     <td>
                                         <div class="flex items-center justify-center">
-                                            <a th:href="@{/member/cart/{id}/{cartItemId}/delete(id=${member.id}, cartItemId=${cartItem.id})}">
+                                            <a th:href="@{/member/cart/{id}/{cartItemId}/delete(id=${member.id},cartItemId=${cartItem.id})}">
                                                 <i class="fas fa-times text-2xl"></i>
                                             </a>
                                         </div>
@@ -399,6 +399,7 @@
 
 
 
+
                                     </script>
                                 </div>
                             </section>
@@ -448,6 +449,7 @@
                         $("#formatted-username").text(formattedUserName);
                     });
                 });
+
 
 
 

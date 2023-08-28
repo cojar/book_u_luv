@@ -39,6 +39,8 @@
             var menu = document.getElementById("mobile-menu");
             menu.classList.toggle("hidden");
         }
+
+
     </script>
 </head>
 
@@ -70,7 +72,7 @@
                     </span>
                 </a>
 
-                <a href="#" class="inline-flex hover:text-red-500 flex-shrink-0">
+                <a href="https://reader.grb.asia/" class="inline-flex hover:text-red-500 flex-shrink-0">
                     <span class="ml-[2px] hidden lg:block">
                         Book U Luv Reader
                     </span>
@@ -122,7 +124,8 @@
                 </span>
             </a>
 
-            <a href="#" class="inline-flex flex-shrink-0">
+            <a sec:authorize="isAuthenticated()" th:href="@{/member/cart/{id}(id=${#authentication.principal.id})}"
+               class="inline-flex flex-shrink-0">
                 <span class="ml-[2px]">
                     장바구니
                 </span>
@@ -270,6 +273,8 @@
             mobileMenu.classList.toggle("hidden"); // Toggle the 'hidden' class
         });
     });
+
+
 </script>
 </body>
 </html>

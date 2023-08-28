@@ -2,56 +2,56 @@
 <html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <link rel="stylesheet" href="">
-  <title>main</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="">
+    <title>main</title>
 </head>
 <body layout:fragment="content">
 <div class="mx-auto mt-10 max-w-screen-xl">
-  <div>
-    <span class="text-[50px] font-bold">장바구니</span>
-    <i class="fas fa-shopping-cart text-red-500 text-[50px]"></i>
-  </div>
-  <div class="mx-auto mt-10 max-w-screen-lg">
-    <table class="w-full">
-      <tbody>
-      <tr th:each="cartItem : ${cartItems}">
-        <td>
-          <div class="flex items-center justify-center">
-            <input type="checkbox" class="w-[20px] h-[20px]">
-          </div>
-        </td>
-        <td class="px-4 py-2 w-60">
-          <div class="flex justify-center">
-            <img th:src="${cartItem.product.coverImg}" class="w-[120px] h-[150px]">
-          </div>
-        </td>
-        <td class="px-4 py-2 w-auto">
-          <div>
-            <span th:text="${cartItem.product.title}" class="block text-center">책제목</span>
-            <span th:text="${cartItem.product.author}" class="block text-center">작가</span>
-            <span th:text="${cartItem.product.publisher}" class="block text-center">출판사</span>
-            <span th:text="${cartItem.product.priceSales}" class="block text-center">가격</span>
-          </div>
-        </td>
-        <td>
-          <div class="flex items-center justify-center">
-            <a th:href="@{/member/cart/{id}/{cartItemId}/delete(id=${member.id}, cartItemId=${cartItem.id})}">
-              <i class="fas fa-times text-2xl"></i>
-            </a>
-          </div>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-    <div class="border-t mt-4 pt-4"></div>
-    <div class="mt-[20px] flex justify-end w-full">
-      <form th:action="@{/order/detail}">
-        <input type="hidden" name="productsId" th:value="${cartItems[0].product.id}">
-        <input type="submit" value="구매" class="btn btn-primary text-white">
-      </form>
+    <div>
+        <span class="text-[50px] font-bold">장바구니</span>
+        <i class="fas fa-shopping-cart text-red-500 text-[50px]"></i>
     </div>
-  </div>
+    <div class="mx-auto mt-10 max-w-screen-lg">
+        <table class="w-full">
+            <tbody>
+            <tr th:each="cartItem : ${cartItems}">
+                <td>
+                    <div class="flex items-center justify-center">
+                        <input type="checkbox" class="w-[20px] h-[20px]">
+                    </div>
+                </td>
+                <td class="px-4 py-2 w-60">
+                    <div class="flex justify-center">
+                        <img th:src="${cartItem.product.coverImg}" class="w-[120px] h-[150px]">
+                    </div>
+                </td>
+                <td class="px-4 py-2 w-auto">
+                    <div>
+                        <span th:text="${cartItem.product.title}" class="block text-center">책제목</span>
+                        <span th:text="${cartItem.product.author}" class="block text-center">작가</span>
+                        <span th:text="${cartItem.product.publisher}" class="block text-center">출판사</span>
+                        <span th:text="${cartItem.product.priceSales}" class="block text-center">가격</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex items-center justify-center">
+                        <a th:href="@{'/member/cart/' + ${member.id} + '/' + ${cartItem.id} + '/delete'}">
+                            <i class="fas fa-times text-2xl"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="border-t mt-4 pt-4"></div>
+        <div class="mt-[20px] flex justify-end w-full">
+            <form th:action="@{/order/detail}">
+                <input type="hidden" name="productsId" th:value="${cartItems[0].product.id}">
+                <input type="submit" value="구매" class="btn btn-primary text-white">
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>

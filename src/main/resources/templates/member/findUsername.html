@@ -18,23 +18,22 @@
                     <div class="alert alert-danger">이름과 전화번호를 다시 확인해 주세요.</div>
                 </div>
                 <div class="form-control">
-                    <input type="text" name="firstName" id="firstName" autofocus class="input input-bordered" maxlength="100%" placeholder="이름"/>
+                    <input type="text" name="firstName" id="firstName" autofocus
+                           class="input input-bordered form-control" maxlength="100%" placeholder="이름"/>
                 </div>
                 <div class="form-control">
-                    <input type="text" name="lastName" id="lastName" autofocus class="input input-bordered" maxlength="50" placeholder="성"/>
+                    <input type="text" name="lastName" id="lastName" autofocus class="input input-bordered form-control"
+                           maxlength="50" placeholder="성"/>
                 </div>
                 <div class="form-control">
-                    <input type="text" name="phone" id="phone" autofocus class="input input-bordered" maxlength="50" placeholder="전화번호"/>
+                    <input type="text" name="phone" id="phone" autofocus class="input input-bordered form-control"
+                           maxlength="50" placeholder="전화번호"/>
                 </div>
                 <div class="flex justify-center">
                     <button type="submit" class="btn btn-primary btn-outline">아이디찾기</button>
                     <a href="/member/login" class="btn btn-primary btn-outline ml-[20px]">뒤로가기</a>
                 </div>
             </form>
-            <!-- 아이디 찾기 결과 출력 -->
-            <div th:if="${result}">
-                <p th:text="${result}"></p>
-            </div>
         </div>
     </section>
 </main>
@@ -62,5 +61,6 @@
             }
         });
     }
+
 </script>
 </html>
