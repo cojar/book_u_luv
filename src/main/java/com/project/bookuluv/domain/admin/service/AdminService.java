@@ -52,7 +52,7 @@ public class AdminService {
                 .ifPresent(user -> {
                     throw new AppException(ErrorCode.USERNAME_DUPLICATED, userName + " 는 존재합니다.");
                 });
-        if (isAdminSignupKeyValid(String.valueOf(adminKey))) { // adminKey가 환경변수(adminSignupKey)와 맞으면
+        if (isAdminSignupKeyValid(adminKey)) { // adminKey가 환경변수(adminSignupKey)와 맞으면
             // 관리자 저장
             Member member = Member.builder()
                     .userName(userName)
