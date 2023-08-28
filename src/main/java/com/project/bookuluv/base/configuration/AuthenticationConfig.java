@@ -28,6 +28,10 @@ public class AuthenticationConfig {
 
     @Value("${spring.jwt.secret}")
     private String secretKey;
+    @Bean
+    public CustomAccessDeniedHandler customAccessDeniedHandler() {
+        return new CustomAccessDeniedHandler();
+    }
 
     @Bean
     public SecurityFilterChain jwtsecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
