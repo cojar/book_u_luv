@@ -250,7 +250,6 @@
 
 <script src="/resource/common/common.js"></script>
 <script th:inline="javascript">
-    /* 검색창이 제출될 때 검색어가 비어있는지 확인 */
     function validateSearchForm() {
         var queryInput = document.querySelector('input[name="query"]');
         if (queryInput.value.trim() === "") {

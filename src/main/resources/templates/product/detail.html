@@ -189,56 +189,99 @@
                     <a th:href="@{|/product/delete/${product.id}|}"
                        class="px-4 py-2 bg-red-500 text-white rounded">삭제</a>
                 </div>
-                <div class="border-t mt-4 pt-4">
-                    <div class="my-4">
-                        <span class="font-bold text-[20px]">리뷰 작성</span>
+            </div>
+            <div class="flex items-center mt-4 border-t pt-4">
+                <i id="likeIcon" class="far fa-heart text-2xl cursor-pointer"></i>
+                <form class="d-flex"
+                      th:action="@{/member/cart/{id}/{productId}(id=${member.id}, productId=${products.id})}"
+                      method="post">
+                    <div class="flex justify-end w-full mr-[10px]">
+                        <input class="form-control text-center me-3" id="amount" name="amount" type="number" value="1"
+                               style="max-width: 3rem"/>
+                        <button class="ml-2 px-4 py-2 w-24 btn btn-primary text-white" type="submit">
+                            장바구니
+                        </button>
                     </div>
-                    <div>
-              <span id="starRating">
-                <!-- 리뷰글쓸때 선택한 별점색칠 -->
-                <i class="star fas fa-star"></i>
-                <i class="star fas fa-star"></i>
-                <i class="star fas fa-star"></i>
-                <i class="star fas fa-star"></i>
-                <i class="star fas fa-star"></i>
-              </span>
-                    </div>
-                    <div class="mt-4">
-                            <textarea class="w-full h-auto resize-none p-2 border rounded"
-                                      placeholder="리뷰를 작성해주세요..."></textarea>
-                        <div class="flex justify-end">
-                            <button class="mt-2 px-4 py-2 bg-blue-600 text-white rounded">작성</button>
-                        </div>
-                    </div>
-                    <div class="flex items-center mt-4 border-t pt-4">
-                        <i id="likeIcon" class="far fa-heart text-2xl cursor-pointer"></i>
-                        <form class="d-flex"  th:action="@{/member/cart/{id}/{productId}(id=${member.id}, productId=${products.id})}" method="post">
-                            <div class="flex justify-end w-full mr-[10px]">
-                                <input class="form-control text-center me-3" id="amount" name="amount" type="number" value="1"
-                                       style="max-width: 3rem"/>
-                                <button class="ml-2 px-4 py-2 w-24 btn btn-primary text-white" type="submit">
-                                    장바구니
-                                </button>
-                            </div>
-                        </form>
-                        <form th:action="@{/order/detail}">
-                            <input type="hidden" name="productsId" th:value="${products.id}">
-                            <input type="submit" value="구매" class="btn btn-primary text-white">
-                        </form>
-                    </div>
-                </div>
+                </form>
+                <form th:action="@{/order/detail}">
+                    <input type="hidden" name="productsId" th:value="${products.id}">
+                    <input type="submit" value="구매" class="btn btn-primary text-white">
+                </form>
             </div>
         </div>
     </div>
-    </div>
+</div>
+</div>
+</div>
+<script>
+        function confirmReviewModify(reviewId) {
+            if (confirm("정말 수정하시겠습니까?")) {
+                showReviewModifyForm(reviewId);
+            }
+        }
+
+        function confirmReviewCancel(reviewId) {
+            if (confirm("리뷰 수정을 취소하시겠습니까?")) {
+                hideReviewModifyForm(reviewId);
+            }
+        }
+
+        function showReviewModifyForm(reviewId) {
+            const contentDiv = $('#reviewContent_' + reviewId);
+            const editForm = $('#review_modify_form_' + reviewId);
+
+            const content = contentDiv.text(); // 기존 리뷰 내용을 가져옴
+            contentDiv.addClass('hidden'); // 리뷰 내용 영역을 숨김
+            editForm.removeClass('hidden'); // 수정 폼을 보여줌
+            editForm.find('textarea').val(content); // 수정 폼에 내용을 설정
+        }
+
+        function hideReviewModifyForm(reviewId) {
+            const contentDiv = $('#reviewContent_' + reviewId);
+            const editForm = $('#review_modify_form_' + reviewId);
+
+            editForm.addClass('hidden'); // 수정 폼을 숨김
+            contentDiv.removeClass('hidden').text(editForm.find('textarea').val()); // 리뷰 내용 영역을 표시하고 내용을 설정
+
+        }
+
+        function toggleReviewModifyForm(button) {
+            const editForm = $(button).closest('.edit-form'); // 해당 수정 폼을 찾음
+            const contentDiv = editForm.siblings('.review-content'); // 수정 폼의 형제 요소 중 리뷰 내용 영역을 찾음
+
+            editForm.addClass('hidden'); // 수정 폼을 숨김
+            contentDiv.removeClass('hidden'); // 리뷰 내용 영역을 보여줌
+        }
+    // 페이지 로딩 시 실행할 함수
+    $(document).ready(function () {
 
 
-    <script>
-  // 찜 스크립트
-  const likeIcon = document.getElementById('likeIcon');
-  let isLiked = false; // 좋아요 상태 여부
-  // 좋아요 아이콘 상태 변경 함수
-  likeIcon.classList.add('text-red-500');
+        // 수정 버튼 클릭 이벤트 핸들러 등록
+            // '수정' 버튼 클릭 시
+            $('.edit-btn').on('click', function () {
+                const reviewId = $(this).data('review-id');
+                confirmReviewModify(reviewId);
+            });
+
+            // '수정 취소' 버튼 클릭 시
+            $('.cancel-btn').on('click', function () {
+                const reviewId = $(this).data('review-id');
+                confirmReviewCancel(reviewId);
+            });
+
+        // 삭제 버튼 클릭 이벤트 핸들러 등록
+        $('.delete').on('click', function () {
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+                alert('삭제가 완료되었습니다.');
+            } else {
+                alert('삭제가 취소되었습니다.');
+            }
+        });
+
+        // 찜 버튼 클릭 이벤트 핸들러 등록
+        const likeIcon = $('#likeIcon');
+        let isLiked = false; // 좋아요 상태 여부
 
         function toggleLike() {
             if (isLiked) {
