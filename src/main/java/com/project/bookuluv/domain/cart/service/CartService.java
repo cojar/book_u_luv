@@ -29,7 +29,7 @@ public class CartService {
 
     private final CartItemService cartItemService;
     @Transactional
-    public void addCart(Product newProduct, Member member, int amount) {
+    public void addCart(Product newProduct, Member member, Integer amount) {
 
         Cart cart = cartRepository.findByMemberId(member.getId());
 

@@ -354,7 +354,7 @@ public class MemberController {
     @PostMapping("/member/cart/{id}/{productId}")
     public String addCartItem(@PathVariable("id") Long id,
                               @PathVariable("productId") Long productId,
-                              int amount) {
+                              Integer amount) {
 
         Member member = memberService.findById(id);
         Product product = productService.findById(productId);
@@ -367,7 +367,6 @@ public class MemberController {
         } else {
             return "redirect:/login?message=장바구니%20서비스는%20로그인%20상태에서만%20이용%20가능합니다.";
         }
-
     }
 
     @GetMapping("/member/cart/{id}")
