@@ -18,6 +18,7 @@
         .star.active {
             color: gold; /* 변경할 색상을 여기에 지정 */
         }
+
     </style>
 </head>
 
@@ -81,15 +82,22 @@
                         <span class="font-bold ml-3" th:text="${review.rating} + ' / 5.0'"></span>
                     </div>
                 </div>
-                <div class="mt-2 review-content" th:text="${review.content}" th:id="'reviewContent_' + ${review.id}"></div>
+                <div class="mt-2 review-content" th:text="${review.content}"
+                     th:id="'reviewContent_' + ${review.id}"></div>
 
                 <!-- Edit Form (hidden by default) -->
                 <form th:object="${reviewDto}" th:action="@{|/review/modify/${review.id}|}"
                       th:id="|review_modify_form_${review.id}|" method="post" class="edit-form hidden">
                     <!-- ... (form fields) ... -->
-                    <textarea th:field="*{content}" class="w-full h-auto p-2 resize-none border rounded" placeholder="좋은 리뷰를 남겨주세요!"></textarea>
-                    <button type="submit" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded btn btn-primary btn-outline">수정 완료</button>
-                    <button type="button" class="mt-2 ml-2 px-4 py-2 bg-gray-300 text-gray-600 rounded btn btn-outline cancel-btn" th:onclick="toggleReviewModifyForm(this)">수정 취소</button>
+                    <textarea th:field="*{content}" class="w-full h-auto p-2 resize-none border rounded"
+                              placeholder="좋은 리뷰를 남겨주세요!"></textarea>
+                    <button type="submit"
+                            class="mt-2 px-4 py-2 bg-blue-600 text-white rounded btn btn-primary btn-outline">수정 완료
+                    </button>
+                    <button type="button"
+                            class="mt-2 ml-2 px-4 py-2 bg-gray-300 text-gray-600 rounded btn btn-outline cancel-btn"
+                            th:onclick="toggleReviewModifyForm(this)">수정 취소
+                    </button>
                 </form>
 
                 <div class="flex justify-between text-gray-500 mt-2">
@@ -139,13 +147,16 @@
                     }
                 });
             });
+
         </script>
 
         <div class="border-t mt-4 pt-4">
             <div class="my-4">
                 <span class="font-bold text-[20px]">리뷰 작성</span>
             </div>
+
             <form th:object="${reviewDto}" th:action="@{|/review/create/${product.id}|}" method="post">
+
                 <input type="hidden" name="productId" th:value="${product.id}">
                 <span id="starRating">
                     <i class="star fa-star fa-regular text-2xl" data-star-index="0"></i>
@@ -154,72 +165,53 @@
                     <i class="star fa-star fa-regular text-2xl" data-star-index="3"></i>
                     <i class="star fa-star fa-regular text-2xl" data-star-index="4"></i>
                 </span>
+
                 <span id="starText">별점: 5.0</span>
+
                 <div class="mt-4">
-                    <textarea th:field="*{content}" class="w-full h-auto p-2 resize-none border rounded" placeholder="좋은 리뷰를 남겨주시면 BOOK_U_LUV에 큰 힘이 됩니다!"></textarea>
-                    <input type="hidden" id="ratingInput" th:field="*{rating}" value="5" /> <!-- 별점 정보 -->
+                    <textarea th:field="*{content}" class="w-full h-auto p-2 resize-none border rounded"
+                              placeholder="좋은 리뷰를 남겨주시면 BOOK_U_LUV에 큰 힘이 됩니다!"></textarea>
+                    <input type="hidden" id="ratingInput" th:field="*{rating}" value="5"/> <!-- 별점 정보 -->
+
                     <div class="flex justify-end">
-                        <button type="submit" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded btn btn-primary btn-outline">작성</button>
+                        <button type="submit"
+                                class="mt-2 px-4 py-2 bg-blue-600 text-white rounded btn btn-primary btn-outline">작성
+                        </button>
                     </div>
+
                 </div>
             </form>
+
             <div th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">
                 <div class="flex justify-between mt-4">
-                    <a th:href="@{|/product/modify/${product.id}|}" class="px-4 py-2 bg-green-500 text-white rounded">수정</a>
-                    <a th:href="@{|/product/delete/${product.id}|}" class="px-4 py-2 bg-red-500 text-white rounded">삭제</a>
+                    <a th:href="@{|/product/modify/${product.id}|}"
+                       class="px-4 py-2 bg-green-500 text-white rounded">수정</a>
+                    <a th:href="@{|/product/delete/${product.id}|}"
+                       class="px-4 py-2 bg-red-500 text-white rounded">삭제</a>
                 </div>
-                <div class="border-t mt-4 pt-4">
-                    <div class="my-4">
-                        <span class="font-bold text-[20px]">리뷰 작성</span>
-                    </div>
-                    <div>
-              <span id="starRating">
-                <!-- 리뷰글쓸때 선택한 별점색칠 -->
-                <i class="star fas fa-star"></i>
-                <i class="star fas fa-star"></i>
-                <i class="star fas fa-star"></i>
-                <i class="star fas fa-star"></i>
-                <i class="star fas fa-star"></i>
-              </span>
-                    </div>
-                    <div class="mt-4">
-                            <textarea class="w-full h-auto resize-none p-2 border rounded"
-                                      placeholder="리뷰를 작성해주세요..."></textarea>
-                        <div class="flex justify-end">
-                            <button class="mt-2 px-4 py-2 bg-blue-600 text-white rounded">작성</button>
-                        </div>
-                    </div>
-                    <div class="flex items-center mt-4 border-t pt-4">
-                        <i id="likeIcon" class="far fa-heart text-2xl cursor-pointer"></i>
-                        <form class="d-flex"  th:action="@{/member/cart/{id}/{productId}(id=${member.id}, productId=${products.id})}" method="post">
-                            <div class="flex justify-end w-full mr-[10px]">
-                                <input class="form-control text-center me-3" id="amount" name="amount" type="number" value="1"
-                                       style="max-width: 3rem"/>
-                                <button class="ml-2 px-4 py-2 w-24 btn btn-primary text-white" type="submit">
-                                    장바구니
-                                </button>
-                            </div>
-                        </form>
-                        <form th:action="@{/order/detail}">
-                            <input type="hidden" name="productsId" th:value="${products.id}">
-                            <input type="submit" value="구매" class="btn btn-primary text-white">
-                        </form>
-                    </div>
             </div>
             <div class="flex items-center mt-4 border-t pt-4">
-                <i class="far fa-heart text-2xl cursor-pointer" id="likeIcon"></i>
-                <div class="flex justify-end w-full mr-[10px]">
-                    <button class="ml-2 px-4 py-2 w-24 btn btn-primary text-white">
-                        장바구니
-                    </button>
-                </div>
+                <i id="likeIcon" class="far fa-heart text-2xl cursor-pointer"></i>
+                <form class="d-flex"
+                      th:action="@{/member/cart/{id}/{productId}(id=${member.id}, productId=${products.id})}"
+                      method="post">
+                    <div class="flex justify-end w-full mr-[10px]">
+                        <input class="form-control text-center me-3" id="amount" name="amount" type="number" value="1"
+                               style="max-width: 3rem"/>
+                        <button class="ml-2 px-4 py-2 w-24 btn btn-primary text-white" type="submit">
+                            장바구니
+                        </button>
+                    </div>
+                </form>
                 <form th:action="@{/order/detail}">
-                    <input name="productsId" th:value="${product.id}" type="hidden">
-                    <input class="btn btn-primary text-white" type="submit" value="구매">
+                    <input type="hidden" name="productsId" th:value="${products.id}">
+                    <input type="submit" value="구매" class="btn btn-primary text-white">
                 </form>
             </div>
         </div>
     </div>
+</div>
+</div>
 </div>
 <script>
         function confirmReviewModify(reviewId) {
@@ -353,6 +345,7 @@
         }
     });
 </script>
+
 
 </body>
 
