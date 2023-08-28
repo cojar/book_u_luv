@@ -8,69 +8,69 @@
 </head>
 
 <body layout:fragment="content">
-<div class="w-[1080px] mx-auto p-5 mt-10">
-    <div class="notice mt-8">
-        <div class="notice-subject">
 
-            <table class="w-full border-collapse border-separate">
-                <tr class="border-b-2 border-black">
-                    <th class="text-left text-center pr-4 border-r-2 border-black">제 목</th>
-                    <td class="pl-20 text-start" th:text="${notice.subject}"></td>
-                </tr>
-                <tr class="border-b-2 border-black">
-                    <th class="w-1/4 text-center text-base pr-4 border-r-2 border-black">작 성 일</th>
-                    <td class="pl-20 text-start" th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}"></td>
-                </tr>
-                <tr class="border-b-2 border-black" th:if="${notice.modifyDate != null}">
-                    <th class="w-1/4 text-center pr-4 border-r-2 border-black">수 정 일</th>
-                    <td class="pl-20 text-start" th:text="${#temporals.format(notice.modifyDate, 'yyyy-MM-dd HH:mm')}"></td>
-                </tr>
-                <tr class="border-b-2 border-black" th:unless="${notice.modifyDate != null}">
-                    <th class="w-1/4 text-center pr-4 border-r-2 border-black">수 정 일</th>
-                    <td class="pl-20 text-start"></td>
-                </tr>
-                <tr class="border-b-2 border-black">
-                    <th class="w-1/4 text-center text-base pr-4 border-r-2 border-black">조 회 수</th>
-                    <td class="pl-20 text-start" th:text="${notice.hit}"></td>
-                </tr>
-            </table>
+<div class=" w-[1080px] mx-auto notice-subject">
+    <table class="w-full border-collapse border-separate">
+        <tr class="border-b-2 border-black">
+            <th class="text-left text-center pr-4 border-r-2 border-black w-1/4">제 목</th>
+            <td class="pl-20 text-start">
+                <div class="max-w-lg whitespace-pre-line break-words"
+                     th:text="${notice.subject}"></div>
+            </td>
+        </tr>
+        <tr class="border-b-2 border-black">
+            <th class="text-left text-center pr-4 border-r-2 border-black w-1/4">작 성 일</th>
+            <td class="pl-20 text-start" th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+        </tr>
+        <tr class="border-b-2 border-black" th:if="${notice.modifyDate != null}">
+            <th class="text-left text-center pr-4 border-r-2 border-black w-1/4">수 정 일</th>
+            <td class="pl-20 text-start" th:text="${#temporals.format(notice.modifyDate, 'yyyy-MM-dd HH:mm')}"></td>
+        </tr>
+        <tr class="border-b-2 border-black" th:unless="${notice.modifyDate != null}">
+            <th class="text-left text-center pr-4 border-r-2 border-black w-1/4">수 정 일</th>
+            <td class="pl-20 text-start"></td>
+        </tr>
+        <tr class="border-b-2 border-black">
+            <th class="text-left text-center pr-4 border-r-2 border-black w-1/4">조 회 수</th>
+            <td class="pl-20 text-start" th:text="${notice.hit}"></td>
+        </tr>
+    </table>
+    <div class="border-b-2 border-black my-8"></div>
+    <div class="bg-white p-8 rounded shadow-md flex justify-center">
+        <div class="notice-content w-[800px] whitespace-pre-line break-words">
+            <span th:text="${notice.content}"></span>
         </div>
-        <div class="border-b-2 border-black my-8"></div>
-        <div class="bg-white p-8 rounded shadow-md flex justify-center">
-            <div class="notice-content">
-                <span th:text="${notice.content}"></span>
-            </div>
+    </div>
+    <div class="border-b-2 border-black w-full mt-8"></div>
+    <!-- 버튼 컨테이너 -->
+    <div class="button flex mt-5 justify-between">
+        <div>
+            <!-- 수정 버튼 -->
+            <a class="py-2 px-4 rounded text-white bg-blue-500 btn btn-primer btn-outline"
+               href="javascript:void(0);"
+               onclick="confirmEdit(event)"
+               th:data-uri="@{/notice/modify/{id}(id=${notice.id})}"
+               th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">수정</a>
+            <!-- 삭제 버튼 -->
+            <a class="py-2 px-4 ml-3 rounded text-white bg-red-500 btn btn-primer btn-outline"
+               href="javascript:void(0);"
+               onclick="confirmDelete(event)"
+               th:data-uri="@{/notice/delete/{id}(id=${notice.id})}"
+               th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">삭제</a>
         </div>
-        <div class="border-b-2 border-black w-full mt-8"></div>
-        <!-- 버튼 컨테이너 -->
-        <div class="button flex mt-5 justify-between">
-            <div>
-                <!-- 수정 버튼 -->
-                <a class="py-2 px-4 rounded text-white bg-blue-500 btn btn-primer btn-outline"
-                   href="javascript:void(0);"
-                   onclick="confirmEdit(event)"
-                   th:data-uri="@{/notice/modify/{id}(id=${notice.id})}"
-                   th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">수정</a>
-
-                <!-- 삭제 버튼 -->
-                <a class="py-2 px-4 ml-3 rounded text-white bg-red-500 btn btn-primer btn-outline"
-                   href="javascript:void(0);"
-                   onclick="confirmDelete(event)"
-                   th:data-uri="@{/notice/delete/{id}(id=${notice.id})}"
-                   th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">삭제</a>
-            </div>
-            <!-- 목록 버튼 -->
-            <div class="button_3 ml-2">
-                <a th:href="@{/notice/list}">
-                    <button class="px-4 py-2 bg-blue-500 text-white rounded-md transition duration-300 hover:bg-blue-600 btn btn-primer btn-outline"
-                            type="button">
-                        목록
-                    </button>
-                </a>
-            </div>
+        <!-- 목록 버튼 -->
+        <div class="button_3 ml-2">
+            <a th:href="@{/notice/list}">
+                <button class="px-4 py-2 bg-blue-500 text-white rounded-md transition duration-300 hover:bg-blue-600 btn btn-primer btn-outline"
+                        type="button">
+                    목록
+                </button>
+            </a>
         </div>
     </div>
 </div>
+
+
 <script>
     /* 페이지 로딩 시 등록/수정 성공 여부 파라미터 확인 및 알림 메시지 띄우기 */
     document.addEventListener('DOMContentLoaded', function () {
