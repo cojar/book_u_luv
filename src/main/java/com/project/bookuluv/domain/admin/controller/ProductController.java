@@ -5,6 +5,7 @@ import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import com.project.bookuluv.domain.admin.service.ProductService;
 
+import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.service.MemberService;
 import com.project.bookuluv.domain.review.domain.Review;
 import com.project.bookuluv.domain.review.dto.ReviewDto;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -70,8 +72,16 @@ public class ProductController {
     }
 
     @GetMapping(value = "/detail/{id}")
-    public String domesticDetail(Model model, @PathVariable("id") Long id) {
+    public String domesticDetail(Model model, @PathVariable("id") Long id, Principal principal) {
         Product product = productService.getById(id);
+
+        if (principal != null) {
+            Member member = this.memberService.getMember(principal.getName());
+            if (member != null) {
+                model.addAttribute("member", member);
+            }
+        }
+
         List<Review> reviews = reviewService.getReviewsByProduct(product); // Fetch reviews for the product
         model.addAttribute("product", product);
         model.addAttribute("reviews", reviews); // Add the reviews to the model
@@ -197,6 +207,7 @@ public class ProductController {
         this.productService.delete(id);
         return "redirect:/";
     }
+
     @PostMapping("/increase-hit")
     @ResponseBody
     public String increaseHitCount(@RequestParam Long id) {

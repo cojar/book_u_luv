@@ -353,7 +353,7 @@ public class MemberController {
 
             cartService.addCart(product, member, amount);
 
-            return "redirect:/product/domestic/detail/{productId}";
+            return "redirect:/product/detail/{productId}";
 
         } else {
             return "redirect:/login?message=장바구니%20서비스는%20로그인%20상태에서만%20이용%20가능합니다.";
