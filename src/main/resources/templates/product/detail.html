@@ -71,7 +71,25 @@
         <span>할인가 : </span>
         <span th:text="${product.priceSales} + '원'"></span>
     </div>
+    <div class="mb-2">
+        <span>출간일 : </span>
+        <span th:text="${product.pubDate}"></span>
+    </div>
 
+    <div class="mb-2">
+        <span>카테고리 : </span>
+        <span th:text="${product.categoryName}"></span>
+    </div>
+
+    <div class="mb-2">
+        <span>청소년관람가능여부 : </span>
+        <span th:if="${product.adult}">
+                    <i class="fas fa-exclamation-circle text-red-500"></i> <!-- 청소년 관람불가 아이콘 -->
+                </span>
+        <span th:unless="${product.adult}">
+                    <i class="fas fa-check-circle text-green-500"></i> <!-- 청소년 관람가 아이콘 -->
+                </span>
+    </div>
     <div class="border-t mt-4 pt-4">
         상품정보 및 내용
     </div>
