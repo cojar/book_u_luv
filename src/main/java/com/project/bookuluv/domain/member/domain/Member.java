@@ -3,6 +3,7 @@ package com.project.bookuluv.domain.member.domain;
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.domain.admin.domain.Notice;
 import com.project.bookuluv.domain.admin.domain.Product;
+import com.project.bookuluv.domain.cart.domain.Cart;
 import com.project.bookuluv.domain.member.dto.MemberRole;
 import com.project.bookuluv.domain.review.domain.Review;
 import jakarta.persistence.*;
@@ -113,4 +114,7 @@ public class Member extends BaseEntity {
 
     @OneToMany(mappedBy = "productRegister", orphanRemoval = true)
     private List<Product> productList;
+
+    @OneToOne
+    private Cart cart;
 }

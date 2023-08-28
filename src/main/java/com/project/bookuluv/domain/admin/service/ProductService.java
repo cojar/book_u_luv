@@ -258,7 +258,7 @@ public class ProductService {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page - 1, 20, Sort.by(sorts));
-            return this.productRepository.findAllForeignByKeyword(kw, pageable);
+        return this.productRepository.findAllForeignByKeyword(kw, pageable);
     }
     public Page<Product> getDomesticProducts(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();

@@ -258,6 +258,7 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+
     public List<Member> getAll() {
         return this.memberRepository.findAll();
     }
@@ -276,5 +277,13 @@ public class MemberService {
         }
 
         memberRepository.delete(member); // 회원 삭제
+    }
+
+    public Member findById(Long id) {
+        Optional<Member> member = this.memberRepository.findById(id);
+        if (member.isPresent()) {
+            return member.get();
+        }
+        throw new DataNotFoundException("Member not found");
     }
 }

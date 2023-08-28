@@ -93,9 +93,9 @@ public class ProductController {
     @PostMapping("/create")
     @PreAuthorize("isAuthenticated()")
     public String articleCreate(@ModelAttribute("productDto") @Valid ProductDto productDto,
-                                 BindingResult bindingResult,
-                                 @RequestParam("file1") MultipartFile file1,
-                                 @RequestParam("file2") MultipartFile file2) throws IOException {
+                                BindingResult bindingResult,
+                                @RequestParam("file1") MultipartFile file1,
+                                @RequestParam("file2") MultipartFile file2) throws IOException {
         if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
             throw new AccessDeniedException("Access is denied");
         }

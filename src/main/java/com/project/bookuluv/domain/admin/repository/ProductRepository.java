@@ -33,7 +33,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllByKeyword(@Param("kw") String kw, @Param("book") String mallType, Pageable pageable);
 
     Optional<Product> findById(Long id);
-}
+
     @Query("select distinct p " +
             "from Product p " +
             "where " +
