@@ -4,7 +4,6 @@ import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.dto.ProductDto;
 import com.project.bookuluv.domain.admin.repository.ProductRepository;
 import com.project.bookuluv.domain.admin.service.ProductService;
-
 import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.service.MemberService;
 import com.project.bookuluv.domain.review.domain.Review;
@@ -15,7 +14,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -97,7 +95,7 @@ public class ProductController {
     @PreAuthorize("isAuthenticated()")
     public String create(ProductDto productDto) {
         if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         return "product/product_form";
     }
@@ -109,7 +107,7 @@ public class ProductController {
                                 @RequestParam("file1") MultipartFile file1,
                                 @RequestParam("file2") MultipartFile file2) throws IOException {
         if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         if (bindingResult.hasErrors()) {
             return "product/product_form";
@@ -123,7 +121,7 @@ public class ProductController {
     @PreAuthorize("isAuthenticated()")
     public String modifyForm(@PathVariable("id") Long id, Model model, HttpServletRequest request) throws URISyntaxException {
         if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         Product product = this.productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시물을 찾을 수 없습니다."));
@@ -189,7 +187,7 @@ public class ProductController {
                                 @RequestParam("file1") MultipartFile file1,
                                 @RequestParam("file2") MultipartFile file2) throws IOException {
         if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
 
         if (bindingResult.hasErrors()) {
@@ -204,7 +202,7 @@ public class ProductController {
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable("id") Long id) {
         if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         this.productService.delete(id);
         return "redirect:/";

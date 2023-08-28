@@ -14,7 +14,6 @@ import com.project.bookuluv.domain.rebate.service.RebateService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -97,11 +96,11 @@ public class ADMController {
     @PreAuthorize("isAuthenticated()")
     public String adminMember(Model model) {
         if (!userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         List<Member> memberList = this.memberService.getAll();
         model.addAttribute("memberList", memberList);
-        return "/admin/member";
+        return "admin/member";
     }
 
 
@@ -110,7 +109,7 @@ public class ADMController {
     @PreAuthorize("isAuthenticated()")
     public String updateMemberRole(@RequestParam Long memberId, @RequestParam MemberRole newRole) {
         if (!userIsAdmin()) { // 슈퍼 관리자만 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         // userId와 newRole을 사용하여 해당 유저의 권한을 업데이트하는 로직 작성
         memberService.updateMemberRole(memberId, newRole);
@@ -122,7 +121,7 @@ public class ADMController {
     @PreAuthorize("isAuthenticated()")
     public String toggleMemberActive(@RequestParam Long memberId) {
         if (!userIsSuperAdmin()) { // 모든 관리자권한 가능 TODO : 추후 슈퍼관리자만 가능으로 변경
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         memberService.toggleMemberActive(memberId);
         return "redirect:/admin/member"; // 회원 목록 페이지로 리다이렉트
@@ -133,7 +132,7 @@ public class ADMController {
     @PreAuthorize("isAuthenticated()")
     public String deleteMember(@RequestParam Long memberId) {
         if (!userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         memberService.deleteMember(memberId);
         return "redirect:/admin/member"; // 회원 목록 페이지로 리다이렉트
@@ -145,7 +144,7 @@ public class ADMController {
                                 @RequestParam(value = "page", defaultValue = "1") int page,
                                 @RequestParam(value = "kw", defaultValue = "") String kw) {
         if (!userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         if (page <= 0) {
             return "redirect:/admin/domestic?page=1";
@@ -165,7 +164,7 @@ public class ADMController {
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "kw", defaultValue = "") String kw) {
         if (!userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         if (page <= 0) {
             return "redirect:/admin/foreign?page=1";
@@ -184,7 +183,7 @@ public class ADMController {
     @PreAuthorize("isAuthenticated()")
     public String adminNotice(Model model) {
         if (!userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         List<Notice> noticeList = this.noticeService.getAll();
         model.addAttribute("noticeList", noticeList);

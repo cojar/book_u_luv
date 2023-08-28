@@ -1,6 +1,5 @@
 package com.project.bookuluv.base.configuration;
 
-import com.project.bookuluv.domain.member.exception.CustomAccessDeniedHandler;
 import com.project.bookuluv.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +22,9 @@ public class AuthenticationConfig {
     private MemberService memberService;
     @Autowired
     private OAuth2UserService oAuth2UserService;
-    @Autowired
-    private CustomAccessDeniedHandler accessDeniedHandler;
 
     @Value("${spring.jwt.secret}")
     private String secretKey;
-    @Bean
-    public CustomAccessDeniedHandler customAccessDeniedHandler() {
-        return new CustomAccessDeniedHandler();
-    }
 
     @Bean
     public SecurityFilterChain jwtsecurityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -67,22 +60,21 @@ public class AuthenticationConfig {
 //                .and()
 //                .addFilterBefore(new JwtFilter(memberService, secretKey), UsernamePasswordAuthenticationFilter.class)
 //                .build();
-                // OAuth 로그인
+        // OAuth 로그인
                 .oauth2Login(
-                        oauth2Login -> oauth2Login
-                                .loginPage("/member/login")
-                                .defaultSuccessUrl("/")
-                                .userInfoEndpoint(
-                                        userInfoEndpoint -> userInfoEndpoint
-                                                .userService(oAuth2UserService)
-                                )
-                )
+                oauth2Login -> oauth2Login
+                        .loginPage("/member/login")
+                        .defaultSuccessUrl("/")
+                        .userInfoEndpoint(
+                                userInfoEndpoint -> userInfoEndpoint
+                                        .userService(oAuth2UserService)
+                        )
+        )
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
-                .and().exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler) // 커스텀 AccessDeniedHandler 등록
+
         ;
         return httpSecurity.build();
     }

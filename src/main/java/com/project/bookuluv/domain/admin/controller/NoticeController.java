@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -64,7 +63,7 @@ public class NoticeController {
     @PreAuthorize("isAuthenticated()")
     public String create(NoticeDto noticeDto, Model model) {
         if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         String write = "공지사항 작성";
         model.addAttribute("pageTitle", write);
@@ -75,7 +74,7 @@ public class NoticeController {
     @PreAuthorize("isAuthenticated()")
     public String noticeCreate(@Valid NoticeDto noticeDto, BindingResult bindingResult, Principal principal) {
         if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         if (bindingResult.hasErrors()) {
             return "notice/notice_form";
@@ -93,7 +92,7 @@ public class NoticeController {
     @PreAuthorize("isAuthenticated()")
     public String modify(NoticeDto noticeDto, @PathVariable("id") Long id, Principal principal, Model model) {
         if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
 
         Notice notice = this.noticeService.getById(id);
@@ -118,7 +117,7 @@ public class NoticeController {
                                Principal principal,
                                BindingResult bindingResult) {
         if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         Notice notice = this.noticeService.getById(id);
         if (!notice.getNoticeRegister().getUserName().equals(principal.getName())) {
@@ -135,7 +134,7 @@ public class NoticeController {
     @PreAuthorize("isAuthenticated()")
     public String delete(@PathVariable("id") Long id) {
         if (!admController.userIsAdmin()) { // 모든 관리자권한 가능
-            throw new AccessDeniedException("Access is denied");
+            return "error_page";
         }
         Notice notice = this.noticeService.getById(id);
         this.noticeService.delete(notice);
