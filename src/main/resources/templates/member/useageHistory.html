@@ -247,8 +247,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="cartItem : ${cart.cartItemList}">
-                                    <td class="flex justify-center">
+                                <tr th:if="${not #lists.isEmpty(cart.cartItemList)}" th:each="cartItem : ${cart.cartItemList}">
+                                    <td>
                                         <a th:href="@{|/product/detail/${cartItem.product.id}|}">
                                             <img class="w-[100px] h-[120px]" th:src="${cartItem.product.coverImg}" alt="">
                                         </a>
@@ -262,7 +262,7 @@
                                     <td class="text-center" th:text="${cartItem.product.priceSales} + '원'"></td>
                                     <td>
                                         <div class="flex items-center justify-center">
-                                            <a th:href="@{/member/cart/{id}/{cartItemId}/delete(id=${member.id}, cartItemId=${cartItem.id})}">
+                                            <a th:href="@{/member/cart/{id}/{cartItemId}/delete(id=${member.id},cartItemId=${cartItem.id})}">
                                                 <i class="fas fa-times text-2xl"></i>
                                             </a>
                                         </div>
@@ -294,8 +294,8 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="order :${OrderList}">
-                                    <td class="flex justify-center">
+                                <tr th:if="${not #lists.isEmpty(OrderList)}" th:each="order :${OrderList}">
+                                    <td>
                                         <a th:href="@{|/product/detail/${order.product.id}|}">
                                             <img class="w-[100px] h-[120px]" th:src="${order.product.coverImg}" alt="">
                                         </a>
@@ -400,6 +400,8 @@
 
 
 
+
+
                                     </script>
                                 </div>
                             </section>
@@ -449,15 +451,6 @@
                         $("#formatted-username").text(formattedUserName);
                     });
                 });
-
-
-
-
-
-
-
-
-
 </script>
 </body>
 </html>
