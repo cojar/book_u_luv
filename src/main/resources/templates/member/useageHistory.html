@@ -246,7 +246,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="cartItem : ${cart.cartItemList}">
+                                <tr th:if="${not #lists.isEmpty(cart.cartItemList)}" th:each="cartItem : ${cart.cartItemList}">
                                     <td>
                                         <a th:href="@{|/product/detail/${cartItem.product.id}|}">
                                             <img th:src="${cartItem.product.coverImg}" alt="">
@@ -293,7 +293,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr th:each="order :${OrderList}">
+                                <tr th:if="${not #lists.isEmpty(OrderList)}" th:each="order :${OrderList}">
                                     <td>
                                         <a th:href="@{|/product/detail/${order.product.id}|}">
                                             <img th:src="${order.product.coverImg}" alt="">
@@ -400,6 +400,7 @@
 
 
 
+
                                     </script>
                                 </div>
                             </section>
@@ -449,6 +450,7 @@
                         $("#formatted-username").text(formattedUserName);
                     });
                 });
+
 
 
 
