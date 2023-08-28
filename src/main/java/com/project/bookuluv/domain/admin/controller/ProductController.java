@@ -79,6 +79,8 @@ public class ProductController {
             Member member = this.memberService.getMember(principal.getName());
             if (member != null) {
                 model.addAttribute("member", member);
+                Long memberId = member.getId();
+                model.addAttribute("memberId", memberId);
             }
         }
 

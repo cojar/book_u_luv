@@ -214,11 +214,15 @@
                     <div class="flex justify-end w-full mr-[10px]">
                         <input class="form-control text-center me-3" id="amount" name="amount" type="hidden"
                                value="1" style="max-width: 3rem"/>
-                        <button class="ml-2 mr-4 px-4 py-2 w-24 btn btn-primary text-white" type="submit">
+                        <button class="ml-2 mr-4 px-4 py-2 w-24 btn btn-primary text-white add-to-cart-btn" type="submit">
                             장바구니
                         </button>
+                        <a class="go-to-cart-btn hidden" sec:authorize="isAuthenticated()" th:href="@{/member/cart/{id}(id=${#authentication.principal.id})}">
+                            장바구니로 이동
+                        </a>
                     </div>
                 </form>
+                <div id="memberId" th:data-member-id="${memberId}"></div>
                 <form th:action="@{/order/detail}">
                     <input type="hidden" name="productsId" th:value="${product.id}">
                     <input type="submit" value="구매" class="btn btn-primary text-white">
@@ -270,20 +274,45 @@
         }
     // 페이지 로딩 시 실행할 함수
     $(document).ready(function () {
+        // 장바구니 버튼 클릭 이벤트 핸들러 등록
+        $('.add-to-cart-btn').on('click', function (event) {
+            event.preventDefault();
+            var memberId = document.getElementById('memberId').getAttribute('data-member-id');
+            console.log('Member ID:', memberId);
+            const form = $(this).closest('form');
+
+            if (confirm('이 상품을 장바구니에 추가하시겠습니까?')) {
+                $.ajax({
+                    type: 'POST',
+                    url: form.attr('action'),
+                    data: form.serialize(),
+                    success: function () {
+                        alert("상품이 장바구니에 추가되었습니다.");
+                        if (confirm('장바구니에 상품이 담겼습니다. 장바구니로 이동하시겠습니까?')) {
+                            var cartUrl = '/member/cart/' + memberId;
+                            window.location.href = cartUrl;
+                        }
+                    },
+                    error: function () {
+                        alert("상품 추가에 실패하였습니다.");
+                    }
+                });
+            }
+        });
 
 
         // 수정 버튼 클릭 이벤트 핸들러 등록
-            // '수정' 버튼 클릭 시
-            $('.edit-btn').on('click', function () {
-                const reviewId = $(this).data('review-id');
-                confirmReviewModify(reviewId);
-            });
+        // '수정' 버튼 클릭 시
+        $('.edit-btn').on('click', function () {
+            const reviewId = $(this).data('review-id');
+            confirmReviewModify(reviewId);
+        });
 
-            // '수정 취소' 버튼 클릭 시
-            $('.cancel-btn').on('click', function () {
-                const reviewId = $(this).data('review-id');
-                confirmReviewCancel(reviewId);
-            });
+        // '수정 취소' 버튼 클릭 시
+        $('.cancel-btn').on('click', function () {
+            const reviewId = $(this).data('review-id');
+            confirmReviewCancel(reviewId);
+        });
 
         // 삭제 버튼 클릭 이벤트 핸들러 등록
         $('.delete').on('click', function () {
