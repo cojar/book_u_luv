@@ -21,15 +21,15 @@
             <div class="info-box">
                 <div class="user-info-box">
                     <div class="nickname-box flex justify-between">
-                        <div>아이디 : </div>
+                        <div>아이디 :</div>
                         <div class="nickname" th:text="${#authentication.principal.nickName} + ' 님' "></div>
                     </div>
                     <div class="nickname-box my-[30px] flex justify-between">
-                        <div>닉네임 : </div>
+                        <div>닉네임 :</div>
                         <div class="nickname" th:text="${#authentication.principal.nickName}"></div>
                     </div>
                     <div class="birth-box flex justify-between">
-                        <div>생년월일 : </div>
+                        <div>생년월일 :</div>
                         <div class="birth" th:text="${#authentication.principal.birthDate}"></div>
                     </div>
                 </div>
@@ -46,11 +46,11 @@
                         <span class="md:inline-block">내 정보</span>
                         <span class="md:inline-block"><i class="fas fa-chevron-right"></i></span>
                     </li>
-<!--                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 md:flex md:justify-between"-->
-<!--                        th:onclick="|toggleSection('likesContent');|">-->
-<!--                        <span class="md:inline-block">내 좋아요</span>-->
-<!--                        <span class="md:inline-block"><i class="fas fa-chevron-right"></i></span>-->
-<!--                    </li>-->
+                    <!--                    <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 md:flex md:justify-between"-->
+                    <!--                        th:onclick="|toggleSection('likesContent');|">-->
+                    <!--                        <span class="md:inline-block">내 좋아요</span>-->
+                    <!--                        <span class="md:inline-block"><i class="fas fa-chevron-right"></i></span>-->
+                    <!--                    </li>-->
                     <li class="cursor-pointer py-2 px-4 rounded hover:bg-gray-200 md:flex md:justify-between"
                         th:onclick="|toggleSection('cartContent');|">
                         <span class="md:inline-block">장바구니</span>
@@ -240,14 +240,32 @@
                                 <tr>
                                     <th>표지</th>
                                     <th>제목</th>
+                                    <th>작가</th>
+                                    <th>출판사</th>
                                     <th>가격</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>표지</td>
-                                    <td>제목</td>
-                                    <td>가격</td>
+                                <tr th:each="cartItem : ${cart.cartItemList}">
+                                    <td>
+                                        <a th:href="@{|/product/detail/${cartItem.product.id}|}">
+                                            <img th:src="${cartItem.product.coverImg}" alt="">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{|/product/detail/${cartItem.product.id}|}"
+                                           th:text="${cartItem.product.title}"></a>
+                                    </td>
+                                    <td th:text="${cartItem.product.author}"></td>
+                                    <td th:text="${cartItem.product.publisher}"></td>
+                                    <td th:text="${cartItem.product.priceSales}"></td>
+                                    <td>
+                                        <div class="flex items-center justify-center">
+                                            <a th:href="@{/member/cart/{id}/{cartItemId}/delete(id=${member.id}, cartItemId=${cartItem.id})}">
+                                                <i class="fas fa-times text-2xl"></i>
+                                            </a>
+                                        </div>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -267,12 +285,27 @@
                             <table class="table">
                                 <thead>
                                 <tr>
+                                    <th>표지</th>
                                     <th>제목</th>
+                                    <th>주문번호</th>
+                                    <th>가격</th>
+                                    <th>주문일자</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>제목</td>
+                                <tr th:each="order :${OrderList}">
+                                    <td>
+                                        <a th:href="@{|/product/detail/${order.product.id}|}">
+                                            <img th:src="${order.product.coverImg}" alt="">
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a th:href="@{|/product/detail/${order.product.id}|}"
+                                           th:text="${order.name}"></a>
+                                    </td>
+                                    <td th:text="${order.id}"></td>
+                                    <td th:text="${order.product.priceSales}"></td>
+                                    <td th:text="${order.createDate}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -296,7 +329,8 @@
                                         <i class="fa-solid fa-lock"></i>
                                         비밀번호 변경
                                     </h1>
-                                    <form class="flex flex-col gap-3" method="POST" action="/mypage/changePassword" onsubmit="MemberModifyPassword__submit(this); return false;">
+                                    <form class="flex flex-col gap-3" method="POST" action="/mypage/changePassword"
+                                          onsubmit="MemberModifyPassword__submit(this); return false;">
                                         <div class="form-control">
                                             <label class="label">
                                                 <span class="label-text">기존 비밀번호</span>
@@ -356,7 +390,16 @@
                     }
                 });
             }
-            </script>
+
+
+
+
+
+
+
+
+
+                                    </script>
                                 </div>
                             </section>
                         </div>
@@ -405,6 +448,15 @@
                         $("#formatted-username").text(formattedUserName);
                     });
                 });
+
+
+
+
+
+
+
+
+
 </script>
 </body>
 </html>

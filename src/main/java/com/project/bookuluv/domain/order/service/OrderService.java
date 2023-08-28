@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -56,4 +56,7 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    public List<Order> getByBuyerId(Long id) {
+        return orderRepository.findByBuyerId(id);
+    }
 }
