@@ -47,6 +47,10 @@
     <!-- 회원 관리 테이블 -->
     <div class="w-[1580px] mx-auto mt-[100px]">
         <h1 class="text-3xl font-semibold my-6">정산 관리</h1>
+        <form action="/admin/perform-rebate" method="get">
+            <button type="submit">1개월 동안의 정산 실행</button>
+        </form>
+        <p th:if="${message}" th:text="${message}"></p>
         <div class="overflow-x-auto">
             <table class="min-w-full">
                 <thead>
