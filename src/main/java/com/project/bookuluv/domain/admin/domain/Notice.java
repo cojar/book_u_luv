@@ -2,9 +2,7 @@ package com.project.bookuluv.domain.admin.domain;
 
 import com.project.bookuluv.base.entity.BaseEntity;
 import com.project.bookuluv.domain.member.domain.Member;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 public class Notice extends BaseEntity {
 
     @Column(name = "subject")
@@ -25,11 +23,12 @@ public class Notice extends BaseEntity {
     @Column(name = "content")
     private String content;
 
-    // @Column(name = "hit")
-    //  private int hit;
+    @Column(name = "hit", columnDefinition = "integer default 0", nullable = false)
+    private int hit;
 
     @ManyToOne
-    private Member register;
+    @JoinColumn(name = "notice_register_id")
+    private Member noticeRegister; // 공지사항 작성자
 
 
 }

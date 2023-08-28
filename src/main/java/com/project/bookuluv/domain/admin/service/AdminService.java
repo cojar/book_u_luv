@@ -29,23 +29,23 @@ public class AdminService {
     }
 
     public String createAdminMember(String userName,
-                                    String password,
-                                    String nickName,
-                                    String roadAddress,
-                                    String jibunAddress,
-                                    String detailAddress,
-                                    String extraAddress,
-                                    String postalNum,
-                                    String phone,
-                                    String firstName,
-                                    String lastName,
-                                    Boolean gender,
-                                    LocalDate birthDate,
-                                    Integer mailKey,
-                                    MemberRole role,
-                                    LocalDateTime currentDate,
-                                    boolean mailAuth,
-                                    String adminKey) {
+                                     String password,
+                                     String nickName,
+                                     String roadAddress,
+                                     String jibunAddress,
+                                     String detailAddress,
+                                     String extraAddress,
+                                     String postalNum,
+                                     String phone,
+                                     String firstName,
+                                     String lastName,
+                                     Boolean gender,
+                                     LocalDate birthDate,
+                                     Integer mailKey,
+                                     MemberRole role,
+                                     LocalDateTime currentDate,
+                                     boolean mailAuth,
+                                     String adminKey) {
 
         // userName 중복체크
         memberRepository.findByUserName(userName)

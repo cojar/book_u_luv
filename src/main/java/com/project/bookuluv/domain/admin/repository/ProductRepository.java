@@ -7,9 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
 
 import java.util.Optional;
 
+@Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     long countByIsbn(String isbn);
@@ -30,4 +33,24 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findAllByKeyword(@Param("kw") String kw, @Param("book") String mallType, Pageable pageable);
 
     Optional<Product> findById(Long id);
+
+    @Query("select distinct p " +
+            "from Product p " +
+            "where " +
+            "   (p.title like %:kw% " +
+            "   or p.publisher like %:kw% " +
+            "   or p.author like %:kw% " +
+            "   or p.categoryName like %:kw%) " +
+            "   and p.mallType = 'FOREIGN'")
+    Page<Product> findAllForeignByKeyword(@Param("kw") String kw, Pageable pageable);
+    @Query("select distinct p " +
+            "from Product p " +
+            "where " +
+            "   (p.title like %:kw% " +
+            "   or p.publisher like %:kw% " +
+            "   or p.author like %:kw% " +
+            "   or p.categoryName like %:kw%) " +
+            "   and p.mallType = 'BOOK'")
+    Page<Product> findAllDomesticByKeyword(@Param("kw") String kw, Pageable pageable);
+
 }

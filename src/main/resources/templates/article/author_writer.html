@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" layout:decorate="~{layout/layout.html}" xmlns:layout="">
+<head>
+    <meta charset="UTF-8">
+    <title>작가글쓰기</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <div class="mx-auto mt-10 max-w-screen-xl">
+        <form class="mx-auto w-full sm:w-96 space-y-4">
+            <h1 class="font-bold text-xl">책 등록하기</h1>
+
+            <div>
+                <label class="font-bold block mb-1">책 표지 이미지</label>
+                <input class="input py-2 px-3 border rounded-lg w-full" type="file">
+            </div>
+
+            <input autofocus class="input input-bordered input-black py-2 px-3 w-full" placeholder="제목">
+            <input autofocus class="input input-bordered input-black py-2 px-3 w-full" placeholder="출판사">
+            <input autofocus class="input input-bordered input-black py-2 px-3 w-full" placeholder="지은이">
+            <input autofocus class="input input-bordered input-black py-2 px-3 w-full" placeholder="가격">
+
+            <textarea class="textarea textarea-bordered textarea-black w-full no-resize py-2 px-3 resize-none" placeholder="책소개"
+                      rows="6"></textarea>
+            <div>
+                <label class="font-bold block mb-1">책 내용 pdf파일 등록</label>
+                <input class="input py-2 px-3 border rounded-lg w-full" type="file">
+            </div>
+            <div class="grid grid-cols-2 gap-4 mt-4">
+                <a class="btn btn-secondary btn-outline py-2 px-4 text-center" href="#">취소</a>
+                <input class="btn btn-primary btn-outline py-2 px-4 text-center" type="submit" value="등록">
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+</html>

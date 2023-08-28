@@ -1,5 +1,7 @@
 package com.project.bookuluv.domain.member.service;
 
+import com.project.bookuluv.domain.admin.domain.Notice;
+import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.dto.MemberRole;
 import com.project.bookuluv.domain.member.dto.MemberUpdateRequest;
@@ -9,6 +11,7 @@ import com.project.bookuluv.domain.member.exception.ErrorCode;
 import com.project.bookuluv.domain.member.repository.MemberRepository;
 import com.project.bookuluv.standard.utils.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -30,7 +33,8 @@ public class MemberService {
 
     @Value("${custom.genFileDirPath}")
     private String genFileDirPath;
-
+    @Value("${custom.originPath}")
+    private String originPath;
     private final MemberRepository memberRepository;
 
     private final BCryptPasswordEncoder encoder;
@@ -134,7 +138,7 @@ public class MemberService {
 
         UUID uuid = UUID.randomUUID();
         String fileName = uuid + "_" + file.getOriginalFilename();
-        String filePath = "/img_upload/" + fileName;
+        String filePath = originPath + fileName;
 
         File saveFile = new File(projectPath, fileName);
         file.transferTo(saveFile); // 업로드된 파일 저장
@@ -254,8 +258,25 @@ public class MemberService {
         memberRepository.save(member);
     }
 
+
     public List<Member> getAll() {
         return this.memberRepository.findAll();
+    }
+
+    @Transactional
+    public void deleteMember(Member member) {
+        // 회원과 연관된 공지사항과 제품의 연결을 해제
+        List<Notice> notices = member.getNoticeList();
+        for (Notice notice : notices) {
+            notice.setNoticeRegister(null);
+        }
+
+        List<Product> products = member.getProductList();
+        for (Product product : products) {
+            product.getReviews().clear(); // 제품과 연관된 리뷰를 일단 분리
+        }
+
+        memberRepository.delete(member); // 회원 삭제
     }
 
     public Member findById(Long id) {
@@ -263,13 +284,6 @@ public class MemberService {
         if (member.isPresent()) {
             return member.get();
         }
-        throw new DataNotFoundException("회원을 찾을 수 없습니다.");
+        throw new DataNotFoundException("Member not found");
     }
-
-
-    // public String me(String userName) {
-    //  User user = memberRepository.findByUserName(userName)
-    //           .orElseThrow();
-    //   return ;
-    // }
 }

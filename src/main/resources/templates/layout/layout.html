@@ -52,7 +52,7 @@
                 <span class="text-[#1E9EFE]">BOOK</span>
                 <span class="ml-[2px] hidden lg:block">U_LUV</span>
             </a>
-            <div class="xl:flex gap-3 ml-[50px] font-bold">
+            <div class="lg:flex gap-3 ml-[50px] font-bold">
                 <a th:href="@{|/product/list?type=book|}" class="inline-flex hover:text-red-500 flex-shrink-0">
                     <span class="ml-[2px] hidden lg:block ">
                         국내도서
@@ -85,7 +85,7 @@
             </form>
         </div>
 
-        <div class="flex gap-3 hidden xl:flex items-center">
+        <div class="flex gap-3 hidden lg:flex items-center">
             <a href="/member/profile" class="inline-flex items-center" sec:authorize="isAuthenticated()">
                 <img class="fa-solid fa-user w-12 h-12 rounded-full" alt=""
                      th:if="${#authentication.principal.imgFilePath}"
@@ -135,7 +135,57 @@
                 </span>
             </a>
         </div>
+        <div>
+            <button id="menu-toggle" class="block text-gray-600 hover:text-red-500 lg:hidden">
+                <i class="fas fa-bars"></i> 메뉴
+            </button>
+        </div>
     </div>
+    <nav class="fixed z-30 top-0 left-0 w-full h-full bg-white transition-transform duration-300 ease-in-out md:hidden transform translate-x-full md:translate-x-0">
+        <div class="container mx-auto h-full flex flex-col py-4 space-y-2 px-4">
+            <!-- 메인 카테고리 -->
+            <a th:href="@{|/product/list?type=book|}" class="hover:text-red-500">
+                국내도서
+            </a>
+            <a th:href="@{|/product/list?type=foreign|}" class="hover:text-red-500">
+                외국도서
+            </a>
+            <a href="#" class="hover:text-red-500">
+                Book U Luv Reader
+            </a>
+            <a href="/member/profile" class="inline-flex items-center" sec:authorize="isAuthenticated()">
+                <img class="fa-solid fa-user w-12 h-12 rounded-full" alt=""
+                     th:if="${#authentication.principal.imgFilePath}"
+                     th:src="${#authentication.principal.imgFilePath}"/>
+                <img class="fa-solid fa-user w-12 h-12 rounded-full" alt=""
+                     src="https://mblogthumb-phinf.pstatic.net/MjAyMDExMDFfMyAg/MDAxNjA0MjI5NDA4NDMy.5zGHwAo_UtaQFX8Hd7zrDi1WiV5KrDsPHcRzu3e6b8Eg.IlkR3QN__c3o7Qe9z5_xYyCyr2vcx7L_W1arNFgwAJwg.JPEG.gambasg/%EC%9C%A0%ED%8A%9C%EB%B8%8C_%EA%B8%B0%EB%B3%B8%ED%94%84%EB%A1%9C%ED%95%84_%ED%8C%8C%EC%8A%A4%ED%85%94.jpg?type=w800"
+                     th:unless="${#authentication.principal.imgFilePath}"/>
+                <span class="ml-[2px]"></span>
+                <span class="ml-[2px] hidden lg:block items-center"
+                      th:if="${#authentication.principal.nickName}"
+                      th:text="${#authentication.principal.nickName + ' 님'}"></span>
+            </a>
+            <!-- 로그인 및 관리 기능 -->
+            <a href="/member/login" sec:authorize="isAnonymous()" class="hover:text-red-500">
+                로그인
+            </a>
+            <a href="/member/join-type" sec:authorize="isAnonymous()" class="hover:text-red-500">
+                회원가입
+            </a>
+            <a href="/notice/list" class="hover:text-red-500">
+                공지사항
+            </a>
+            <a href="#" class="hover:text-red-500">
+                장바구니
+            </a>
+            <a href="/admin/member" sec:authorize="hasRole('ROLE_ADMIN')" class="hover:text-red-500">
+                관리자페이지
+            </a>
+            <a href="/member/logout" sec:authorize="isAuthenticated()" class="hover:text-red-500">
+                로그아웃
+            </a>
+        </div>
+    </nav>
 </header>
 
 <div class="flex-grow flex flex-col py-32">
@@ -145,71 +195,48 @@
 <footer class="bg-black py-16 text-top mt-32">
     <div class="max-w-7xl mx-auto">
         <nav class="flex flex-col md:flex-row md:justify-between">
-            <div class="flex md:flex-row gap-x-36 md:gap-x-0 justify-around">
-                <div>
-                    <img class="w-[100px]" src="https://i.imgur.com/9qCFLjc.png" alt="">
-                </div>
-
-                <div class="ml-[20px] text-white">
-
+            <div class="flex md:flex-row gap-x-6 md:gap-x-0 justify-around">
+                <img class="w-[100px]" src="https://i.imgur.com/9qCFLjc.png" alt="">
+                <div class="ml-[20px] text-white flex flex-col justify-center">
                     <div class="mb-[10px]">
-                        <span>고우영</span>
+                        <span>고 우 영</span>
                     </div>
                     <div class="mb-[10px]">
-
                         <span>이메일 : wooyoung0407@naver.com</span>
-
                     </div>
                     <div class="mb-[10px]">
                         <span>Front/React</span>
                     </div>
-                    <div class="mb-[10px]">
-                        <span>고우영</span>
-                    </div>
                 </div>
             </div>
-
-            <div class="flex md:flex-row gap-x-36 md:gap-x-0 justify-around mx-[10px]">
-                <div>
-                    <img class="w-[100px]" src="https://i.imgur.com/EgByDhq.jpg" alt="">
-                </div>
-                <div class="ml-[20px] text-white">
+            <div class="flex md:flex-row gap-x-6 md:gap-x-0 justify-around mt-6 md:mt-0">
+                <img class="ml-0 w-[100px]" src="https://i.imgur.com/EgByDhq.jpg" alt="">
+                <div class="ml-[20px] text-white flex flex-col justify-center">
 
                     <div class="mb-[10px]">
-                        <span>박창규</span>
-                    </div>
-                    <div class="mb-[10px]">
-
-                        <span>이메일 : wooyoung0407@naver.com</span>
-
-                    </div>
-                    <div class="mb-[10px]">
-                        <span>박창규</span>
-                    </div>
-                    <div class="mb-[10px]">
-                        <span>박창규</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex md:flex-row gap-x-36 md:gap-x-0 justify-around">
-                <div>
-                    <img class="w-[100px]" src="https://i.imgur.com/Q42WfBv.png" alt="">
-                </div>
-
-                <div class="ml-[20px] text-white">
-
-                    <div class="mb-[10px]">
-                        <span>황인성</span>
+                        <span>박 창 규</span>
                     </div>
                     <div class="mb-[10px]">
                         <span>이메일 : wooyoung0407@naver.com</span>
                     </div>
                     <div class="mb-[10px]">
-                        <span>황인성</span>
+                        <span>Backend</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex md:flex-row gap-x-6 md:gap-x-0 justify-around mt-6 md:mt-0">
+                <img class="w-[100px]" src="https://i.imgur.com/Q42WfBv.png" alt="">
+                <div class="ml-[20px] text-white flex flex-col justify-center">
+
+                    <div class="mb-[10px]">
+                        <span>황 인 성</span>
                     </div>
                     <div class="mb-[10px]">
-                        <span>황인성</span>
+                        <span>이메일 : wooyoung0407@naver.com</span>
+                    </div>
+                    <div class="mb-[10px]">
+                        <span>Backend</span>
                     </div>
                 </div>
             </div>
@@ -232,6 +259,14 @@
         }
         return true;
     }
+
+    const menuToggle = document.getElementById("menu-toggle");
+    const navMenu = document.querySelector("nav");
+
+    menuToggle.addEventListener("click", () => {
+        navMenu.classList.toggle("translate-x-full"); // transform 값을 토글하여 메뉴 보이기/숨기기
+    });
+
 
 
 </script>

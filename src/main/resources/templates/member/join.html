@@ -21,6 +21,9 @@
                   th:object="${memberJoinRequest}">
                 <!-- 사용자 아이디 (이메일) -->
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">사용자 아이디 (이메일)</span>
+                    </label>
                     <div class="flex items-center">
                         <input autofocus class="input input-bordered w-full" id="userName" maxlength="50"
                                placeholder="아이디" required th:field="*{userName}" type="email">
@@ -30,6 +33,9 @@
                 </div>
 
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">인증번호</span>
+                    </label>
                     <div class="relative flex items-center">
                         <input class="input input-bordered w-full mr-2" id="mailKey" placeholder="인증번호"
                                th:field="*{mailKey}" type="text">
@@ -75,20 +81,32 @@
 
                 </script>
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">비밀번호</span>
+                    </label>
                     <input class="input input-bordered" id="password1" maxlength="50" placeholder="비밀번호"
                            required th:field="*{password1}" type="password">
                 </div>
 
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">비밀번호 확인</span>
+                    </label>
                     <input class="input input-bordered" id="password2" maxlength="50" placeholder="비밀번호 확인"
                            required th:field="*{password2}" type="password">
                 </div>
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">닉네임</span>
+                    </label>
                     <input class="input input-bordered" id="nickName" maxlength="50" placeholder="닉네임"
                            required th:field="*{nickName}" type="text">
                 </div>
 
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">우편번호</span>
+                    </label>
                     <div class="flex items-center">
                         <input class="input input-bordered" id="sample4_postcode" placeholder="우편번호" required
                                th:field="*{postalNum}" type="text">
@@ -97,22 +115,34 @@
                     </div>
                 </div>
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">도로명</span>
+                    </label>
                     <input class="input input-bordered" id="sample4_roadAddress" placeholder="도로명" required
                            th:field="*{roadAddress}"
                            type="text">
                 </div>
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">지번주소</span>
+                    </label>
                     <input class="input input-bordered" id="sample4_jibunAddress" placeholder="지번주소" required
                            th:field="*{jibunAddress}"
                            type="text">
                 </div>
                 <span id="guide" style="color:#999;display:none"></span>
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">상세주소</span>
+                    </label>
                     <input class="input input-bordered" id="sample4_detailAddress" placeholder="상세주소" required
                            th:field="*{detailAddress}"
                            type="text">
                 </div>
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">참고항목</span>
+                    </label>
                     <input class="input input-bordered" id="sample4_extraAddress" placeholder="참고항목" required
                            th:field="*{extraAddress}"
                            type="text">
@@ -177,24 +207,36 @@
                 }
                 </script>
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">연락처</span>
+                    </label>
                     <input class="input input-bordered" id="phone" placeholder="연락처" required th:field="*{phone}"
                            type="number">
                 </div>
 
                 <!-- 이름 -->
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">이름</span>
+                    </label>
                     <input class="input input-bordered" id="firstName" placeholder="이름" required th:field="*{firstName}"
                            type="text">
                 </div>
 
                 <!-- 성 -->
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">성</span>
+                    </label>
                     <input class="input input-bordered" id="lastName" placeholder="성" required th:field="*{lastName}"
                            type="text">
                 </div>
 
                 <!-- 성별 -->
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">성별</span>
+                    </label>
                     <select id="gender" th:field="*{gender}">
                         <option value="false" disabled selected>성별</option>
                         <option value="true">남성</option>
@@ -204,6 +246,9 @@
 
                 <!-- 생년월일 -->
                 <div class="form-control">
+                    <label class="label" for="userName">
+                        <span class="label-text">생년월일</span>
+                    </label>
                     <input class="input input-bordered" id="birthDate" pattern="\d{4}-\d{2}-\d{2}" required
                            th:field="*{birthDate}"
                            type="date">

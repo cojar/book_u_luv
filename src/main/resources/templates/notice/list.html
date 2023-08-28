@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NoticeList</title>
+    <title>BOOKU_LUV 공지사항</title>
 </head>
 
 
@@ -18,26 +18,75 @@
                     <div class="text-start">
                         <h1 class="text-[50px] mb-4">공지사항</h1>
                     </div>
+                    <div class="w-full px-4 py-3 bg-blue-100 rounded-md mt-4 grid grid-cols-2 gap-4">
+                        <div class="px-2 col-span-2 sm:col-span-1" th:if="${kw != null && kw != ''}">
+                            <h2 class="text-xl font-semibold mb-2" th:text="${searchResultLabel}"></h2>
+                            <p class="text-gray-600">"<span style="display:inline-block;" th:text="${kw}"></span>" 검색어가 포함된 모든 결과입니다.</p>
+                        </div>
+                        <!-- 검색어가 없을 때 -->
+                        <div class="col-span-2 sm:col-span-1" th:unless="${kw != null && kw != ''}">
+                            <h2 class="text-xl font-semibold mb-2"></h2>
+                            <p class="text-gray-600"></p>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1 flex justify-end items-center">
+                            <div class="search-result inline-block mr-1 text-xl font-semibold" th:text="${notices.totalElements}"></div>
+                            건의 결과가 있어요
+                        </div>
+                    </div>
+
+                    <!-- 글쓰기 버튼 -->
+                    <div class="flex justify-end my-4">
+                        <a th:href="@{/notice/create}" th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}"
+                           class="btn btn-primer btn-outline">글쓰기</a>
+                    </div>
                     <table class="w-full border-collapse">
                         <thead>
                         <tr class="border-y">
-                            <th class="py-2">번호</th>
+                            <th class="py-2 px-8">번호</th>
                             <th class=" py-2">제목</th>
                             <th class=" py-2">작성자</th>
                             <th class=" py-2">작성일</th>
                             <th class=" py-2">수정일</th>
-                            <!--                            <th class="py-2">조회수</th>-->
+                            <th class=" py-2">조회수</th>
+                            <th class=" py-2" th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}">수정 / 삭제</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr th:each="notice : ${noticeList}" class="border-b">
-                            <td th:text="${notice.id}" class="py-2"></td>
+                        <tbody th:if="${notices}">
+                        <tr th:each="notice, loop : ${notices}" class="border-b">
                             <td>
-                                <a th:href="@{|/notice/detail/${notice.id}|}" th:text="${notice.subject}"></a>
+                                <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}" th:text="${notices.getTotalElements() - (notices.getNumber() * notices.getSize()) - loop.index}" th:attr="data-id=${notice.id}"></a>
                             </td>
-                            <td th:text="${notice.register}" class="py-2"></td>
-                            <td th:text="${notice.createDate}" class="py-2"></td>
-                            <td th:text="${notice.modifyDate}" class="py-2"></td>
+                            <td class="text-left">
+                                <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}" th:text="${notice.subject}" th:attr="data-id=${notice.id}"></a>
+                            </td>
+                            <td class="py-2">
+                                <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}" th:text="${notice.register.nickName}" th:attr="data-id=${notice.id}"></a>
+                            </td>
+                            <td class="py-2">
+                                <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}" th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}" th:attr="data-id=${notice.id}"></a>
+                            </td>
+                            <td class="py-2" th:if="${notice.modifyDate != null}">
+                                <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}"
+                                   th:text="${#temporals.format(notice.modifyDate, 'yyyy-MM-dd HH:mm')}" th:attr="data-id=${notice.id}"></a>
+                            </td>
+                            <td th:unless="${notice.modifyDate != null}" class="py-2">-</td>
+                            <td class="py-2">
+                                <a href="javascript:void(0);" class="notice-link" data-id="${notice.id}" th:text="${notice.hit}" th:attr="data-id=${notice.id}"></a>
+                            </td>
+                            <td class="py-2">
+                                <!-- 수정/삭제 버튼 -->
+                                <a th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}"
+                                   href="javascript:void(0);"
+                                   th:data-uri="@{/notice/modify/{id}(id=${notice.id})}"
+                                   class="text-blue-500 hover:text-blue-600 transition duration-300 mr-2"
+                                   onclick="confirmEdit(event)">수정</a>
+
+                                <a th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}"
+                                   href="javascript:void(0);"
+                                   th:data-uri="@{/notice/delete/{id}(id=${notice.id})}"
+                                   class="text-red-500 hover:text-red-600 transition duration-300"
+                                   onclick="confirmDelete(event)">삭제</a>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -46,13 +95,106 @@
         </div>
         <div class="search_box flex items-center justify-center mt-8">
             <select id="dropdown" class="p-2 border rounded">
+                <option value="all">제목 + 내용</option>
                 <option value="title">제목</option>
                 <option value="content">내용</option>
             </select>
-            <input type="text" id="search_input" class="p-2 border rounded mx-2">
-            <button type="button" class="p-2 border">검색</button>
+            <input type="text" id="search_kw" class="p-2 border rounded mx-2" placeholder="검색어를 입력하세요">
+            <button type="button" id="btn_search" class="p-2 border transition duration-300 hover:bg-gray-200">검색</button>
         </div>
     </div>
+    <!-- 페이지네이션 -->
+    <div th:if="${!notices.isEmpty()}">
+        <div class="flex justify-center mt-4">
+            <ul class="flex list-reset border border-gray-300 rounded">
+                <li class="page-item hover:bg-gray-200"
+                    th:classappend="${!notices.hasPrevious()} ? 'disabled'">
+                    <a class="page-link px-3 py-2 block text-center" href="javascript:void(0)"
+                       th:data-page="${notices.number}">
+                        <span><</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="page: ${#numbers.sequence(1, notices.totalPages)}"
+                    th:if="${page >= notices.number-5 and page <= notices.number+5}">
+                    <a class="page-link block text-center px-3 py-2 hover:bg-gray-200"
+                       href="javascript:void(0)" th:classappend="${page == notices.number+1} ? 'bg-blue-300'"
+                       th:data-page="${page}">
+                        <span th:text="${page}"></span>
+                    </a>
+                </li>
+                <li class="page-item hover:bg-gray-200" th:classappend="${!notices.hasNext()} ? 'disabled'">
+                    <a class="page-link px-3 py-2 block text-center" href="javascript:void(0)"
+                       th:data-page="${notices.number+2}">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <form id="searchForm" method="get" th:action="@{/notice/list}">
+        <input id="kw" name="kw" th:value="${kw}" type="hidden">
+        <input id="page" name="page" th:value="${notices.number}" type="hidden">
+    </form>
+    <script layout:fragment="script" type="text/javascript">
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function(element) {
+        element.addEventListener('click', function() {
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
+    });
+    const btn_search = document.getElementById("btn_search");
+    btn_search.addEventListener('click', function() {
+        document.getElementById('kw').value = document.getElementById('search_kw').value;
+        document.getElementById('page').value = 1;
+        document.getElementById('searchForm').submit();
+    });
+    function confirmDelete(event) {
+        event.preventDefault();
+        if (confirm("정말로 삭제하시겠습니까?\n삭제된 공지사항은 되돌릴 수 없습니다.")) {
+            location.href = event.target.getAttribute("data-uri");
+            alert('삭제가 완료되었습니다.');
+        }
+    }
+    function confirmEdit(event) {
+        event.preventDefault();
+        if (confirm("정말로 수정하시겠습니까?")) {
+            location.href = event.target.getAttribute("data-uri");
+        }
+    }
+    /* 페이지 로딩 시 등록/수정 성공 여부 파라미터 확인 및 알림 메시지 띄우기 */
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const successType = urlParams.get('success');
+
+        if (successType === 'create') {
+            alert('등록이 완료되었습니다.');
+        } else if (successType === 'modify') {
+            alert('수정이 완료되었습니다.');
+        }
+    });
+
+    $(document).ready(function() {
+        $("#btn_search").click(function() {
+            var selectedOption = $("#dropdown").val();
+            var searchKeyword = $("#search_kw").val();
+            var url = "/notice/list?kw=" + searchKeyword + "&field=" + selectedOption + "&page=1";
+            window.location.href = url;
+        });
+        $(".notice-link").click(function() {
+            var noticeId = $(this).data("id");
+            $.ajax({
+                type: "POST",
+                url: "/notice/increase-hit",
+                data: { id: noticeId },
+                success: function(response) {
+                    if (response === "success") {
+                        window.location.href = "/notice/detail/" + noticeId;
+                    }
+                }
+            });
+        });
+    });
+    </script>
 </main>
 </body>
 </html>

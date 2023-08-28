@@ -15,70 +15,65 @@
 
 <main layout:fragment="content">
 
-  <header class="w-[1580px] mx-auto p-4 text-left border-b">
-    <div class="flex justify-between items-center">
-      <h1 class="text-[50px]">관리자 페이지</h1>
-      <div class="menu">
-        <div class="admin_menu flex space-x-4">
-          <ul class="flex space-x-4">
-            <li>
-              <a th:href="@{/admin/member}" class="menu-link">회원관리</a>
-            </li>
-            <li>
-              <a th:href="@{/admin/notice}" class="menu-link">공지사항 관리</a>
-            </li>
-            <li>
-              <a th:href="@{/admin/domestic}" class="menu-link">국내도서 관리</a>
-            </li>
-            <li>
-              <a th:href="@{/admin/foreign}" class="menu-link">외국도서 관리</a>
-            </li>
-            <li>
-              <a th:href="@{/admin/author}" class="menu-link">작가관리</a>
-            </li>
-            <li>
-              <a th:href="@{/admin/article}" class="menu-link">판매 글 관리</a>
-            </li>
-            <li>
-              <a th:href="@{/admin/calculate}" class="menu-link">정산관리</a>
-            </li>
-          </ul>
+    <header class="w-[1580px] mx-auto p-4 text-left border-b">
+        <div class="flex justify-between items-center">
+            <h1 class="text-[50px]">관리자 페이지</h1>
+            <div class="menu">
+                <div class="admin_menu flex space-x-4">
+                    <ul class="flex space-x-4">
+                        <li>
+                            <a class="menu-link" th:href="@{/admin/member}">회원관리</a>
+                        </li>
+                        <li>
+                            <a class="menu-link" th:href="@{/admin/notice}">공지사항 관리</a>
+                        </li>
+                        <li>
+                            <a class="menu-link" th:href="@{/admin/domestic}">국내도서 관리</a>
+                        </li>
+                        <li>
+                            <a class="menu-link" th:href="@{/admin/foreign}">외국도서 관리</a>
+                        </li>
+                        <li>
+                            <a class="menu-link" th:href="@{/admin/calculate}">정산관리</a>
+                        </li>
+                        <li>
+                            <a class="menu-link" th:href="@{/product/create}">제품 등록</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- ... -->
+    </header>
+    <!-- 회원 관리 테이블 -->
+    <div class="w-[1580px] mx-auto mt-[100px]">
+        <div class="flex justify-between">
+            <h1 class="text-3xl font-semibold mt-8 mb-4">공지사항 관리</h1>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                <tr>
+                    <th class="py-2 px-4 w-auto border">NO.</th>
+                    <th class="py-2 px-4 w-auto border">제목</th>
+                    <th class="py-2 px-4 w-auto border">작성자</th>
+                    <th class="py-2 px-4 w-auto border">작성일자</th>
+                    <th class="py-2 px-4 w-auto border">수정일자</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="bg-white" th:each="notice : ${noticeList}">
+                    <td class="py-2 px-4 border" th:text="${notice.id}"></td>
+                    <td class="py-2 px-4 border" th:text="${notice.subject}"></td>
+                    <td class="py-2 px-4 border" th:text="${notice.register.nickName}"></td>
+                    <td class="py-2 px-4 border" th:text="${#temporals.format(notice.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td class="py-2 px-4 border" th:unless="${notice.modifyDate != null}">-</td>
+                    <td class="py-2 px-4 border" th:text="${#temporals.format(notice.modifyDate, 'yyyy-MM-dd HH:mm')}"
+                        th:if="${notice.modifyDate != null}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    <!-- ... -->
-  </header>
-  <!-- 회원 관리 테이블 -->
-  <div class="w-[1580px] mx-auto mt-[100px]">
-    <div class="flex justify-between">
-      <h1 class="text-3xl font-semibold mt-8 mb-4">공지사항 관리</h1>
-      <div class="flex items-center">
-        <a th:href="@{/notice/create}">글쓰기</a>
-        <input class="ml-[20px]" type="button" value="삭제">
-      </div>
-    </div>
-    <div class="overflow-x-auto">
-      <table class="min-w-full">
-        <thead>
-        <tr>
-          <th class="py-2 px-4 w-auto border">NO.</th>
-          <th class="py-2 px-4 w-auto border">제목</th>
-          <th class="py-2 px-4 w-auto border">작성자</th>
-          <th class="py-2 px-4 w-auto border">작성일자</th>
-          <th class="py-2 px-4 w-auto border">수정일자</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="bg-white" th:each="notice : ${noticeList}">
-          <td class="py-2 px-4 border" th:text="${notice.id}"></td>
-          <td class="py-2 px-4 border" th:text="${notice.subject}"></td>
-          <td class="py-2 px-4 border" th:text="${notice.register}"></td>
-          <td class="py-2 px-4 border" th:text="${notice.createDate}"></td>
-          <td class="py-2 px-4 border" th:text="${notice.modifyDate}"></td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
 </main>
 </body>
-</html>\
+</html>

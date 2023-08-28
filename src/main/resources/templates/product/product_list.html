@@ -52,9 +52,9 @@
             <!-- 도서 정보 표시 -->
             <div class="flex flex-col mx-auto w-80 p-4" th:each="product : ${products}">
                 <div class="text-center">
-                    <a class="block text-lg font-semibold my-4" th:href="@{|/product/domestic/detail/${product.id}|}">
+                    <a class="block text-lg font-semibold my-4" th:href="@{|/product/detail/${product.id}|}">
                         <div class="hover:scale-105 transition-transform">
-                            <img alt="Book Cover" class="mx-auto w-48 h-72" th:src="${product.coverImg}">
+                            <img alt="Book Cover" class="mx-auto w-48 h-72 object-contain" th:src="${product.coverImg}">
                         </div>
                         <span class="block text-lg font-semibold my-4" th:text="${product.title}"></span>
                     </a>
@@ -124,8 +124,6 @@
         document.getElementById('page').value = 1;
         document.getElementById('searchForm').submit();
     });
-
-
 </script>
 </body>
 
