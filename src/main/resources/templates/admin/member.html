@@ -76,8 +76,8 @@
                     <td class="py-2 px-4 border" th:text="${member.firstName}"></td>
                     <td class="py-2 px-4 border" th:text="${member.nickName}"></td>
                     <td class="py-2 px-4 border" th:text="${member.gender == true ? '남성' : (member.gender == false ? '여성' : '알 수 없음')}"></td>
-                    <td class="py-2 px-4 border" th:text="${member.birthDate}"></td>
-                    <td class="py-2 px-4 border" th:text="${member.phone}"></td>
+                    <td class="py-2 px-4 border" th:text="${member.birthDate != null ? member.birthDate : '알 수 없음'}"></td>
+                    <td class="py-2 px-4 border" th:text="${member.phone != null ? member.phone : '알 수 없음'}"></td>
                     <td class="py-2 px-4 border" th:text="${member.role}"></td>
                     <td class="py-2 px-4 border">
                         <form method="post" th:action="@{/admin/member/update-role}">
