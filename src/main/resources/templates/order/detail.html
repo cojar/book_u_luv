@@ -14,7 +14,7 @@
         </div>
         <table class="w-full mb-[20px]">
             <thead>
-            <tr class="text-[30px]">
+            <tr class="text-[20px]">
                 <th>책표지</th>
                 <th>책번호</th>
                 <th>구매자</th>
@@ -25,7 +25,7 @@
             <tbody>
             <tr class="text-center text-[20px] ">
                 <td class="flex justify-center">
-                    <img class="w-36" th:src="${product.coverImg}" alt="상품이미지">
+                    <img class="w-[120px] h-[150px]" th:src="${product.coverImg}" alt="상품이미지">
                 </td>
                 <td class="">
                     <span th:text="${product.id}"></span>
@@ -33,7 +33,7 @@
                 <td class="">
                     <span th:text="${member.lastName}+${member.firstName}"></span>
                 </td>
-                <td class="">
+                <td class="w-4/12">
                     <span th:text="${product.title}" class="font-bold"></span>
                 </td>
                 <td class="">
