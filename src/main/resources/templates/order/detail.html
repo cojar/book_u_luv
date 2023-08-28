@@ -48,7 +48,7 @@
         <form method="get" th:action="@{|{/order/{id}/success}}">
             <input required type="hidden" name="productId" id="productId" th:value="${product.id}">
             <button type="button" onclick="pay();" class="btn btn-primary">결제</button>
-            <a href="#" class="btn btn-secondary ml-2">취소</a>
+            <a href="javascript:history.back()" class="btn btn-secondary ml-2">취소</a>
         </form>
     </div>
 </div>
