@@ -3,6 +3,7 @@ package com.project.bookuluv.base.configuration;
 import com.project.bookuluv.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -22,8 +23,8 @@ public class AuthenticationConfig {
     @Autowired
     private OAuth2UserService oAuth2UserService;
 
-//    @Value("${spring.jwt.secret}")
-//    private String secretKey;
+    @Value("${spring.jwt.secret}")
+    private String secretKey;
 
     @Bean
     public SecurityFilterChain jwtsecurityFilterChain(HttpSecurity httpSecurity) throws Exception {

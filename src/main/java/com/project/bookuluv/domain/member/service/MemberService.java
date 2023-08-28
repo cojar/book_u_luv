@@ -9,6 +9,7 @@ import com.project.bookuluv.domain.member.exception.AppException;
 import com.project.bookuluv.domain.member.exception.DataNotFoundException;
 import com.project.bookuluv.domain.member.exception.ErrorCode;
 import com.project.bookuluv.domain.member.repository.MemberRepository;
+import com.project.bookuluv.standard.utils.JwtUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,8 +39,8 @@ public class MemberService {
 
     private final BCryptPasswordEncoder encoder;
 
-//    @Value("${spring.jwt.secret}")
-//    private String secretKey;
+    @Value("${spring.jwt.secret}")
+    private String secretKey;
 
     private Long expiredMs = 1000 * 60 * 60l;
 
@@ -183,20 +184,20 @@ public class MemberService {
 
 
     // 이하 JWT 토큰 관련
-//    public String login(String userName, String password) {
-//
-//        // userName 없음
-//        Member user = memberRepository.findByUserName(userName)
-//                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "이 없습니다."));
-//
-//        // password 틀림
-//        // if (!encoder.matches(user.getPassword(), password)) {
-//        //    throw new AppException(ErrorCode.INVALID_PASSWORD, "패스워드를 잘못 입력했습니다.");
-//        //  }
-//
-//        String token = JwtUtil.createJwt(user.getUserName(), secretKey, expiredMs);
-//        return token;
-//    }
+    public String login(String userName, String password) {
+
+        // userName 없음
+        Member user = memberRepository.findByUserName(userName)
+                .orElseThrow(() -> new AppException(ErrorCode.USERNAME_NOT_FOUND, userName + "이 없습니다."));
+
+        // password 틀림
+        // if (!encoder.matches(user.getPassword(), password)) {
+        //    throw new AppException(ErrorCode.INVALID_PASSWORD, "패스워드를 잘못 입력했습니다.");
+        //  }
+
+        String token = JwtUtil.createJwt(user.getUserName(), secretKey, expiredMs);
+        return token;
+    }
 
     public Member getMember(String userName) {
         Optional<Member> siteUser = this.memberRepository.findByUserName(userName);

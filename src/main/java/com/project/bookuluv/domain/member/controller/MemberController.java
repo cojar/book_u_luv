@@ -9,6 +9,7 @@ import com.project.bookuluv.domain.cartItem.service.CartItemService;
 import com.project.bookuluv.domain.mail.MailController;
 import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.member.dto.MemberJoinRequest;
+import com.project.bookuluv.domain.member.dto.MemberLoginRequest;
 import com.project.bookuluv.domain.member.dto.MemberRole;
 import com.project.bookuluv.domain.member.dto.MemberUpdateRequest;
 import com.project.bookuluv.domain.member.exception.DataNotFoundException;
@@ -78,10 +79,10 @@ public class MemberController {
         return ResponseEntity.ok().body("회원가입이 완료되었습니다.");
     }
 
-//    @PostMapping("/api/v1/members/login")
-//    public ResponseEntity<String> login(@RequestBody MemberLoginRequest dto) {
-//        return ResponseEntity.ok().body(memberService.login(dto.getUserName(), ""));
-//    }
+    @PostMapping("/api/v1/members/login")
+    public ResponseEntity<String> login(@RequestBody MemberLoginRequest dto) {
+        return ResponseEntity.ok().body(memberService.login(dto.getUserName(), ""));
+    }
 
     // @GetMapping("/me")
     // public ResponseEntity<String> me(@RequestBody MemberLoginRequest dto) {
