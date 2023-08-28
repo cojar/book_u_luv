@@ -72,6 +72,7 @@ public class ProductController {
     @GetMapping(value = "/detail/{id}")
     public String domesticDetail(Model model, @PathVariable("id") Long id) {
         Product product = productService.getById(id);
+
         List<Review> reviews = reviewService.getReviewsByProduct(product); // Fetch reviews for the product
         model.addAttribute("product", product);
         model.addAttribute("reviews", reviews); // Add the reviews to the model
@@ -197,6 +198,7 @@ public class ProductController {
         this.productService.delete(id);
         return "redirect:/";
     }
+
     @PostMapping("/increase-hit")
     @ResponseBody
     public String increaseHitCount(@RequestParam Long id) {

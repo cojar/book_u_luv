@@ -19,6 +19,7 @@
             color: gold; /* 변경할 색상을 여기에 지정 */
         }
 
+
     </style>
 </head>
 
@@ -148,6 +149,7 @@
                 });
             });
 
+
         </script>
 
         <div class="border-t mt-4 pt-4">
@@ -192,19 +194,20 @@
             </div>
             <div class="flex items-center mt-4 border-t pt-4">
                 <i id="likeIcon" class="far fa-heart text-2xl cursor-pointer"></i>
-                <form class="d-flex"
-                      th:action="@{/member/cart/{id}/{productId}(id=${member.id}, productId=${products.id})}"
+                <form sec:authorize="isAuthenticated()" class="d-flex" th:if="${#authentication.principal}"
+                      th:action="@{/member/cart/{id}/{productId}(id=${member.id}, productId=${product.id})}"
                       method="post">
                     <div class="flex justify-end w-full mr-[10px]">
                         <input class="form-control text-center me-3" id="amount" name="amount" type="number" value="1"
                                style="max-width: 3rem"/>
-                        <button class="ml-2 px-4 py-2 w-24 btn btn-primary text-white" type="submit">
+                        <button
+                                class="ml-2 px-4 py-2 w-24 btn btn-primary text-white" type="submit">
                             장바구니
                         </button>
                     </div>
                 </form>
                 <form th:action="@{/order/detail}">
-                    <input type="hidden" name="productsId" th:value="${products.id}">
+                    <input type="hidden" name="productsId" th:value="${product.id}">
                     <input type="submit" value="구매" class="btn btn-primary text-white">
                 </form>
             </div>
@@ -344,6 +347,7 @@
             alert('수정이 완료되었습니다.');
         }
     });
+
 </script>
 
 
