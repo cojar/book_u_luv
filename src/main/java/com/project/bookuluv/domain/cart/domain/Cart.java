@@ -22,7 +22,7 @@ public class Cart extends BaseEntity {
 
     private int count; // 카트에 담긴 총 상품 개수
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<CartItem> cartItemList;
 
 

@@ -1,6 +1,7 @@
 package com.project.bookuluv.domain.admin.domain;
 
 import com.project.bookuluv.base.entity.BaseEntity;
+import com.project.bookuluv.domain.cartItem.domain.CartItem;
 import com.project.bookuluv.domain.member.domain.Member;
 import com.project.bookuluv.domain.review.domain.Review;
 import jakarta.persistence.*;
@@ -77,7 +78,7 @@ public class Product extends BaseEntity {
     @Column(name = "hit", columnDefinition = "integer default 0", nullable = false)
     private int hit;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Review> reviews;
 
     // 평균 별점 필드 추가
@@ -87,4 +88,8 @@ public class Product extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_register_id")
     private Member productRegister; // 제품 작성자
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<CartItem> cartItemList;
+
 }
