@@ -21,10 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
@@ -181,15 +178,44 @@ public class ADMController {
 
 
     @GetMapping("/admin/notice")
-    @PreAuthorize("isAuthenticated()")
-    public String adminNotice(Model model) {
+    public String noticeListad(Model model,
+                             @RequestParam(value = "page", defaultValue = "1") int page,
+                             @RequestParam(value = "kw", defaultValue = "") String kw,
+                             @RequestParam(value = "field", defaultValue = "title") String field) {
         if (!userIsAdmin()) { // 모든 관리자권한 가능
             return "error_page";
         }
-        List<Notice> noticeList = this.noticeService.getAll();
-        model.addAttribute("noticeList", noticeList);
+        if (page <= 0) {
+            return "redirect:/notice/list?page=1";
+        }
+        Page<Notice> notices = this.noticeService.getNotices(page, kw, field);
+        model.addAttribute("notices", notices);
+        model.addAttribute("field", field);
+        model.addAttribute("kw", kw);
         return "admin/notice";
     }
+
+    @ModelAttribute("searchResultLabel")
+    public String getSearchResultLabelad(@RequestParam(value = "field", defaultValue = "") String field) {
+        if ("title".equals(field)) {
+            return "제목검색결과";
+        } else if ("content".equals(field)) {
+            return "내용검색결과";
+        } else if ("all".equals(field)) {
+            return "통합검색결과";
+        } else {
+            return "";
+        }
+    }
+
+
+
+
+
+
+
+
+
     private boolean hasAuthority(String... roles) { // String...은 Java에서 가변 인자(variable arity)를 나타내는 문법.
         // String...과 같이 선언하면, 해당 메서드를 호출할 때 여러 개의 인자를 전달할 수 있고, 이렇게 전달된 인자들은 배열로 처리됨.(roles 는 배열변수로써 권한정보를 문자열로 담고 있다.)
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

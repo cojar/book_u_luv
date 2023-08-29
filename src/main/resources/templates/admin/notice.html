@@ -41,7 +41,6 @@
             </div>
         </div>
     </header>
-    <!-- 회원 관리 테이블 -->
     <div class="w-[1580px] mx-auto mt-[100px]">
         <div class="flex justify-between">
             <h1 class="text-3xl font-semibold mt-8 mb-4">공지사항 관리</h1>
@@ -62,21 +61,36 @@
                 </button>
             </div>
         </div>
+        <div class="w-full px-4 py-3 my-8 bg-blue-100 rounded-md mt-4 grid grid-cols-2 gap-4">
+            <div class="px-2 col-span-2 sm:col-span-1" th:if="${kw != null && kw != ''}">
+                <h2 class="text-xl font-semibold mb-2" th:text="${searchResultLabel}"></h2>
+                <p class="text-gray-600">"<span style="display:inline-block;" th:text="${kw}"></span>" 검색어가 포함된 모든 결과입니다.</p>
+            </div>
+            <!-- 검색어가 없을 때 -->
+            <div class="col-span-2 sm:col-span-1" th:unless="${kw != null && kw != ''}">
+                <h2 class="text-xl font-semibold mb-2"></h2>
+                <p class="text-gray-600"></p>
+            </div>
+            <div class="col-span-2 sm:col-span-1 flex justify-end items-center">
+                <div class="search-result inline-block mr-1 text-xl font-semibold" th:text="${notices.totalElements}"></div>
+                건의 결과가 있어요
+            </div>
+        </div>
         <div class="overflow-x-auto">
             <table class="min-w-full text-center">
                 <thead>
                 <tr>
                     <th class="py-2 px-4 w-[100px] border">NO.</th>
-                    <th class="py-2 px-4 w-[560px] border">제목</th>
+                    <th class="py-2 px-4 w-[700px] border">제목</th>
                     <th class="py-2 px-4 w-auto border">작성자</th>
                     <th class="py-2 px-4 w-[200px] border">작성일자</th>
                     <th class="py-2 px-4 w-[200px] border">수정일자</th>
-                    <th class="py-2 px-4 w-[80px] border">수정 / 삭제</th>
+                    <th class="py-2 px-4 w-[130px] border">수정 / 삭제</th>
 
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="bg-white" th:each="notice : ${noticeList}">
+                <tr class="bg-white" th:each="notice : ${notices}">
                     <td class="py-2 px-4 border" th:text="${notice.id}"></td>
                     <td class="py-2 px-4 border w-[300px] max-w-lg break-words" th:text="${notice.subject}"></td>
                     <td class="py-2 px-4 border" th:text="${notice.noticeRegister.nickName}"></td>
@@ -87,11 +101,12 @@
                     <td class="py-2 px-4 border">
                         <!-- 수정/삭제 버튼 -->
                         <a href="javascript:void(0);"
+                           th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}"
                            th:data-uri="@{/notice/modify/{id}(id=${notice.id})}"
                            class="text-blue-500 hover:text-blue-600 transition duration-300 mr-2"
-                           onclick="confirmEdit(event)">수정</a>
-
+                           onclick="confirmEdit(event)">수정</a>/
                         <a href="javascript:void(0);"
+                           th:if="${#authorization.expression('hasRole(''ROLE_SUPERADMIN'') or hasRole(''ROLE_ADMIN'')')}"
                            th:data-uri="@{/notice/delete/{id}(id=${notice.id})}"
                            class="text-red-500 hover:text-red-600 transition duration-300"
                            onclick="confirmDelete(event)">삭제</a>
@@ -101,6 +116,38 @@
             </table>
         </div>
     </div>
+    <!-- 페이지네이션 -->
+    <div th:if="${!notices.isEmpty()}">
+        <div class="flex justify-center mt-4">
+            <ul class="flex list-reset border border-gray-300 rounded">
+                <li class="page-item hover:bg-gray-200"
+                    th:classappend="${!notices.hasPrevious()} ? 'disabled'">
+                    <a class="page-link px-3 py-2 block text-center" href="javascript:void(0)"
+                       th:data-page="${notices.number}">
+                        <span><</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="page: ${#numbers.sequence(1, notices.totalPages)}"
+                    th:if="${page >= notices.number-5 and page <= notices.number+5}">
+                    <a class="page-link block text-center px-3 py-2 hover:bg-gray-200"
+                       href="javascript:void(0)" th:classappend="${page == notices.number+1} ? 'bg-blue-300'"
+                       th:data-page="${page}">
+                        <span th:text="${page}"></span>
+                    </a>
+                </li>
+                <li class="page-item hover:bg-gray-200" th:classappend="${!notices.hasNext()} ? 'disabled'">
+                    <a class="page-link px-3 py-2 block text-center" href="javascript:void(0)"
+                       th:data-page="${notices.number+2}">
+                        <span>></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <form id="searchForm" method="get" th:action="@{/admin/notice}">
+        <input id="kw" name="kw" th:value="${kw}" type="hidden">
+        <input id="page" name="page" th:value="${notices.number}" type="hidden">
+    </form>
     <script layout:fragment="script" type="text/javascript">
     const page_elements = document.getElementsByClassName("page-link");
     Array.from(page_elements).forEach(function(element) {
@@ -115,9 +162,9 @@
         document.getElementById('page').value = 1;
         document.getElementById('searchForm').submit();
     });
-      function confirmDelete(event) {
+    function confirmDelete(event) {
         event.preventDefault();
-        if (confirm("정말로 삭제하시겠습니까?\n삭제된 도서는 되돌릴 수 없습니다.")) {
+        if (confirm("정말로 삭제하시겠습니까?\n삭제된 공지사항은 되돌릴 수 없습니다.")) {
             location.href = event.target.getAttribute("data-uri");
             alert('삭제가 완료되었습니다.');
         }
@@ -128,16 +175,33 @@
             location.href = event.target.getAttribute("data-uri");
         }
     }
-    $(document).ready(function() {
-        $(".book-link").click(function() {
-            var productId = $(this).data("id");
+        /* 페이지 로딩 시 등록/수정 성공 여부 파라미터 확인 및 알림 메시지 띄우기 */
+    document.addEventListener('DOMContentLoaded', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const successType = urlParams.get('success');
+
+        if (successType === 'create') {
+            alert('등록이 완료되었습니다.');
+        } else if (successType === 'modify') {
+            alert('수정이 완료되었습니다.');
+        }
+    });
+$(document).ready(function() {
+        $("#btn_search").click(function() {
+            var selectedOption = $("#dropdown").val();
+            var searchKeyword = $("#search_kw").val();
+            var url = "/notice/list?kw=" + searchKeyword + "&field=" + selectedOption + "&page=1";
+            window.location.href = url;
+        });
+        $(".notice-link").click(function() {
+            var noticeId = $(this).data("id");
             $.ajax({
                 type: "POST",
-                url: "/product/increase-hit",
-                data: { id: productId },
+                url: "/notice/increase-hit",
+                data: { id: noticeId },
                 success: function(response) {
                     if (response === "success") {
-                        window.location.href = "/product/detail/" + productId;
+                        window.location.href = "/notice/detail/" + noticeId;
                     }
                 }
             });

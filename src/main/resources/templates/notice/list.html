@@ -17,6 +17,15 @@
                     <div class="text-start">
                         <h1 class="text-[50px] mb-4">공지사항</h1>
                     </div>
+                    <div class="search_box flex items-center justify-end mt-8">
+                        <select id="dropdown" class="p-2 border rounded">
+                            <option value="all">제목 + 내용</option>
+                            <option value="title">제목</option>
+                            <option value="content">내용</option>
+                        </select>
+                        <input type="text" id="search_kw" class="p-2 border rounded mx-2" placeholder="검색어를 입력하세요">
+                        <button type="button" id="btn_search" class="p-2 border transition duration-300 hover:bg-gray-200">검색</button>
+                    </div>
                     <div class="w-full px-4 py-3 bg-blue-100 rounded-md mt-4 grid grid-cols-2 gap-4">
                         <div class="px-2 col-span-2 sm:col-span-1" th:if="${kw != null && kw != ''}">
                             <h2 class="text-xl font-semibold mb-2" th:text="${searchResultLabel}"></h2>
@@ -93,15 +102,6 @@
                 </div>
             </div>
         </div>
-        <div class="search_box flex items-center justify-center mt-8">
-            <select id="dropdown" class="p-2 border rounded">
-                <option value="all">제목 + 내용</option>
-                <option value="title">제목</option>
-                <option value="content">내용</option>
-            </select>
-            <input type="text" id="search_kw" class="p-2 border rounded mx-2" placeholder="검색어를 입력하세요">
-            <button type="button" id="btn_search" class="p-2 border transition duration-300 hover:bg-gray-200">검색</button>
-        </div>
     </div>
     <!-- 페이지네이션 -->
     <div th:if="${!notices.isEmpty()}">
@@ -125,6 +125,7 @@
                 <li class="page-item hover:bg-gray-200" th:classappend="${!notices.hasNext()} ? 'disabled'">
                     <a class="page-link px-3 py-2 block text-center" href="javascript:void(0)"
                        th:data-page="${notices.number+2}">
+                        <span>></span>
                     </a>
                 </li>
             </ul>
