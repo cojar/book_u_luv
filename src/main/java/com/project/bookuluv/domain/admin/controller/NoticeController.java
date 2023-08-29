@@ -83,8 +83,9 @@ public class NoticeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
         Member member = this.memberService.getMember(userName);
-        this.noticeService.create(noticeDto.getSubject(), noticeDto.getContent(), member);
-        return "redirect:/notice/list?success=create";
+        Notice notice = this.noticeService.create(noticeDto.getSubject(), noticeDto.getContent(), member);
+        Long nid = notice.getId();
+        return "redirect:/notice/detail/" + nid + "?success=create";
     }
 
 

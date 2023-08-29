@@ -208,6 +208,8 @@ public class ProductController {
         return "redirect:/";
     }
 
+
+
     @PostMapping("/increase-hit")
     @ResponseBody
     public String increaseHitCount(@RequestParam Long id) {

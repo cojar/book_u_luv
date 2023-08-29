@@ -57,7 +57,7 @@ public class NoticeService {
     }
 
 
-    public void create(String subject, String content, Member member) {
+    public Notice create(String subject, String content, Member member) {
         Notice notice = Notice.builder()
                 .subject(subject)
                 .content(content)
@@ -65,6 +65,7 @@ public class NoticeService {
                 .createDate(LocalDateTime.now())
                 .build();
         this.noticeRepository.save(notice);
+        return notice;
     }
 
     public void modify(NoticeDto noticeDto, Long id) {

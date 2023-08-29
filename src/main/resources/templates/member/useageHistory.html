@@ -7,7 +7,7 @@
 <body class="bg-gray-100" layout:fragment="content">
 <main class="container mx-auto pb-6">
     <div class="flex justify-around pb-10">
-        <div class="w-2/5 flex justify-center">
+        <div class="w-4/5 flex justify-center">
             <div class="form-control">
                 <img class="preview-image h-40 w-40 rounded-full border-solid border-black border"
                      th:if="${#authentication.principal.imgFilePath}"
@@ -17,7 +17,7 @@
                      th:unless="${#authentication.principal.imgFilePath}"/>
             </div>
         </div>
-        <div class="info-content w-3/5 flex flex-col justify-center">
+        <div class="info-content w-4/5 flex flex-col justify-center">
             <div class="info-box">
                 <div class="user-info-box">
                     <div class="nickname-box flex justify-between">
@@ -30,7 +30,8 @@
                     </div>
                     <div class="birth-box flex justify-between">
                         <div>생년월일 :</div>
-                        <div class="birth" th:text="${#authentication.principal.birthDate}"></div>
+                        <div class="birth" th:if="${#authentication.principal.birthDate}" th:text="${#authentication.principal.birthDate}"></div>
+                        <div class="birth" th:unless="${#authentication.principal.birthDate}" th:text="미등록"></div>
                     </div>
                 </div>
             </div>
@@ -249,7 +250,7 @@
                                 <tbody>
                                 <tr th:if="${not #lists.isEmpty(cartItemList)}" th:each="cartItem : ${cartItemList}">
                                     <td>
-                                        <a th:href="@{|/product/detail/${cartItem.product.id}|}">
+                                        <a class="flex justify-center" th:href="@{|/product/detail/${cartItem.product.id}|}">
                                             <img class="w-[100px] h-[120px]" th:src="${cartItem.product.coverImg}" alt="">
                                         </a>
                                     </td>
@@ -300,7 +301,7 @@
                                 <tbody>
                                 <tr th:if="${not #lists.isEmpty(OrderList)}" th:each="order :${OrderList}">
                                     <td>
-                                        <a th:href="@{|/product/detail/${order.product.id}|}">
+                                        <a class="flex justify-center" th:href="@{|/product/detail/${order.product.id}|}">
                                             <img class="w-[100px] h-[120px]" th:src="${order.product.coverImg}" alt="">
                                         </a>
                                     </td>
@@ -309,8 +310,8 @@
                                            th:text="${order.name}"></a>
                                     </td>
                                     <td class="text-center" th:text="${order.id}"></td>
-                                    <td class="text-center" th:text="${order.product.priceSales}"></td>
-                                    <td class="text-center" th:text="${order.createDate}"></td>
+                                    <td class="text-center" th:text="${order.product.priceSales +  ' \'}"></td>
+                                    <td class="text-center" th:text="${#temporals.format(order.createDate, 'yyyy-MM-dd hh:mm')}"></td>
                                 </tr>
                                 <!-- 구매내역이 없는 경우에 대한 처리 -->
                                 <tr th:if="${#lists.isEmpty(OrderList)}">

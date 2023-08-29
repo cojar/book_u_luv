@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -248,6 +249,26 @@ public class ADMController {
 
         model.addAttribute("message", "1개월 동안의 정산이 수행되었습니다.");
         return "admin/calculate";
+    }
+
+    @GetMapping("/deleteDomesticAd/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String deleteDomestic(@PathVariable("id") Long id) {
+        if (!userIsAdmin()) { // 모든 관리자권한 가능
+            return "error_page";
+        }
+        this.productService.delete(id);
+        return "redirect:/admin/domestic";
+    }
+
+    @GetMapping("/deleteForeignAd/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public String deleteForeign(@PathVariable("id") Long id) {
+        if (!userIsAdmin()) { // 모든 관리자권한 가능
+            return "error_page";
+        }
+        this.productService.delete(id);
+        return "redirect:/admin/foreign";
     }
 
 }
