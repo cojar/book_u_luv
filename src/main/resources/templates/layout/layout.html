@@ -42,6 +42,20 @@
 
 
     </script>
+    <style>
+    /* Toggle 메뉴가 나타날 때의 스타일 */
+    #mobile-menu {
+        opacity: 0; /* 일단 숨김 */
+        transition: opacity 0.3s ease; /* 부드럽게 전환되도록 트랜지션 추가 */
+        background-color: rgba(255, 255, 255, 0.9); /* 연한 배경색 추가 */
+        /* 나머지 스타일 지정 */
+    }
+
+    /* Toggle 메뉴가 나타날 때의 스타일 */
+    #mobile-menu:not(.hidden) {
+        opacity: 1; /* 나타날 때 투명도 1로 변경 */
+    }
+</style>
 </head>
 
 <body class="min-h-screen flex flex-col pt-[35px] md:pt-[50px]">
