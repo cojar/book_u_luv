@@ -63,12 +63,12 @@ public class ProductService {
         return getBooksFromApi(url);
     }
     private String buildSearchUrl(String queryType, String query) {
-        return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Book&Foreign" + "&Cover=Big" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
+        return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Foreign" + "&Cover=Big" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
     }
 
     private String buildListUrl(String queryType) {
 
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book&Foreign" + "&Cover=Big" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Foreign" + "&Cover=Big" + "&output=js" + "&Version=20131101";
     }
 
     private String domesticBuildListUrl(String queryType) {
