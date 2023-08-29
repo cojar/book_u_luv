@@ -109,26 +109,26 @@ public class ProductService {
                             .mallType(item.optString("mallType"))
                             .build();
 
-                    Product product = Product.builder()
-                            .coverImg(result.getCoverImg())
-                            .title(result.getTitle())
-                            .link(result.getLink())
-                            .author(result.getAuthor())
-                            .pubDate(item.optString("pubDate"))
-                            .description(item.optString("description"))
-                            .publisher(result.getPublisher())
-                            .isbn(result.getIsbn())
-                            .adult(result.isAdult())
-                            .categoryName(result.getCategoryName())
-                            .priceStandard(result.getPriceStandard())
-                            .priceSales(result.getPriceSales())
-                            .mallType(result.getMallType())
-                            .createDate(LocalDateTime.now())
-                            .build();
-
-                    if (productRepository.countByIsbn(product.getIsbn()) == 0L) {//productRepository에 isbn이 0개라면 저장해라(0L의 L은 Long 타입이라 사용)
-                        productRepository.save(product);
-                    }
+//                    Product product = Product.builder()
+//                            .coverImg(result.getCoverImg())
+//                            .title(result.getTitle())
+//                            .link(result.getLink())
+//                            .author(result.getAuthor())
+//                            .pubDate(item.optString("pubDate"))
+//                            .description(item.optString("description"))
+//                            .publisher(result.getPublisher())
+//                            .isbn(result.getIsbn())
+//                            .adult(result.isAdult())
+//                            .categoryName(result.getCategoryName())
+//                            .priceStandard(result.getPriceStandard())
+//                            .priceSales(result.getPriceSales())
+//                            .mallType(result.getMallType())
+//                            .createDate(LocalDateTime.now())
+//                            .build();
+//
+//                    if (productRepository.countByIsbn(product.getIsbn()) == 0L) {//productRepository에 isbn이 0개라면 저장해라(0L의 L은 Long 타입이라 사용)
+//                        productRepository.save(product);
+//                    }
                     results.add(result);
                 }
             }
