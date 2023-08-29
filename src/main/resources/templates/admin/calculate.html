@@ -54,20 +54,20 @@
             <table class="min-w-full">
                 <thead>
                 <tr>
-                    <th class="py-2 px-4 w-auto border">상품</th>
-                    <th class="py-2 px-4 w-auto border">판매량</th>
-                    <th class="py-2 px-4 w-auto border">상품가격</th>
-                    <th class="py-2 px-4 w-auto border">작가</th>
-                    <th class="py-2 px-4 w-auto border">출판사</th>
+                    <th class="py-2 px-4 w-4/12 border">상품</th>
+                    <th class="py-2 px-4 w-4/12 border">작가</th>
+                    <th class="py-2 px-4 border">출판사</th>
+                    <th class="py-2 px-4 border">판매량</th>
+                    <th class="py-2 px-4 border">상품가격</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr class="text-center" th:each="entry : ${productSales}">
-                    <td class="py-2 px-4 w-auto border" th:text="${entry.key.title}"></td>
-                    <td class="py-2 px-4 border" th:text="${entry.value}"></td>
-                    <td class="py-2 px-4 border" th:text="${entry.key.priceSales}"></td>
+                    <td class="py-2 px-4 border" th:text="${entry.key.title}"></td>
                     <td class="py-2 px-4 border" th:text="${entry.key.author}"></td>
                     <td class="py-2 px-4 border" th:text="${entry.key.publisher}"></td>
+                    <td class="py-2 px-4 border" th:text="${entry.value}"></td>
+                    <td class="py-2 px-4 border" th:text="${entry.key.priceSales}"></td>
                 </tr>
                 </tbody>
             </table>
