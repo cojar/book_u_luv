@@ -121,9 +121,6 @@ public class NoticeController {
             return "error_page";
         }
         Notice notice = this.noticeService.getById(id);
-        if (!notice.getNoticeRegister().getUserName().equals(principal.getName())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
-        }
         if (bindingResult.hasErrors()) {
             return "notice/notice_form";
         }
