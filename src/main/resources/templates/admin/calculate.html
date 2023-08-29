@@ -109,14 +109,14 @@
                     </td>
                     <td class="py-2 px-4 border">
                         <ul>
-                            <li th:each="orderItem : ${entry.value}" th:text="${orderItem.payDate}"></li>
+                            <li th:each="orderItem : ${entry.value}" th:text="${#temporals.format(orderItem.payDate, 'yyyy-MM-dd HH:mm')}"></li>
                         </ul>
                     </td>
                 </tr>
                 </tbody>
             </table>
             <div th:each="entry : ${memberPurchase}" class="flex justify-end mt-4">
-                <span th:text="${#lists.size(entry.value)}"></span>
+                <span th:text="${'총 결제 건수 : ' + #lists.size(entry.value) + ' 건'}"></span>
                 <span class="ml-4" th:text="'총 결제금액: ' + ${totalPaidAmount} + '원'"></span>
             </div>
         </div>
