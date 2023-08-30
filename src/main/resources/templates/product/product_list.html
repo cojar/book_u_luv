@@ -68,6 +68,14 @@
                         <div>
                             <span class="text-gray-500">할인가 : </span>
                             <span class="text-green-600" th:text="${product.priceSales} + '원'"></span>
+                            <div th:if="${product.priceStandard - product.priceSales == 0}"
+                                 style="display: none;">
+                                <!-- 해당 내용을 숨길 조건을 체크하고 숨기도록 스타일을 설정합니다. -->
+                            </div>
+                            <div th:unless="${product.priceStandard - product.priceSales == 0}"
+                                 th:text="'(' + ${100 - (product.priceSales * 100) / product.priceStandard + '% 할인)'}">
+                                <!-- 할인 정보를 표시할 조건을 체크하고 할인 정보를 표시합니다. -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -124,6 +132,9 @@
         document.getElementById('page').value = 1;
         document.getElementById('searchForm').submit();
     });
+
+
+
 </script>
 </body>
 
