@@ -58,7 +58,7 @@
 </style>
 </head>
 
-<body class="min-h-screen flex flex-col pt-[35px] md:pt-[50px]">
+<body class="min-h-screen flex flex-col pt-[35px] lg:pt-[50px]">
 
 <!-- 데이지 UI -->
 <link href="https://cdn.jsdelivr.net/npm/daisyui@3.1.1/dist/full.css" rel="stylesheet" type="text/css"/>
@@ -66,16 +66,16 @@
 <!-- common.css -->
 <link href="/resource/common/common.css" rel="stylesheet" type="text/css"/>
 
-<header class="fixed z-40 top-0 left-0 w-full bg-white border-b-[1px] border-b-[color:#efefef] h-[35px] md:h-[50px]">
+<header class="fixed z-40 top-0 left-0 w-full bg-white border-b-[1px] border-b-[color:#efefef] h-[35px] lg:h-[50px]">
     <div class="container mx-auto h-full flex items-center px-2">
         <div class="flex mr-auto">
             <a href="/" class="logo flex font-bold">
                 <span class="text-[#1E9EFE]">BOOK</span>
-                <span class="ml-[2px] hidden lg:block">U_LUV</span>
+                <span class="ml-[2px] lg:block">U_LUV</span>
             </a>
             <div class="lg:flex gap-3 ml-[50px] font-bold">
                 <a th:href="@{|/product/list?type=book|}" class="inline-flex hover:text-red-500 flex-shrink-0">
-                    <span class="ml-[2px] hidden lg:block ">
+                    <span class="ml-[2px] hidden lg:block">
                         국내도서
                     </span>
                 </a>
@@ -94,7 +94,7 @@
             </div>
         </div>
 
-        <div class="search-box items-center space-x-2 mr-4 md:mr-20 hidden xl:flex">
+        <div class="search-box items-center space-x-2 mr-4 lg:mr-20 hidden xl:flex">
             <form class="flex items-center" action="#" th:action="@{/api/search}" th:method="get"
                   onsubmit="return validateSearchForm();">
                 <div class="relative flex items-center">
@@ -162,7 +162,7 @@
             </button>
         </div>
     </div>
-    <nav id="mobile-menu" class="hidden md:hidden">
+    <nav id="mobile-menu" class="hidden lg:hidden">
         <div class="container mx-auto h-full flex flex-col py-4 space-y-2 px-4">
             <!-- 메인 카테고리 -->
             <a th:href="@{|/product/list?type=book|}" class="hover:text-red-500">
@@ -199,7 +199,7 @@
             <a sec:authorize="isAuthenticated()" th:href="@{/member/cart/{id}(id=${#authentication.principal.id})}" class="hover:text-red-500">
                 장바구니
             </a>
-            <a href="/admin/member" sec:authorize="hasRole('ROLE_ADMIN')" class="hover:text-red-500">
+            <a href="/admin/member" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'') or hasRole(''ROLE_SUPERADMIN'')')}" class="hover:text-red-500">
                 관리자페이지
             </a>
             <a href="/member/logout" sec:authorize="isAuthenticated()" class="hover:text-red-500">
@@ -215,8 +215,8 @@
 
 <footer class="bg-black py-16 text-top mt-32">
     <div class="max-w-7xl mx-auto">
-        <nav class="flex flex-col md:flex-row md:justify-between">
-            <div class="flex md:flex-row gap-x-6 md:gap-x-0 justify-around">
+        <nav class="flex flex-col lg:flex-row lg:justify-between">
+            <div class="flex lg:flex-row gap-x-6 lg:gap-x-0 justify-around">
                 <img class="w-[100px]" src="https://i.imgur.com/9qCFLjc.png" alt="">
                 <div class="ml-[20px] text-white flex flex-col justify-center">
                     <div class="mb-[10px]">
@@ -230,7 +230,7 @@
                     </div>
                 </div>
             </div>
-            <div class="flex md:flex-row gap-x-6 md:gap-x-0 justify-around mt-6 md:mt-0">
+            <div class="flex lg:flex-row gap-x-6 lg:gap-x-0 justify-around mt-6 lg:mt-0">
                 <img class="ml-0 w-[100px]" src="https://i.imgur.com/EgByDhq.jpg" alt="">
                 <div class="ml-[20px] text-white flex flex-col justify-center">
 
@@ -246,7 +246,7 @@
                 </div>
             </div>
 
-            <div class="flex md:flex-row gap-x-6 md:gap-x-0 justify-around mt-6 md:mt-0">
+            <div class="flex lg:flex-row gap-x-6 lg:gap-x-0 justify-around mt-6 lg:mt-0">
                 <img class="w-[100px]" src="https://i.imgur.com/Q42WfBv.png" alt="">
                 <div class="ml-[20px] text-white flex flex-col justify-center">
 
