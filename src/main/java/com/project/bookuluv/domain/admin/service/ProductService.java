@@ -100,12 +100,9 @@ public class ProductService {
     }
 
     public Product getProductISBN(String isbn) {
-        Optional<Product> product = this.productRepository.findByIsbn(isbn);
-        if (product.isPresent()) {
-            return product.get();
-        } else {
-            throw new DataNotFoundException("product not found");
-        }
+        Product product = this.productRepository.findByIsbn(isbn)
+                .orElseThrow(() -> new DataNotFoundException("제품을 찾을 수 없습니다."));
+        return product;
     }
 
     private List<ProductDto> getBooksFromApi(String url) {
