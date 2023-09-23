@@ -100,10 +100,15 @@ public class ProductService {
     }
 
     public Product getProductISBN(String isbn) {
-        Product product = this.productRepository.findByIsbn(isbn)
-                .orElseThrow(() -> new DataNotFoundException("제품을 찾을 수 없습니다."));
-        return product;
+        Optional<Product> product = this.productRepository.findByIsbn(isbn);
+
+        if (product.isEmpty()) {
+            throw new DataNotFoundException("제품을 찾을 수 없습니다.");
+        }
+
+        return product.get();
     }
+
 
     private List<ProductDto> getBooksFromApi(String url) {
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
