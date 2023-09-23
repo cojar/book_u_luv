@@ -58,16 +58,36 @@ public class ProductService {
         return getBooksFromApi(url);
     }
 
+    public List<Product> getNewBooksProduct() {
+        List<Product> newBookProduct = new ArrayList<>();
+        List<ProductDto> newBooks = this.getNewBooks();
+        for (ProductDto books : newBooks) {
+            Product productNewBooks = this.getProductISBN(books.getIsbn());
+            newBookProduct.add(productNewBooks);
+        }
+        return newBookProduct;
+    }
+
     public List<ProductDto> getBestsellers() {
         String url = buildListUrl("Bestseller");
         return getBooksFromApi(url);
     }
+
+    public List<Product> getBestsellersProduct() {
+        List<Product> bestSellersProduct = new ArrayList<>();
+        List<ProductDto> bestSellers = this.getBestsellers();
+        for (ProductDto books : bestSellers) {
+            Product productBestSellers = this.getProductISBN(books.getIsbn());
+            bestSellersProduct.add(productBestSellers);
+        }
+        return bestSellersProduct;
+    }
+
     private String buildSearchUrl(String queryType, String query) {
         return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Book&Foreign" + "&Cover=Big" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
     }
 
     private String buildListUrl(String queryType) {
-
         return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book&Foreign" + "&Cover=Big" + "&output=js" + "&Version=20131101";
     }
 
@@ -77,6 +97,15 @@ public class ProductService {
 
     private String foreignBuildListUrl(String queryType) {
         return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Foreign" + "&output=js" + "&Version=20131101";
+    }
+
+    public Product getProductISBN(String isbn) {
+        Optional<Product> product = this.productRepository.findByIsbn(isbn);
+        if (product.isPresent()) {
+            return product.get();
+        } else {
+            throw new DataNotFoundException("product not found");
+        }
     }
 
     private List<ProductDto> getBooksFromApi(String url) {
@@ -109,32 +138,33 @@ public class ProductService {
                             .mallType(item.optString("mallType"))
                             .build();
 
-//                    Product product = Product.builder()
-//                            .coverImg(result.getCoverImg())
-//                            .title(result.getTitle())
-//                            .link(result.getLink())
-//                            .author(result.getAuthor())
-//                            .pubDate(item.optString("pubDate"))
-//                            .description(item.optString("description"))
-//                            .publisher(result.getPublisher())
-//                            .isbn(result.getIsbn())
-//                            .adult(result.isAdult())
-//                            .categoryName(result.getCategoryName())
-//                            .priceStandard(result.getPriceStandard())
-//                            .priceSales(result.getPriceSales())
-//                            .mallType(result.getMallType())
-//                            .createDate(LocalDateTime.now())
-//                            .build();
-//
-//                    if (productRepository.countByIsbn(product.getIsbn()) == 0L) {//productRepository에 isbn이 0개라면 저장해라(0L의 L은 Long 타입이라 사용)
-//                        productRepository.save(product);
-//                    }
+                    Product product = Product.builder()
+                            .coverImg(result.getCoverImg())
+                            .title(result.getTitle())
+                            .link(result.getLink())
+                            .author(result.getAuthor())
+                            .pubDate(item.optString("pubDate"))
+                            .description(item.optString("description"))
+                            .publisher(result.getPublisher())
+                            .isbn(result.getIsbn())
+                            .adult(result.isAdult())
+                            .categoryName(result.getCategoryName())
+                            .priceStandard(result.getPriceStandard())
+                            .priceSales(result.getPriceSales())
+                            .mallType(result.getMallType())
+                            .createDate(LocalDateTime.now())
+                            .build();
+
+                    if (productRepository.countByIsbn(product.getIsbn()) == 0L) {//productRepository에 isbn이 0개라면 저장해라(0L의 L은 Long 타입이라 사용)
+                        productRepository.save(product);
+                    }
                     results.add(result);
                 }
             }
         }
         return results;
     }
+
 
     public Product create(ProductDto productDto, MultipartFile file1, MultipartFile file2) throws IOException {
         String SanitizedMallType = "";

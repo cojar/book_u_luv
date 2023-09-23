@@ -34,6 +34,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findById(Long id);
 
+    Optional<Product> findByIsbn(String isbn);
+
     @Query("select distinct p " +
             "from Product p " +
             "where " +

@@ -18,10 +18,10 @@
             <!-- 각 도서 -->
             <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/5 p-4" th:each="newBook : ${newBooks}">
                 <div class="text-center">
-                    <a th:href="${newBook.link}">
+                    <a th:href="@{|/product/detail/${newBook.id}|}">
                         <img alt="Book Cover" class="mx-auto w-48 h-72" th:src="${newBook.coverImg}">
                     </a>
-                    <a class="block text-lg font-semibold my-[30px]" th:href="${newBook.link}"
+                    <a class="block text-lg font-semibold my-[30px]" th:href="@{|/product/detail/${newBook.id}|}"
                        th:text="${newBook.title}">Title</a>
                     <span class="block text-gray-600 mb-[20px]" th:text="${newBook.author}"></span>
                     <span class="block text-gray-600 mb-[20px]" th:text="${newBook.publisher}"></span>
@@ -57,10 +57,10 @@
             <!-- 각 도서 -->
             <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/5 p-4" th:each="bestseller : ${bestsellers}">
                 <div class="text-center">
-                    <a th:href="${bestseller.link}">
+                    <a th:href="@{|/product/detail/${bestseller.id}|}">
                         <img alt="Book Cover" class="mx-auto w-48 h-72" th:src="${bestseller.coverImg}">
                     </a>
-                    <a class="block text-lg font-semibold my-[30px]" th:href="${bestseller.link}"
+                    <a class="block text-lg font-semibold my-[30px]" th:href="@{|/product/detail/${bestseller.id}|}"
                        th:text="${bestseller.title}">Title</a>
                     <span class="block text-gray-600 mb-[20px]" th:text="${bestseller.author}"></span>
                     <span class="block text-gray-600 mb-[20px]" th:text="${bestseller.publisher}"></span>
