@@ -1,6 +1,6 @@
 package com.project.bookuluv.domain.admin.controller;
 
-import com.project.bookuluv.domain.admin.dto.ProductDto;
+import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,7 +18,7 @@ public class ProductApiController {
     private final ProductService productService;
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     public String searchBooks(Model model, @RequestParam String query) {
-        List<ProductDto> results = productService.searchBooks(query);
+        List<Product> results = productService.getSearchBooksProduct(query);
         model.addAttribute("results", results);
         return "searchBooks";
     }

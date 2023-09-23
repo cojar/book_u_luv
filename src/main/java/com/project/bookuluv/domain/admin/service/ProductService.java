@@ -53,6 +53,16 @@ public class ProductService {
         return getBooksFromApi(url);
     }
 
+    public List<Product> getSearchBooksProduct(String query) {
+        List<Product> searchBooksProduct = new ArrayList<>();
+        List<ProductDto> searchBooks = this.searchBooks(query);
+        for (ProductDto books : searchBooks) {
+            Product productBestSellers = this.getProductISBN(books.getIsbn());
+            searchBooksProduct.add(productBestSellers);
+        }
+        return searchBooksProduct;
+    }
+
     public List<ProductDto> getNewBooks() {
         String url = buildListUrl("ItemNewAll");
         return getBooksFromApi(url);

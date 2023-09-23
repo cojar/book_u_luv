@@ -14,10 +14,10 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-8">
             <div th:each="result : ${results}" class="flex flex-col mx-auto w-80 p-4">
                 <div class="text-center">
-                    <a th:href="${result.link}">
+                    <a th:href="@{|/product/detail/${result.id}|}">
                         <img class="mx-auto w-48 h-72" th:src="${result.coverImg}" alt="Book Cover">
                     </a>
-                    <a th:href="${result.link}" class="block text-lg font-semibold my-4"
+                    <a th:href="@{|/product/detail/${result.id}|}" class="block text-lg font-semibold my-4"
                        th:text="${result.title}">Title</a>
                     <span th:text="${result.author}" class="block text-gray-600 mb-2"></span>
                     <span th:text="${result.publisher}" class="block text-gray-600 mb-2"></span>
