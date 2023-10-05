@@ -67,13 +67,18 @@
     </div>
 
     <div class="mb-2 mx-auto">
-        <span>정가 : </span>
-        <span class="line-through text-gray-500" th:text="${product.priceStandard} + '원'"></span>
-        <span>할인가 : </span>
-        <span th:text="${product.priceSales} + '원'"></span>
-        <span th:text="'(' + ${100 - (product.priceSales * 100) / product.priceStandard + '%'} + ', '
-                                           + ${product.priceStandard - product.priceSales} + '원 할인)'"></span>
+        <div class="mb-2 mx-auto">
+            <span>정가 : </span>
+            <span class="line-through text-gray-500" th:text="${product.priceStandard} + '원'"></span>
+        </div>
+        <div class="mb-2 mx-auto">
+            <span>할인가 : </span>
+            <span th:text="${product.priceSales} + '원'"></span>
+            <span th:text="'(' + ${100 - (product.priceSales * 100) / product.priceStandard + '%'} + ', '
+                                   + ${product.priceStandard - product.priceSales} + '원 할인)'"></span>
+        </div>
     </div>
+
     <div class="mb-2">
         <span>출간일 : </span>
         <span th:text="${product.pubDate}"></span>

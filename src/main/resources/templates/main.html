@@ -1,10 +1,32 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <link href="" rel="stylesheet">
     <title>main</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css">
+    <style>
+        /* 호버 효과 제거 */
+        .slick-arrow {
+            background-color: transparent !important;
+            color: #000 !important;
+            line-height: 1; /* 아이콘 가운데 정렬 */
+            z-index: 1; /* 슬라이드 위에 버튼이 나타나도록 함 */
+        }
+
+        .slick-prev {
+            left: -70px; /* 원하는 위치로 조정 */
+        }
+
+        .slick-next {
+            right: -10px; /* 원하는 위치로 조정 */
+        }
+
+        .slick-dots {
+            bottom: -30px; /* 도트 위치 조정 */
+        }
+    </style>
 </head>
 <body layout:fragment="content">
 <div class="container mx-auto py-4">
@@ -13,33 +35,35 @@
         <div class="w-full mx-auto">
             <span class="font-bold text-2xl sm:text-4xl">신간도서</span>
         </div>
-        <!-- 도서 목록 -->
-        <div class="flex flex-wrap justify-center mt-8">
-            <!-- 각 도서 -->
-            <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/5 p-4" th:each="newBook : ${newBooks}">
-                <div class="text-center">
-                    <a th:href="@{|/product/detail/${newBook.id}|}">
-                        <img alt="Book Cover" class="mx-auto w-48 h-72" th:src="${newBook.coverImg}">
-                    </a>
-                    <a class="block text-lg font-semibold my-[30px]" th:href="@{|/product/detail/${newBook.id}|}"
-                       th:text="${newBook.title}">Title</a>
-                    <span class="block text-gray-600 mb-[20px]" th:text="${newBook.author}"></span>
-                    <span class="block text-gray-600 mb-[20px]" th:text="${newBook.publisher}"></span>
-                    <div class="mt-2">
-                        <div>
-                            <span class="text-gray-500">정가 : </span>
-                            <span class="line-through text-gray-500" th:text="${newBook.priceStandard} + '원'"></span>
-                        </div>
-                        <div>
-                            <span class="text-gray-500">할인가 : </span>
-                            <span class="text-green-600" th:text="${newBook.priceSales} + '원'"></span>
-                            <div th:if="${newBook.priceStandard - newBook.priceSales == 0}"
-                                 style="display: none;">
-                                <!-- 해당 내용을 숨길 조건을 체크하고 숨기도록 스타일을 설정합니다. -->
+        <div class="relative mt-8">
+            <!-- 도서 목록 -->
+            <div class="new-books-slider">
+                <!-- 각 도서 -->
+                <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/5 p-4" th:each="newBook : ${newBooks.content}">
+                    <div class="text-center">
+                        <a th:href="@{|/product/detail/${newBook.id}|}">
+                            <img alt="Book Cover" class="mx-auto w-48 h-72" th:src="${newBook.coverImg}">
+                        </a>
+                        <a class="block text-lg font-semibold my-[30px]" th:href="@{|/product/detail/${newBook.id}|}"
+                           th:text="${newBook.title}">Title</a>
+                        <span class="block text-gray-600 mb-[20px]" th:text="${newBook.author}"></span>
+                        <span class="block text-gray-600 mb-[20px]" th:text="${newBook.publisher}"></span>
+                        <div class="mt-2">
+                            <div>
+                                <span class="text-gray-500">정가 : </span>
+                                <span class="line-through text-gray-500" th:text="${newBook.priceStandard} + '원'"></span>
                             </div>
-                            <div th:unless="${newBook.priceStandard - newBook.priceSales == 0}"
-                                 th:text="'(' + ${100 - (newBook.priceSales * 100) / newBook.priceStandard + '% 할인)'}">
-                                <!-- 할인 정보를 표시할 조건을 체크하고 할인 정보를 표시합니다. -->
+                            <div>
+                                <span class="text-gray-500">할인가 : </span>
+                                <span class="text-green-600" th:text="${newBook.priceSales} + '원'"></span>
+                                <div th:if="${newBook.priceStandard - newBook.priceSales == 0}"
+                                     style="display: none;">
+                                    <!-- 해당 내용을 숨길 조건을 체크하고 숨기도록 스타일을 설정합니다. -->
+                                </div>
+                                <div th:unless="${newBook.priceStandard - newBook.priceSales == 0}"
+                                     th:text="'(' + ${100 - (newBook.priceSales * 100) / newBook.priceStandard + '% 할인)'}">
+                                    <!-- 할인 정보를 표시할 조건을 체크하고 할인 정보를 표시합니다. -->
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -48,14 +72,15 @@
         </div>
     </div>
 
+    <!-- 베스트셀러 섹션 -->
     <div class="my-10">
         <div class="w-full mx-auto">
             <span class="font-bold text-2xl sm:text-4xl">베스트셀러</span>
         </div>
         <!-- 도서 목록 -->
-        <div class="flex flex-wrap justify-center mt-8">
+        <div class="bestsellers-slider">
             <!-- 각 도서 -->
-            <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/5 p-4" th:each="bestseller : ${bestsellers}">
+            <div class="w-full sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/5 p-4" th:each="bestseller : ${bestsellers.content}">
                 <div class="text-center">
                     <a th:href="@{|/product/detail/${bestseller.id}|}">
                         <img alt="Book Cover" class="mx-auto w-48 h-72" th:src="${bestseller.coverImg}">
@@ -87,9 +112,79 @@
         </div>
     </div>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // 신간도서 슬라이더 설정
+        $('.new-books-slider').slick({
+            slidesToShow: 5,
+            slidesToScroll: 5,
+            prevArrow: '<button type="button" class="slick-prev text-9xl">&#8249;</button>', <!-- 이전 버튼 아이콘 추가 -->
+            nextArrow: '<button type="button" class="slick-next text-9xl">&#8250;</button>', <!-- 다음 버튼 아이콘 추가 -->
+            dots: true, // 슬라이드 페이지 인덱스 표시
+            autoplay: true, // 자동 재생 설정
+            autoplaySpeed: 2000,
+            responsive: [
+                {
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 4,
+                        slidesToScroll: 4,
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 3,
+                    }
+                },
+                {
+                    breakpoint: 576,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 2,
+                    }
+                }
+            ]
+        });
+
+        // 베스트셀러 슬라이더 설정
+        $('.bestsellers-slider').slick({
+            slidesToShow: 5,
+            slidesToScroll: 5,
+            prevArrow: '<button type="button" class="slick-prev text-9xl">&#8249;</button>', <!-- 이전 버튼 아이콘 추가 -->
+            nextArrow: '<button type="button" class="slick-next text-9xl">&#8250;</button>', <!-- 다음 버튼 아이콘 추가 -->
+            dots: true, // 슬라이드 페이지 인덱스 표시
+            autoplay: true, // 자동 재생 설정
+            autoplaySpeed: 2000,
+            responsive: [
+                {
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 4,
+                        slidesToScroll: 4,
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 3,
+                        slidesToScroll: 3,
+                    }
+                },
+                {
+                    breakpoint: 576,
+                    settings: {
+                        slidesToShow: 2,
+                        slidesToScroll: 2,
+                    }
+                }
+            ]
+        });
+    });
+</script>
 </body>
 </html>
-
-
-
-

@@ -9,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.stereotype.Service;
@@ -77,6 +74,11 @@ public class ProductService {
         }
         return newBookProduct;
     }
+    public Page<Product> getNewBooksProductWithPagination(Pageable pageable) {
+        // 여기서 페이지네이션을 지원하도록 수정
+        List<Product> newBooks = getNewBooksProduct();
+        return new PageImpl<>(newBooks, pageable, newBooks.size());
+    }
 
     public List<ProductDto> getBestsellers() {
         String url = buildListUrl("Bestseller");
@@ -92,13 +94,18 @@ public class ProductService {
         }
         return bestSellersProduct;
     }
+    public Page<Product> getBestsellersProductWithPagination(Pageable pageable) {
+        // 여기서 페이지네이션을 지원하도록 수정
+        List<Product> bestsellers = getBestsellersProduct();
+        return new PageImpl<>(bestsellers, pageable, bestsellers.size());
+    }
 
     private String buildSearchUrl(String queryType, String query) {
         return searchUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=20" + "&start=1" + "&SearchTarget=Book&Foreign" + "&Cover=Big" + "&output=js" + "&Version=20131101" + (query != null ? "&Query=" + query : "") + "&CategoryId=0";
     }
 
     private String buildListUrl(String queryType) {
-        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=5" + "&start=1" + "&SearchTarget=Book&Foreign" + "&Cover=Big" + "&output=js" + "&Version=20131101";
+        return listUrl + "?ttbkey=" + apiKey + "&QueryType=" + queryType + "&MaxResults=50" + "&start=1" + "&SearchTarget=Book&Foreign" + "&Cover=Big" + "&output=js" + "&Version=20131101";
     }
 
     private String domesticBuildListUrl(String queryType) {

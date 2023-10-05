@@ -61,7 +61,7 @@ public class ProductController {
         model.addAttribute("kw", kw);
 
         // 접근한 파라미터가 book 혹은 foreign일 경우에만 제품 리스트페이지를 반환
-        if ("book".equals(type) || "foreign".equals(type)) {
+        if ("book".equals(type) || "foreign".equals(type) || "new".equals(type) || "best".equals(type)) {
             return "product/product_list";
         } else {
             // 다른 타입의 경우 에러페이지 반환

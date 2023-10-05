@@ -74,6 +74,16 @@
                 <span class="ml-[2px] lg:block">U_LUV</span>
             </a>
             <div class="lg:flex gap-3 ml-[50px] font-bold">
+<!--                <a th:href="@{|/product/list?type=new|}" class="inline-flex hover:text-red-500 flex-shrink-0">-->
+<!--                    <span class="ml-[2px] hidden lg:block">-->
+<!--                        신간도서-->
+<!--                    </span>-->
+<!--                </a>-->
+<!--                <a th:href="@{|/product/list?type=best|}" class="inline-flex hover:text-red-500 flex-shrink-0">-->
+<!--                    <span class="ml-[2px] hidden lg:block">-->
+<!--                        베스트샐러-->
+<!--                    </span>-->
+<!--                </a>-->
                 <a th:href="@{|/product/list?type=book|}" class="inline-flex hover:text-red-500 flex-shrink-0">
                     <span class="ml-[2px] hidden lg:block">
                         국내도서
@@ -165,6 +175,12 @@
     <nav id="mobile-menu" class="hidden lg:hidden">
         <div class="container mx-auto h-full flex flex-col py-4 space-y-2 px-4">
             <!-- 메인 카테고리 -->
+<!--            <a th:href="@{|/product/list?type=new|}" class="hover:text-red-500">-->
+<!--                신간도서-->
+<!--            </a>-->
+<!--            <a th:href="@{|/product/list?type=best|}" class="hover:text-red-500">-->
+<!--                베스트샐러-->
+<!--            </a>-->
             <a th:href="@{|/product/list?type=book|}" class="hover:text-red-500">
                 국내도서
             </a>

@@ -4,12 +4,13 @@ import com.project.bookuluv.domain.admin.domain.Product;
 import com.project.bookuluv.domain.admin.service.ProductService;
 import com.project.bookuluv.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.security.Principal;
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,12 +20,17 @@ public class MainController {
     private final ProductService productService;
 
     @GetMapping("/")
-    public String root(Model model, Principal principal) {
-        List<Product> newBooks = this.productService.getNewBooksProduct();
-        List<Product> bestsellers = this.productService.getBestsellersProduct();
+    public String mainPage(Model model,
+                           @RequestParam(value = "newBooksPage", defaultValue = "1") int newBooksPage,
+                           @RequestParam(value = "bestsellersPage", defaultValue = "1") int bestsellersPage) {
+        Pageable newBooksPageable = PageRequest.of(newBooksPage - 1, 5); // 5개씩 표시
+        Pageable bestsellersPageable = PageRequest.of(bestsellersPage - 1, 5); // 5개씩 표시
 
-        model.addAttribute("newBooks", newBooks); // 'books' 대신 'newBooks'로 변경
-        model.addAttribute("bestsellers", bestsellers); // 'books' 대신 'bestsellers'로 변경
+        Page<Product> newBooks = productService.getNewBooksProductWithPagination(newBooksPageable);
+        Page<Product> bestsellers = productService.getBestsellersProductWithPagination(bestsellersPageable);
+
+        model.addAttribute("newBooks", newBooks);
+        model.addAttribute("bestsellers", bestsellers);
 
         return "main";
     }
