@@ -26,6 +26,12 @@
         .slick-dots {
             bottom: -30px; /* 도트 위치 조정 */
         }
+
+       @media (max-width : 576px) {
+           .slick-dots li button:before {
+               font-size : 10px !important;
+           }
+       }
     </style>
 </head>
 <body layout:fragment="content">
@@ -116,8 +122,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 <script>
-    $(document).ready(function () {
-        // 신간도서 슬라이더 설정
+$(document).ready(function () {
+// 신간도서 슬라이더 설정
         $('.new-books-slider').slick({
             slidesToShow: 5,
             slidesToScroll: 5,
@@ -144,8 +150,8 @@
                 {
                     breakpoint: 576,
                     settings: {
-                        slidesToShow: 2,
-                        slidesToScroll: 2,
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
                     }
                 }
             ]
@@ -178,13 +184,36 @@
                 {
                     breakpoint: 576,
                     settings: {
-                        slidesToShow: 2,
-                        slidesToScroll: 2,
+                        slidesToShow: 1,
+                        slidesToScroll: 1,
                     }
                 }
             ]
         });
-    });
+
+   adjustDotSize();
+
+   $(window).resize(function() {
+       adjustDotSize();
+   });
+});
+
+function adjustDotSize() {
+   var windowWidth = $(window).width();
+   var dotSize = '20px';
+   var dotMargin = '5px';
+
+   if (windowWidth <= 576) {
+       dotSize = '10px';
+       dotMargin = '2px';
+   } else if (windowWidth <= 768) {
+       dotSize = '15px';
+       dotMargin = '3px';
+   }
+
+   $('.slick-dots li button:before').css('font-size', dotSize);
+
+}
 </script>
 </body>
 </html>
