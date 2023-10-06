@@ -1,9 +1,29 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout/layout.html}" xmlns:layout="http://www.w3.org/1999/xhtml"
+<html lang="ko" layout:decorate="~{layout/layout.html}" xmlns:layout="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.w3.org/1999/xhtml">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>BOOKU_LUV 도서 목록</title>
+    <style>
+        .responsive-width {
+            width: 1580px;
+        }
+
+        @media (max-width: 1580px) {
+            .responsive-width {
+                width: 100%;
+            }
+        }
+        @media (max-width: 576px) {
+            .search-input-width {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body layout:fragment="content">
@@ -13,10 +33,10 @@
 </div>
 
 <!-- 검색 창과 검색 버튼 -->
-<div class="w-[1580px] mx-auto">
+<div class="responsive-width mx-auto">
     <div class="flex justify-center">
         <div class="flex justify-end mt-4 w-full">
-            <input class="border p-2 rounded" id="search_kw" placeholder="검색어를 입력하세요" type="text">
+            <input class="border p-2 rounded search-input-width" id="search_kw" placeholder="검색어를 입력하세요" type="text">
             <button class="bg-blue-500 text-white px-4 py-2 ml-2 rounded" id="btn_search">검색</button>
         </div>
     </div>
