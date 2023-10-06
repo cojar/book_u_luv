@@ -22,6 +22,7 @@ public class BaseEntity {
 
     @CreatedDate
     @Column(name = "create_date")
+    @Builder.Default
     private LocalDateTime createDate = LocalDateTime.now();
 
     @LastModifiedDate
