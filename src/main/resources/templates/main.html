@@ -54,19 +54,17 @@
                         <div class="mt-2">
                             <div>
                                 <span class="text-gray-500">정가 : </span>
-                                <span class="line-through text-gray-500" th:text="${newBook.priceStandard} + '원'"></span>
+                                <span th:if="${newBook.priceSales != null && newBook.priceSales < newBook.priceStandard}"
+                                      class="line-through text-gray-500" th:text="${newBook.priceStandard} + '원'"></span>
+                                <span th:unless="${newBook.priceSales != null && newBook.priceSales < newBook.priceStandard}"
+                                      th:text="${newBook.priceStandard} + '원'"></span>
                             </div>
-                            <div>
+                            <div th:if="${newBook.priceSales != null && newBook.priceSales < newBook.priceStandard}">
                                 <span class="text-gray-500">할인가 : </span>
                                 <span class="text-green-600" th:text="${newBook.priceSales} + '원'"></span>
-                                <div th:if="${newBook.priceStandard - newBook.priceSales == 0}"
-                                     style="display: none;">
-                                    <!-- 해당 내용을 숨길 조건을 체크하고 숨기도록 스타일을 설정합니다. -->
-                                </div>
-                                <div th:unless="${newBook.priceStandard - newBook.priceSales == 0}"
-                                     th:text="'(' + ${100 - (newBook.priceSales * 100) / newBook.priceStandard + '% 할인)'}">
-                                    <!-- 할인 정보를 표시할 조건을 체크하고 할인 정보를 표시합니다. -->
-                                </div>
+                                <!-- 할인 정보를 표시할 조건을 체크하고 할인 정보를 표시합니다. -->
+                                <div th:text="'(' + ${100 - (newBook.priceSales * 100) / newBook.priceStandard + '%'} + ', '
+                               + ${newBook.priceStandard - newBook.priceSales} + '원 할인)'"></div>
                             </div>
                         </div>
                     </div>
@@ -95,19 +93,17 @@
                     <div class="mt-2">
                         <div>
                             <span class="text-gray-500">정가 : </span>
-                            <span class="line-through text-gray-500" th:text="${bestseller.priceStandard} + '원'"></span>
+                            <span th:if="${bestseller.priceSales != null && bestseller.priceSales < bestseller.priceStandard}"
+                                  class="line-through text-gray-500" th:text="${bestseller.priceStandard} + '원'"></span>
+                            <span th:unless="${bestseller.priceSales != null && bestseller.priceSales < bestseller.priceStandard}"
+                                  th:text="${bestseller.priceStandard} + '원'"></span>
                         </div>
-                        <div>
+                        <div th:if="${bestseller.priceSales != null && bestseller.priceSales < bestseller.priceStandard}">
                             <span class="text-gray-500">할인가 : </span>
-                            <span class="text-green-600" th:text="${bestseller.priceSales}  + '원'"></span>
-                            <div th:if="${bestseller.priceStandard - bestseller.priceSales == 0}"
-                                 style="display: none;">
-                                <!-- 해당 내용을 숨길 조건을 체크하고 숨기도록 스타일을 설정합니다. -->
-                            </div>
-                            <div th:unless="${bestseller.priceStandard - bestseller.priceSales == 0}"
-                                 th:text="'(' + ${100 - (bestseller.priceSales * 100) / bestseller.priceStandard + '% 할인)'}">
-                                <!-- 할인 정보를 표시할 조건을 체크하고 할인 정보를 표시합니다. -->
-                            </div>
+                            <span class="text-green-600" th:text="${bestseller.priceSales} + '원'"></span>
+                            <!-- 할인 정보를 표시할 조건을 체크하고 할인 정보를 표시합니다. -->
+                            <div th:text="'(' + ${100 - (bestseller.priceSales * 100) / bestseller.priceStandard + '%'} + ', '
+                               + ${bestseller.priceStandard - bestseller.priceSales} + '원 할인)'"></div>
                         </div>
                     </div>
                 </div>

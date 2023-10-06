@@ -49,23 +49,29 @@
     </div>
 
 
-    <div class="my-2 sm:my-3">
+    <div class="my-2 sm:my-3 w-[700px]">
         <span>작가 : </span>
-        <span th:text="${product.author}"></span>
-        <span class="ml-2">출판사 : </span>
-        <span th:text="${product.publisher}"></span>
+        <span th:text="${product.author}" class="overflow-auto break-words"></span>
+    </div>
+
+    <div class="my-2 sm:my-3 w-[700px]">
+        <span>출판사 : </span>
+        <span th:text="${product.publisher}" class="overflow-auto break-words"></span>
     </div>
 
     <div class="mb-2 mx-auto">
         <div class="mb-2 mx-auto">
             <span>정가 : </span>
-            <span class="line-through text-gray-500" th:text="${product.priceStandard} + '원'"></span>
+            <span th:if="${product.priceSales != null && product.priceSales < product.priceStandard}"
+                  class="line-through text-gray-500" th:text="${product.priceStandard} + '원'"></span>
+            <span th:unless="${product.priceSales != null && product.priceSales < product.priceStandard}"
+                  th:text="${product.priceStandard} + '원'"></span>
         </div>
-        <div class="mb-2 mx-auto">
+        <div class="mb-2 mx-auto" th:if="${product.priceSales != null && product.priceSales < product.priceStandard}">
             <span>할인가 : </span>
             <span th:text="${product.priceSales} + '원'"></span>
             <span th:text="'(' + ${100 - (product.priceSales * 100) / product.priceStandard + '%'} + ', '
-                                   + ${product.priceStandard - product.priceSales} + '원 할인)'"></span>
+                               + ${product.priceStandard - product.priceSales} + '원 할인)'"></span>
         </div>
     </div>
 
@@ -74,7 +80,7 @@
         <span th:text="${product.pubDate}"></span>
     </div>
 
-    <div class="mb-2">
+    <div class="mb-2 w-[700px]">
         <span>카테고리 : </span>
         <span th:text="${product.categoryName}"></span>
     </div>
@@ -181,16 +187,6 @@
                     }
                 });
             });
-
-
-
-
-
-
-
-
-
-
         </script>
 
         <div class="border-t mt-4 pt-4">
@@ -249,8 +245,6 @@
             </div>
         </div>
     </div>
-</div>
-</div>
 </div>
 <script>
         function confirmReviewModify(reviewId) {
