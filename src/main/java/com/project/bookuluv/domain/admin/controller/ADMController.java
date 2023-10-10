@@ -91,11 +91,21 @@ public class ADMController {
     }
 
     @GetMapping("/admin/member")
-    @PreAuthorize("isAuthenticated()")
-    public String adminMember(Model model) {
-        if (!userIsAdmin()) { // 모든 관리자권한 가능
+    public String adminMember(Model model, Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()) {
+            // 로그인되지 않은 경우 또는 인증되지 않은 경우 에러 페이지를 리턴
             return "error_page";
         }
+
+        boolean isAdminOrSuperAdmin = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN") || authority.getAuthority().equals("ROLE_SUPERADMIN"));
+
+        if (!isAdminOrSuperAdmin) {
+            // 로그인은 되어 있지만, 관리자 권한이 없는 경우 에러 페이지를 리턴
+            return "error_page";
+        }
+
+        // 로그인되어 있고, 관리자 권한이 있는 경우 원하는 작업을 수행
         List<Member> memberList = this.memberService.getAll();
         model.addAttribute("memberList", memberList);
         return "admin/member";
