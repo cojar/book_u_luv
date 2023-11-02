@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html layout:decorate="~{layout/layout.html}" xmlns="http://www.w3.org/1999/html"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
     <title>회원가입</title>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
-<body>
-<main layout:fragment="content">
+<body layout:fragment="content">
+<main>
     <section class="section section-join flex-grow flex flex-col items-center justify-center">
         <div class="max-w-lg w-full px-2 pt-4">
             <h1 class="font-bold text-lg">
@@ -86,6 +87,7 @@
                     </label>
                     <input class="input input-bordered" id="password1" maxlength="50" placeholder="비밀번호"
                            required th:field="*{password1}" type="password">
+                    <div class="mt-3 text-xs" id="password-validation-message">영문, 숫자, 특수문자를 포함한 8자 이상</div>
                 </div>
 
                 <div class="form-control">
@@ -94,7 +96,84 @@
                     </label>
                     <input class="input input-bordered" id="password2" maxlength="50" placeholder="비밀번호 확인"
                            required th:field="*{password2}" type="password">
+                    <div class="mt-3 text-xs" id="password-match-message"></div>
                 </div>
+                <script>
+                $(document).ready(function() {
+                    // 비밀번호 입력란의 변경 이벤트 처리
+                    $("#password1").on("input", function() {
+                        checkPasswordMatch(); // 비밀번호 일치 여부 확인
+                        validatePassword();   // 비밀번호 유효성 검사
+                    });
+
+                    // 비밀번호 확인 입력란의 변경 이벤트 처리
+                    $("#password2").on("input", function() {
+                        checkPasswordMatch(); // 비밀번호 일치 여부 확인
+                    });
+
+                    // 폼 제출 시 유효성 검사 실행
+                    $("form").on("submit", function(event) {
+                        if (!checkPasswordMatch() || !validatePassword()) {
+                            event.preventDefault();
+                            // 비밀번호 불일치나 유효성 검사 실패 시 스크롤 이동
+                            if (!checkPasswordMatch()) {
+                                scrollError("password2"); // 비밀번호 불일치 시 스크롤 이동
+                                alert("비밀번호가 일치하지 않습니다.");
+                            }
+                            if (!validatePassword()) {
+                                scrollError("password1"); // 비밀번호 유효성 검사 실패 시 스크롤 이동
+                                alert("비밀번호는 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.");
+                            }
+                        }
+                    });
+
+                    function checkPasswordMatch() {
+                        const password1 = $("#password1").val();
+                        const password2 = $("#password2").val();
+                        const matchMessage = $("#password-match-message");
+
+                        if (password1 === password2) {
+                            matchMessage.text("✔️ 비밀번호 일치");
+                            matchMessage.css("color", "green");
+                            return true;
+                        } else {
+                            matchMessage.text("❌ 비밀번호 불일치");
+                            matchMessage.css("color", "red");
+                            return false;
+                        }
+                    }
+
+                    function validatePassword() {
+                        const passwordInput = $("#password1");
+                        const validationMessage = $("#password-validation-message");
+
+                        // 정규식을 사용하여 비밀번호 유효성 검사
+                        const passwordPattern = /^(?=.*[a-zA-Z\d])(?=.*[!@#$%^&*()\-_=+\[\]{}|;:'",<.>/?]).{8,}$/;
+                        if (passwordPattern.test(passwordInput.val())) {
+                            validationMessage.text("✔️ 사용 가능한 비밀번호 입니다.");
+                            validationMessage.css("color", "green");
+                            return true;
+                        } else {
+                            validationMessage.text("❌ 영문, 숫자, 특수문자를 포함한 8자 이상이어야 합니다.");
+                            validationMessage.css("color", "red");
+                            return false;
+                        }
+                    }
+
+                    // 스크롤 이동 함수
+                    function scrollError(elementId) {
+                        const element = $("#" + elementId);
+                        if (element.length > 0) {
+                            $("html, body").animate({
+                                scrollTop: element.offset().top - 100 // 이동할 위치를 조정할 수 있음
+                            }, 500);
+                            element.focus();
+                        }
+                    }
+                });
+                </script>
+
+
                 <div class="form-control">
                     <label class="label" for="userName">
                         <span class="label-text">닉네임</span>
@@ -217,18 +296,18 @@
                 <!-- 이름 -->
                 <div class="form-control">
                     <label class="label" for="userName">
-                        <span class="label-text">이름</span>
+                        <span class="label-text">이름(First name / Given name)</span>
                     </label>
-                    <input class="input input-bordered" id="firstName" placeholder="이름" required th:field="*{firstName}"
+                    <input class="input input-bordered" id="firstName" placeholder="ex) 길동" required th:field="*{firstName}"
                            type="text">
                 </div>
 
                 <!-- 성 -->
                 <div class="form-control">
                     <label class="label" for="userName">
-                        <span class="label-text">성</span>
+                        <span class="label-text">성(Last name / Family name)</span>
                     </label>
-                    <input class="input input-bordered" id="lastName" placeholder="성" required th:field="*{lastName}"
+                    <input class="input input-bordered" id="lastName" placeholder="ex) 홍" required th:field="*{lastName}"
                            type="text">
                 </div>
 

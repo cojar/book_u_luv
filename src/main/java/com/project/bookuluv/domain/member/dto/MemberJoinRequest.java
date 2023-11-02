@@ -17,11 +17,11 @@ public class MemberJoinRequest {
     private String userName;
 
     @NotEmpty(message = "비밀번호는 필수항목입니다.")
-//    @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*\\(\\)\\-_=+\\[\\{\\]}\\|;:'\",<.>\\/?])[A-Za-z\\d!@#$%^&*\\(\\)\\-_=+\\[\\{\\]}\\|;:'\",<.>\\/?]{8,30}")
+    @Pattern(regexp = "^(?=.*[a-zA-Z\\d])(?=.*[!@#$%^&*()\\-_=+\\[\\]{}|;:'\",<.>/?]).{8,}$", flags = Pattern.Flag.CASE_INSENSITIVE)
     private String password1;
 
     @NotEmpty(message = "비밀번호 확인은 필수항목입니다.")
-//    @Pattern(regexp = "(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*\\(\\)\\-_=+\\[\\{\\]}\\|;:'\",<.>\\/?])[A-Za-z\\d!@#$%^&*\\(\\)\\-_=+\\[\\{\\]}\\|;:'\",<.>\\/?]{8,30}")
+    @Pattern(regexp = "^(?=.*[a-zA-Z\\d])(?=.*[!@#$%^&*()\\-_=+\\[\\]{}|;:'\",<.>/?]).{8,}$", flags = Pattern.Flag.CASE_INSENSITIVE)
     private String password2;
 
     @NotEmpty(message = "닉네임을 입력해주세요")
